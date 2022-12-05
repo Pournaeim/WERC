@@ -1,0 +1,85 @@
+﻿
+@using WERC.Models
+
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Styles.Render("~/Resources/CSS/jquery-ui")
+
+@section safetySafetyAdminMenu{
+    <!--SafetyAdmin Menu start-->
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid menu-height">
+            <div class="row">
+
+                <div class="navbar-header head-foot-back-color">
+
+                    <!--Menu Button-->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target=".navbar-ex1-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="partialLogin text-left visible-xs col-xs-6">
+                        @Html.Partial("_LoginPartial",
+                            new LoginPartialViewModel
+                            {
+                                LanguageDictionary = Model.LanguageDictionary,
+                                Layout = Model.Layout,
+                                WelcomeMessage = Model.WelcomeMessage
+                            })
+                    </div>
+                </div>
+                <!--Menu Items-->
+                <div class="collapse navbar-collapse navbar-ex1-collapse head-foot-back-color">
+
+                    <ul class="nav navbar-nav navbar-left col-sm-8 col-md-8">
+                        <li class="">
+                            <a href="~/Home">@Model["HOME"] </a>
+                        </li>
+
+                        <li>
+                            <a href="/safetyAdmin/lupf">
+                                <i class="fa fa-user-circle-o fa-1x" aria-hidden="true"></i>
+                                <span class="">@Model["CHANGE PROFILE"] </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/safetyAdmin/larf">
+                                <i class="fa fa-upload fa-1x" aria-hidden="true"></i>
+                                <span class="">@Model["ADD MY REFERENCES"] </span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/safetyadmin/sa_tfim/">@Model["ESP STATUS AND REPORTS"]</a>
+                        </li>
+                        <li>
+                            <a href="/safetyadmin/sa_tfim_esp_r/">@Model["ESP REPORT"]</a>
+                        </li>
+
+                        <!--<li class="">
+                            <a href="~/admin/ups_tfim">@Model["TEAM STATUS"] </a>-->
+                            @*  <a href="~/admin/tfim">@Model["TEAM"] </a>*@
+                        <!--</li>-->
+
+                        @*<li class="">
+                            <a href="~/admin/tem">@Model["SENDING EMAIL TO TEAM/S"] </a>
+                        </li>
+                        <li>
+                            <a href="~/admin/ruem">
+                                <span class="menuItemText">@Model["SEARCH, EMAIL & EXPORT USER DATA"] </span>
+                            </a>
+                        </li>*@
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+}
+<div class="col-xs-12">
+    @RenderBody()
+</div>

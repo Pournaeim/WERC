@@ -1,0 +1,151 @@
+﻿
+@model Model.ViewModels.Grade.Grading.VmGradingType
+
+@{
+                /**/
+
+                var gradingTableId = "gradingTable" + Model.GradeId;
+}
+
+<table id="@gradingTableId" class="table table-responsive">
+    <thead>
+        <tr class="grading-header">
+            <th class="grading-team">
+                Team
+            </th>
+            @foreach (var gradingDetail in Model.TeamGradingList.First().GradingDetailList)
+            {
+                <th title="@gradingDetail.EvaluationItem" class="grading-header">
+                    @gradingDetail.EvaluationItem
+                    <input type="hidden" value="@gradingDetail.MaxPoint" />
+                </th>
+            }
+            <th class="grading-total">Total</th>
+            <th class="">Description</th>
+    </thead>
+    <tbody>
+        @foreach (var team in Model.TeamGradingList)
+        {
+            <tr data-team_id="@team.TeamId">
+                <td class="grading-team">@team.TeamName</td>
+                @foreach (var gradingDetail in team.GradingDetailList)
+                {
+                    <td class="grading-point" data-grade_detail_id="@gradingDetail.Id"
+                        data-coefficiet="@gradingDetail.Coefficient" data-max_point="@gradingDetail.MaxPoint">
+                        @gradingDetail.Point
+                    </td>
+                }
+
+                @{
+                    var gradingTotalId = "gradingTotal" + team.TeamId;
+                    var descriptionId = "description" + team.TeamId + "_GT_" + Model.GradeId;
+                }
+
+                <td class="grading-total" id="@gradingTotalId">@team.GradingDetailList.Sum(p => p.Point)</td>
+
+                <td>
+                    <input type="hidden" id="@descriptionId" class="description" value="@team.GradingDetailList.First().Description" />
+                    <input type="button" value="..." class="btn btn-success" id="descrioptionButton"
+                           onclick="openDescriptionModal('@team.TeamName on @Model.GradeType comment','@descriptionId')" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<link href="~/Resources/CSS/modal-fixed-full-screen-top.css" rel="stylesheet" />
+<div class="row">
+
+    <div class="modal-fixed-full-screen-top row">
+        <div class="modal fade" id="descriptionModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><span id="descriptionHeaderSpan"></span></h4>
+                        <hr />
+                    </div>
+                    <div class="modal-body">
+
+                        <textarea id="teamDescriptionArea" class="text-left team-description-textarea" tabindex="1"></textarea>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var activeDescriptionId = '';
+    $.fn.numericInputExample = function () {
+        'use strict';
+        var element = $(this),
+            header = element.find('thead tr'),
+            dataRows = element.find('tbody tr'),
+
+            initialTotal = function () {
+
+                dataRows.each(function () {
+
+                    var row = $(this);
+                    var total = 0;
+                    var columns = row.find("td");
+                    var coefficients = header.find("th");
+
+                    for (var i = 1; i < columns.length - 2; i++)
+                    {
+                        total += parseFloat($(columns[i]).text()) * parseFloat($(coefficients[i]).find("input[type='hidden']").val());
+                    }
+
+                    $(columns[columns.length - 2]).text(total);
+
+                });
+            };
+
+        element.find('td').on('change', function (evt) {
+            var cell = $(this),
+                column = cell.index(),
+                total = 0;
+            if (column === 0) {
+                return;
+            }
+
+            initialTotal();
+
+
+        }).on('validate', function (evt, value) {
+            var cell = $(this),
+                column = cell.index();
+            if (column === 0) {
+                return !!value && value.trim().length > 0;
+            } else {
+                return !isNaN(parseFloat(value)) && isFinite(value);
+            }
+        });
+        initialTotal();
+        return this;
+    };
+
+    $('#@gradingTableId').editableTableWidget().numericInputExample().find('td:first').focus();
+
+    function openDescriptionModal(descriptionHeader, hiddenDescriptionId) {
+
+        $("#descriptionHeaderSpan").text(descriptionHeader);
+
+        $("#teamDescriptionArea").val($("#" + hiddenDescriptionId).val());
+
+        $("#descriptionModal").modal();
+
+        activeDescriptionId = hiddenDescriptionId;
+
+        $('#descriptionModal').on('hidden.bs.modal', function () {
+
+            $("#" + activeDescriptionId).val($("#teamDescriptionArea").val());
+
+        })
+
+    }
+</script>

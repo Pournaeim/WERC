@@ -1,0 +1,238 @@
+﻿@model Model.ViewModels.Team.VmTeam
+@using Model.ToolsModels.DropDownList
+
+
+<h2 id="actionMessageHandlerMessage"></h2>
+
+@using (Html.BeginForm("et", "team", FormMethod.Post, new { id = "_TeamEdit_Form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal text-left">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.Label(@Model["Task"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-1" })
+            <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+                @Html.Partial("_DropDownList", new VmDropDownList
+           {
+               HtmlElementId = "TaskId",
+               DataController = "task",
+               DataAction = "gtddlwd",
+               OptionLabel = Model["Select Task..."],
+               ActiveItemValue = Model.TaskId.ToString(),
+               OnItemSelected = "TaskDropDownList_OnClientSelectedItem",
+
+           })
+
+                @Html.ValidationMessage(@Model["TaskId"], "", new { @class = "text-danger" })
+
+                <script>
+                function TaskDropDownList_OnClientSelectedItem(id) {
+                    $("#TaskIdHidden").val(id);
+                    var task = $('#TaskId option:selected')[0].innerText;
+                    $("#TaskHidden").val(task);
+                   // createteamName(id);
+
+
+                    $.ajax(
+                        {
+                            type: 'get',
+                            url: '/task/cpn/' + id,
+                            dataType: 'json',
+
+                        }
+                    ).done(function (result) {
+                        if (result === true) {
+                            $("#projectNameDiv").removeClass('hidden');
+                        }
+                        else {
+                            $("#projectNameDiv").addClass('hidden');
+
+                        }
+                    });
+
+                }
+
+                //function pad(str, max) {
+                //    str = str.toString();
+                //    return str.length < max ? pad("0" + str, max) : str;
+                //}
+                @*function createteamName(id)
+                {
+                    var University = $("#UniversityHidden").val();
+                    var teamnumber = @Model.TeamNumber.ToString();
+                    var universityWords = University.split(' ');
+                    var abbreviation = '';
+                    var count = 0;
+                    for (i = 0; i < universityWords.length; i++)
+                    {
+                        if (universityWords[i].length > 2) {
+                        abbreviation += universityWords[i][0];
+                        count++;
+                    }
+
+                    }
+
+
+                    var task = $('#TaskId option:selected')[0].innerText;
+                    $("#TaskHidden").val(task);
+
+                    $("#teamName").val(pad(teamnumber, 2) + abbreviation + '-' + task.split(' ')[1]);
+                    $("#NameHidden").val($("#teamName").val());
+                }*@
+                </script>
+            </div>
+            <div id="projectNameDiv" class="form-group  hidden">
+                @Html.Label(@Model["Project Title"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+                <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+                    @Html.EditorFor(model => model.ProjectName, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+        </div>
+        @*<div class="form-group">
+                @Html.Label(@Model["Name"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-1" })
+                <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled", id = "teamName" } })
+                </div>
+            </div>*@
+        <div class="form-group hidden">
+            @Html.Label(@Model["Team Logo"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12 col-md-1" })
+            <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+                <div class="input-group input-file" name="uploadedDocument">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary btn-xs  submit-btn-choose-file" type="button"></button>
+                    </span>
+                    <input type="text" class="form-control path-container" placeholder='Choose a file...' />
+                    <span class="input-group-btn">
+                        <button class="btn btn-danger btn-reset" type="button">Reset</button>
+                    </span>
+                </div>
+
+                @Html.ValidationMessage(@Model["TeamImageUrl"], "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-sm-10 col-xs-12 col-md-6 col-lg-4">
+                <input id="_TeamEdit_Submit" type="submit" value="@Model["Update"]" class="btn btn-primary" />
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.TeamImageUrl, htmlAttributes: new { @id = "TeamImageUrlHidden" })
+        @Html.HiddenFor(model => model.Id, htmlAttributes: new { @id = "IdHidden" })
+        @Html.HiddenFor(model => model.TeamState, htmlAttributes: new { @id = "TeamStateHidden" })
+        @Html.HiddenFor(model => model.Task, htmlAttributes: new { @id = "TaskHidden", @name = @Model.Task, @value = @Model.Task })
+        @Html.HiddenFor(model => model.TaskId, htmlAttributes: new { @id = "TaskIdHidden", @name = @Model.TaskId, @value = @Model.TaskId })
+        @Html.HiddenFor(model => model.Name, htmlAttributes: new { @id = "NameHidden", @name = @Model.Name, @value = @Model.Name })
+        @Html.HiddenFor(model => model.University, htmlAttributes: new { @id = "UniversityHidden", @name = @Model.University, @value = @Model.University })
+
+    </div>
+}
+
+<script>
+    $('#_TeamEdit_Form').submit(function (e) {
+        e.preventDefault();
+
+        var form = $('#_TeamEdit_Form');
+
+        if (validateCustomElements() == false) { return false;}
+
+            var formData = new FormData($('#_TeamEdit_Form').get(0));
+            var file = document.getElementById("inputGhost").files[0];
+
+            formData.append("UploadedDocument", file);
+
+            HoldOn.open({
+                    theme: 'sk-cube-grid',
+                    message: "<h4>@Model["Please wait..."]</h4>"
+            });
+
+
+            $.ajax({
+                url: "/team/et", //you can get also action attribute from form using form.attr('action')
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function (result) {
+
+
+                if (result.success == false) {
+
+                    $("#actionMessageHandlerMessage").text(result.message);
+                }
+
+                @if(!string.IsNullOrEmpty(@Model.OnActionSuccess))
+                {
+                    @Html.Raw("if(result.success == true){"+@Model.OnActionSuccess+"(result);}")
+                }
+
+                @if(!string.IsNullOrEmpty(@Model.OnActionFailed))
+                {
+                    @Html.Raw("if(result.success == false){"+@Model.OnActionFailed + "();}")
+                }
+
+                HoldOn.close();
+
+                }).fail(function () { HoldOn.close(); });
+
+        return false;
+    });
+</script>
+
+@*validate*@
+
+<script>
+
+    function validateCustomElements() {
+        @*if ($(".input-ghost").val() == '') {
+            alert("@Model["please select Team Logo..."]");
+            return false;
+        }*@
+
+        return true;
+
+    }
+</script>
+
+@*Initialize*@
+<script type="text/javascript">
+    function bs_input_file() {
+        $(".input-file").before(
+            function () {
+                if (!$(this).prev().hasClass('input-ghost')) {
+                    var element = $("<input type='file' id='inputGhost' class='input-ghost' style='visibility:hidden; height:0'>");
+                    element.attr("name", $(this).attr("name"));
+                    element.change(function () {
+                        element.next(element).find('input').val((element.val()).split('\\').pop());
+                    })
+                    $(this).find("button.submit-btn-choose-file").click(function () {
+                        element.click();
+                    })
+                    $(this).find("button.btn-reset").click(function () {
+                        element.val(null);
+                        $(this).parents(".input-file").find('input').val('');
+                    })
+                    $(this).find('input').css("cursor", "pointer");
+                    $(this).find('input').mousedown(function () {
+                        $(this).parents('.input-file').prev().click();
+                        return false;
+                    })
+                    return element;
+                }
+            }
+        );
+    }
+
+
+    $(document).ready(function () {
+
+        bs_input_file();
+    })
+
+</script>
+

@@ -1,0 +1,26 @@
+Hello Amirreza—
+Is there a way to export a sorted Team Status list?
+I would like to be able to sort the Team Status page, according to task number, then export that to Excel.
+
+The only exportable file I have found on our site is attached. The problem with it is that it groups tasks according to Advisor. That is good when organizing t-shirts for the contest, but I want to generate a report that helps me see how many teams are registered for each task. This means that I need each team that is registered for a task in its own separate row.
+
+I would like the report to look like the information from the attached screenshot (although payment information is not important for my needs, it would not hurt to include it). Notice that David Taylor has two teams registered for Task 1D, but each are listed in a separate row. That is exactly what I need.
+
+Kind regards,
+
+Ginger
+------------------------------------------------------------------------------------------------------------------------------------
+Put message below in https://werc.nmsu.edu/student/gesp/ page before "Experimental Safety Plan"
+
+message:
+
+"The WERC Environmental Design Contest is not accepting contest ESPs in 2021. Please refer to your institution's policies for submitting experimental safety plans. NMSU students should submit their ESP through Juanita Miller, according to NMSU's COE safety regulations."
+===========================================================================================
+change sort of date in https://werc.nmsu.edu/admin/lelm
+===========================================================================================
+Add row number in the Grids
+===========================================================================================
+Redirect judge to Profile page
+===========================================================================================
+Implement Setting Resource Link for roles Usecase
+------------------------------------------------------------------------------------------------------------------------------------

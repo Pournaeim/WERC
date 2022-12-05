@@ -1,0 +1,59 @@
+﻿
+
+@model IEnumerable<Model.ViewModels.Grade.Report.VmTaskBaseGrade>
+
+@foreach (var task in Model)
+{
+    <div class="col-xs-12 col-sm-12 col-md-12  col-lg-12">
+
+        <h3>@task.TaskName</h3>
+        <table class="table table-condensed table-bordered table-striped grade-report-table" border="1" cellpadding="0" cellspacing="0">
+            <tr class="grade-report-border">
+                <th>Team</th>
+
+                @foreach (var grade in task.GradeList)
+                {
+                    <th>AVG. @grade.Name</th>
+                }
+                <td><strong>Total</strong></td>
+
+            </tr>
+            @{
+                var teamIndex = 1;
+
+            }
+
+            @foreach (var team in task.TeamGradeList)
+            {
+                <tr>
+                    <td>Team @teamIndex</td>
+
+                    @{
+                        var total = 0d;
+                        teamIndex++;
+                    }
+
+                    @foreach (var grade in team.GradeReportList)
+                    {
+                        <td class="grade-cell-hover">
+                            <span>@grade.Average</span>
+                        </td>
+                        if (grade.Average.Value.ToString().ToLower() != "nan")
+                        {
+                            total += grade.Average.Value;
+                        }
+                    }
+
+                    @*@foreach (var grade in team.GradeReportList)
+                        {
+                            total += grade.Average.Value;
+                        }*@
+
+                    <td><strong>@total</strong></td>
+
+                </tr>
+            }
+        </table>
+
+    </div>
+}

@@ -1,0 +1,225 @@
+﻿<script src="https://www.google.com/recaptcha/api.js?render=6LcEf8UUAAAAAM0WRPze6GUKEGIaDS35i-p81L_t"></script>
+
+    <script>
+        grecaptcha.ready(function () {
+
+            grecaptcha.execute('6LcEf8UUAAAAAM0WRPze6GUKEGIaDS35i-p81L_t', { action: 'Register' }).then(function (token) {
+            debugger
+            $("#googleRecaptchaResponseHidden").val(token);
+        });
+    });
+    </script>
+
+<script src="https://www.google.com/recaptcha/api.js?render=6LfJeMUUAAAAACyyw-I0NnNUV_jJWZCB7OEbObN2"></script>
+
+@*<script>
+    grecaptcha.ready(function () {
+
+        grecaptcha.execute('6LfJeMUUAAAAACyyw-I0NnNUV_jJWZCB7OEbObN2', { action: 'Register' }).then(function (token) {
+        debugger
+        $("#googleRecaptchaResponseHidden").val(token);
+    });
+});
+</script>*@
+
+
+@model WERC.Models.RegisterViewModel
+@using Model.ToolsModels.DropDownList
+@{
+    ViewBag.Title = "Register";
+}
+<script src="~/Resources/Scripts/jquery.maskedinput.min.js"></script>
+
+<br />
+
+<div class="col-xs-12 col-sm-4">
+
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+
+        <input type="hidden" id="returnUrl" name="ReturnUrl" value="@Model.ReturnUrl" />
+        <input type="hidden" id="googleRecaptchaResponseHidden" name="GoogleRecaptchaResponse" />
+
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-xs-12">
+                <label class="text text-info sign-up-text fa-2x"> @Model["Sign Up as "] </label>
+            </div>
+            <div class="col-xs-4">
+
+                <label for="advisorRadioButton"> @Model["Faculty Advisor"] </label>
+                @Html.RadioButtonFor(m=>m.RoleName, "Advisor",
+                        new
+                        {
+                            @id = "advisorRadioButton",
+                        })
+            </div>
+            <div class="col-xs-4">
+
+                <label for="judgeRadioButton"> @Model["Judge"] </label>
+                @Html.RadioButtonFor(m=>m.RoleName, "Judge",
+                       new
+                       {
+                           @id = "judgeRadioButton",
+                       })
+            </div>
+        </div>
+
+        <hr />
+        <div class="row register-div">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="form-group university-div">
+                @Html.Label(@Model["University"], new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+
+                    @Html.Partial("_DropDownList",
+                       new VmDropDownList
+                       {
+                           HtmlElementId = "UniversityId",
+                           DataController = "University",
+                           DataAction = "guddl",
+                           OptionLabel = Model["Select University..."],
+                           ActiveItemValue = Model.UniversityId.ToString(),
+                           OnItemSelected = "UniversityDropDownList_OnClientSelectedItem",
+
+                       })
+
+                    @Html.ValidationMessage(@Model["UniversityId"], "", new { @class = "text-danger" })
+
+                    <script>
+                        function UniversityDropDownList_OnClientSelectedItem(id) {
+                        }
+                    </script>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label(@Model["First Name"], new { @class = "col-md-4 control-label", @Id = "FirstName" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label(@Model["Last Name"], new { @class = "col-md-4 control-label", @Id = "LastName" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label(@Model["Enter E-mail as your user name"], new { @class = "col-md-4 control-label", @title = "This E-mail will be your permanent username for this account" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @title = "This E-mail will be your permanent username for this account", @placeholder = "This Email will be your permanent username" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label(@Model["Phone (work)"], new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.WorkPhoneNumber, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label(@Model["Phone (at contest)"], new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                </div>
+            </div>
+            @*<div class="form-group">
+                    @Html.Label(@Model["Gender"], new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("Sex", new List<SelectListItem>
+                                                    {
+                                                        new SelectListItem{ Text="Male", Value="false"},
+                                                        new SelectListItem{ Text="Female", Value="true"}
+                                                    },  new { @class = "form-control" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                @Html.Label(@Model["Password"], new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label(@Model["Confirm Password"], new { @class = "col-md-4 control-label" })
+                <div class="col-md-8">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-8">
+                    <button type="submit" class="btn btn-primary" id="submitButton" value="@Model["Register"]">
+                        <i class="fa fa-user-plus icon-size-1-3"></i>
+                        <span class="">@Model["Register"]</span>
+                    </button>
+                    <a href="/Account/Login" class="btn btn-primary">
+                        <i class="fa fa-arrow-left icon-size-1-3"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="signUpPageContentContainerTop" class="col-xs-12 text-justify"></div>
+
+    }
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+
+        if ('@Model.RoleName' == "Advisor") {
+            $('.register-div').show();
+            $('.university-div').show();
+
+        }
+        else
+            if ('@Model.RoleName' == "Judge") {
+                $('.register-div').show();
+                $('.university-div').hide();
+
+            }
+            else {
+                $('.register-div').hide();
+                $('.university-div').hide();
+            }
+
+        $('#advisorRadioButton').click(function () {
+            $('.register-div').show();
+            $('.university-div').show();
+        });
+
+        $('#judgeRadioButton').click(function () {
+            $('.register-div').show();
+            $('.university-div').hide();
+        });
+
+        $("#PhoneNumber").mask("(999) 999-9999");
+        $("#PhoneNumber").click(function () {
+            $(this).focus();
+        });
+
+        $("#WorkPhoneNumber").mask("(999) 999-9999");
+        $("#WorkPhoneNumber").click(function () {
+            $(this).focus();
+        })
+
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "Get",
+            url: "/PageContent/gspc",
+            dataType: "html",
+
+        }).done(function (response) {
+            $("#signUpPageContentContainerTop").html(response);
+        }).fail(function (data, textStatus, XMLHttpRequest) {
+            $("#signUpPageContentContainerTop").html(data.responseText);
+        });
+    });
+</script>

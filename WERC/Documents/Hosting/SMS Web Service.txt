@@ -1,0 +1,21 @@
+﻿http://panel.kavenegar.com/client/tour/getstarted
+
+var sender = "100065995";
+var receptor = "09127306671";
+var message = ".وب سرویس  پیام کوتاه کاوه نگار";
+var api = new Kavenegar.KavenegarApi("4738656B564552554A57726B6C61523537476B7733556430375736765256415A");
+api.Send(sender, receptor, message);
+
+
+1280304693
+Pass:6323035165
+_____
+
+6649796786
+P:5831706036
+
+____
+2291235028
+P:1254844551
+
+

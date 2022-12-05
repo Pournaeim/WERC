@@ -1,0 +1,28 @@
+﻿@model  WERC.Models.VMDisplayEmail
+@{
+    ViewBag.Title = "You have successfully signed up!";
+}
+
+<div class="col-xs-2"></div>
+<div class="col-xs-8">
+
+    <h2>@ViewBag.Title</h2>
+    <p>
+        @Model["Thank you for your interest in the 33rd WERC Environmental Design Contest."]
+    </p>
+    <p class="text-info"><b>@Model[Model.Message]</b></p>
+
+    @*<p>
+        @Model["We have received your request for access to the online platform. Each request requires approval from our system administrator."]
+    </p>*@
+    <hr />
+    <p>
+        <b> @Model["If you do not receive the confirmation message within a few minutes of signing up, please check your Spam or Bulk or Junk E-Mail folder just in case the confirmation email got delivered there instead of your inbox. If so, select the confirmation message and mark it Not Spam, which should allow future messages to get through."]</b>
+    </p>
+    <hr />
+
+    <p>
+        @Model["If you have questions about the WERC Environmental Design Contest online platform, please call 575-646-8171 or email wercteams.nmsu.edu ."]
+    </p>
+</div>
+<div class="col-xs-2"></div>

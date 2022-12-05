@@ -1,0 +1,269 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Team;
+
+@model VmTeamMemberManagement
+@{
+    ViewBag.Title = "Team Member Management";
+
+    Layout = "~/Views/Shared/_LayoutAdvisor.cshtml";
+
+    Model.ReadOnly = false;
+
+}
+
+<div class="col-xs-6 col-sm-3">
+    <span class="team-member-form-title display-block">Team Activities </span>
+    <span class="team-name-form-title display-block">Team Name: <span style="font-size:.7em">@Model.TeamName </span> </span>
+    <span class="task-name-form-title display-block">@Model["Task"]: <span style="font-size:.7em">@Model.Task </span>  </span>
+    @if (!string.IsNullOrWhiteSpace(Model.ProjectTitle))
+    {
+        <span class="task-name-form-title display-block">@Model["Project title"]: <span style="font-size:.7em">@Model.ProjectTitle  </span> </span>
+    }
+    <div class="col-xs-12">
+
+        <div class="row">
+            <a href='/advisor/ltef/@Model.TeamId' class='btn btn-success force-width-180'>@Model["Edit Selected Task"]</a>
+
+        </div>
+        <div class="row">
+            <button type='button' class='btn btn-danger force-width-180 force-margin-5'
+                    data-id="@Model.TeamId"
+                    onclick='showDeleteTeamConfirmDialog(this)'>
+                @Model["Delete This Team"]
+            </button>
+
+        </div>
+        <div class="row">
+            <a href="#teamMemberAnchore" class="btn btn-primary force-width-180 force-margin-5">Add/Edit Team Members</a>
+
+        </div>
+
+    </div>
+</div>
+<div class="col-xs-6 col-sm-7 col-sm-offset-2">
+
+    <table class="table-bordered">
+
+        <tr>
+            <td colspan="2">
+                <div class="submission-table-header-container">
+                    <span class="display-block submission-header text-center">Team Submissions</span>
+                    <spnan class="display-block submission-detail">
+                        @if (Model.SubmissionRuleList != null && Model.SubmissionRuleList.Count > 0)
+                        {
+                            <p>
+                                Once a report has been submitted, it may be replaced by clicking the "Submit" button again.
+                            </p>
+                            <p>
+                                Caution! Re-submitting will change the time stamp. Note the substantial point penalties for late submissions.
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                Any submission has not been set for this task yet
+                            </p>
+                        }
+                    </spnan>
+                </div>
+            </td>
+        </tr>
+
+        @foreach (var submission in Model.SubmissionRuleList)
+        {
+
+            var inputFileId = "submissionRule_" + submission.Id;
+            var submissionRuleUrlLinkId = "submissionRuleUrl_" + submission.Id;
+            var submissionRuleUrlHiddenId = "submissionRuleUrlHidden_" + submission.Id;
+            var submissionUrlSpanId = "submissionUrlSpanId_" + submission.Id;
+
+            <tr>
+                <td>
+                    <input id="@inputFileId" name="file" type="file" class="form-control hidden" />
+
+                    <button type="button" class="submission-open-task-plan-button text-left" onclick="$('#@inputFileId').click()">
+                        @submission.Name
+                    </button>
+
+                    @if (!string.IsNullOrWhiteSpace(submission.SubmissionRuleUrl) && submission.SubmissionRuleUrl.Split(new string[] { "-?CT=" }, StringSplitOptions.None)[0] != "")
+                    {
+                        <a href="@HttpUtility.HtmlDecode(submission.SubmissionRuleUrl)" id="@submissionRuleUrlLinkId"
+                           data-attachedurl="submission.SubmissionRuleUrl" class="display-block" target="_blank">
+                            @{
+                                var splitItem = submission.SubmissionRuleUrl.Split(new string[] { "?CT" }, StringSplitOptions.RemoveEmptyEntries)[0];
+                                var slashSplit = splitItem.Split('/');
+                            }
+                            <span class="display-block" id="@submissionUrlSpanId">Uploaded File: @slashSplit[slashSplit.Length - 1]</span>
+                        </a>
+                                }
+                                else
+                                {
+                        <a href="" id="@submissionRuleUrlLinkId" class="display-block" target="_blank">
+                            <span class="display-block" id="@submissionUrlSpanId"> </span>
+                        </a>
+                                }
+
+                    <script>
+
+                        $('#@inputFileId').on('change', function (e) {
+                            uploadSubmissionRule('@inputFileId', '@submissionRuleUrlLinkId', @Model.TeamId,
+                                                @submission.Id, '@submissionRuleUrlHiddenId', '@submissionUrlSpanId');
+                        });
+
+                        $('#@inputFileId').on('click', function (e) {
+
+                            @if (submission.RegistrationStatus == true && submission.TeamRegistrationStatus == false)
+                            {
+                                @Html.Raw("alert('This submission rule cannot be submitted, Team registration status is not complete.'); return false;");
+                            }
+                            @if (submission.PayStatus == true && submission.TeamPayStatus == false)
+                            {
+                                @Html.Raw("alert('To submit the " + submission.Name.Replace("\r", "").Replace("\n", "") + ", the payment status of this team should be PAID.'); return false;");
+                            }
+                        });
+
+                    </script>
+
+                    @Html.Hidden("SubmissionRuleUrl", submission.SubmissionRuleUrl, htmlAttributes: new { @id = "submissionRuleUrlHidden" })
+
+                </td>
+                <td>@submission.Description @submission.DueDate</td>
+            </tr>
+
+                                }
+
+        @*<tr>
+                <td>
+                    <button onclick='window.location = "/advisor/gesp/@Model.TeamId"'
+                            title="Submit Experimental Safety"
+                            class='submission-experimental-safty-button text-left'>
+
+                        Submit Experimental Safety
+
+                    </button>
+                </td>
+                <td></td>
+            </tr>*@
+    </table>
+
+</div>
+
+<hr />
+<div class="col-xs-12 col-sm-12">
+    <a name="teamMemberAnchore"></a>
+    <hr />
+    <h5>Double-click on the grid row to update team member. To add a new team member, click the gray "Add Member" box.</h5>
+    <hr />
+
+    @Html.Partial("_TeamMemberGrid", new VmJsGrid()
+{
+    DataAction = "gtbf",
+    DataController = "TeamMember",
+
+    CreateAction = "Create",
+    CreateController = "TeamMember",
+
+    EditAction = "Edit",
+    EditController = "TeamMember",
+
+    DeleteAction = "Delete",
+    DeleteController = "TeamMember",
+
+    ReadOnly = false,
+    HtmlElementId = "TeamManagement_TeamMemberJsGrid",
+    ExternalHtmlControlId = "_TeamMemberGrid_TeamId_Hidden",
+    CurrentUserRoles = Model.CurrentUserRoles,
+    LanguageDictionary = Model.LanguageDictionary,
+})
+</div>
+
+<input type="hidden" id="_TeamMemberGrid_TeamId_Hidden" value="@Model.TeamId" />
+
+<script>
+    $(document).ready(function () {
+
+    });
+
+    function showDeleteTeamConfirmDialog(sender) {
+
+        var confirmDeleteDialogObjec =
+            {
+                title: "Delete Team",
+                sender: sender,
+                width: "",
+                height: "auto",
+                dialogConfirmId: "confirmDialogContainer",
+                yesButton:'@Model["Yes"]',
+                noButton: '@Model["No"]',
+                acceptCallbak: function (sender) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/team/dt",
+                        data: { id: $(sender).data("id") }
+                    }).done(function (result) {
+                        alert(result.message);
+                        if (result.success == true) {
+                            location.href = "/advisor/tl";
+                        }
+                    });
+                },
+                rejectCallbak: function () { }
+            }
+
+        openConfirmDialog(confirmDeleteDialogObjec);
+    }
+</script>
+
+
+
+
+<script type="text/javascript">
+    function uploadSubmissionRule(inputFileId, submissionRuleUrlLinkId, teamId, submissionRuleId, SubmissionRuleUrlHiddenId, submissionUrlSpanId) {
+
+        var formData = new FormData();
+
+        var uploadedFile = document.getElementById(inputFileId).files[0];
+
+        formData.append("uploadedSubmissionRule", uploadedFile);
+        formData.append("teamId", teamId);
+        formData.append("submissionRuleId", submissionRuleId);
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/team/usr", //you can get also action attribute from form using form.attr('action')
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+        }).done(
+            function (result)
+            {
+                if (result.success == true) {
+
+                    alert(result.message);
+
+                    $("#" + SubmissionRuleUrlHiddenId).val(result.submissionRuleUrl);
+                    $("#" + submissionRuleUrlLinkId).attr("href", result.submissionRuleUrl);
+                    $("#" + submissionUrlSpanId).text("File Uploaded: " + result.submissionRuleFileName);
+
+                    //window.location.reload(true);
+                    HoldOn.close();
+
+                }
+                else {
+                    HoldOn.close();alert("Operation has been failed");
+                }
+
+            }).fail(function () { alert("Operation has been failed"); HoldOn.close(); });
+    }
+</script>
+
+
+

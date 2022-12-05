@@ -1,0 +1,65 @@
+﻿
+@model Model.ViewModels.Test.VmTeamTestManagement
+
+@using Model.ViewModels.Test;
+
+
+@{
+    ViewBag.Title = "Lab Results";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<link href="~/Resources/CSS/treeview.css" rel="stylesheet" />
+
+<h2>
+    @DateTime.Now.Year Environmental Design Contest Lab Results
+</h2>
+
+<div class="col-xs-12">
+
+    <ul id="tree1" class="cnct">
+
+                            @*(labUsers).Items[0]).Tasks).Items[0]).UserTasks).Items[0]).TeamTests).Items[0]).TestList).Items[0]*@
+
+                            @foreach (var labUser in Model.LabUsers)
+                            {
+                                <li class="cnct">
+                                    @labUser.Name
+
+                                    <ul class="cnct">
+                                        @foreach (var task in labUser.Tasks)
+                                        {
+                                            <li class="cnct">
+                                                @task.Name
+                                                <ul class="cnct">
+
+                                                    @foreach (var item in task.UserTasks)
+                                                    {
+                                                        <li class="cnct">
+                                                            @Html.Partial("_TeamTestTable",
+                                                               new VmTeamTestCollection {
+                                                                   TaskId = item.TaskId,
+                                                                   TeamTestList = item.TeamTests
+                                                               })
+
+                                                        </li>
+                                                    }
+
+                                                </ul>
+                                            </li>
+                                        }
+                                    </ul>
+
+                                </li>
+                            }
+    </ul>
+
+
+</div>
+
+<script src="~/Resources/Scripts/treeview.js"></script>
+<script>
+
+    $('#tree1').treed();
+
+</script>

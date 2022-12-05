@@ -1,0 +1,28 @@
+﻿@using Model.ViewModels.Task
+@model  VmTaskCollection
+
+@foreach (var item in Model.TaskList)
+{
+    <div class="col-xs-12 card ui-draggable ui-draggable-handle" id="@item.Id">
+        <div class="margin-div dropped-select-item-hihghlight">
+            <div id="dragedImageDiv" class="col-xs-12">
+                <div class="row">
+                    <img src="@item.ImageUrl" class="img-responsive item-image" />
+                </div>
+            </div>
+
+            <div class="card-detail col-xs-12">
+                <div class="card-item-detail">
+                    <span for="Name" class="card-item-detail-label">@Model["Name"]:</span>
+                    <span id="Name" name="Name" class="card-item-detail-value"> @item.Name </span>
+                    <span for="Name" class="card-item-detail-label display-block">@Model["Priority"]:<span for="Name" class="card-item-detail-value"> @item.Priority</span></span>
+                    
+                </div>
+            </div>
+            <p id="removeSection" class="col-xs-12 text-right operation-key-bottom">
+                <button type='button' id="@item.Id" class='btn btn-danger btn-sm btn-delete remove-draged-item-img' title="@Model["Delete"]" 
+                        onclick='showDroppedDeleteItemConfirmDialog(this)'></button>
+            </p>
+        </div>
+    </div>
+}

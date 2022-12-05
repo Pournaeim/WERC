@@ -1,0 +1,653 @@
+﻿
+@model Model.ViewModels.TeamSafetyItem.VmTeamSafetyItemCollection
+
+@using Model.ToolsModels.DropDownList
+
+@{
+    ViewBag.Title = "Experimental Safety Plan";
+    Layout = "~/Views/Shared/_LayoutSafetyAdmin.cshtml";
+    var firstTime = true;
+    var firstAccordionLinkId = "";
+}
+
+<link href="~/Resources/CSS/treeview.css" rel="stylesheet" />
+<link href="~/Resources/CSS/_accordion.css" rel="stylesheet" />
+
+<h2>Experimental Safety Plan. </h2>
+<h3>Team Name: <span style="color:#850d0d">@Model.TeamName</span> ---- <span style="color:#850d0d">@Model.TaskName.ToUpper()</span></h3>
+<h3> @Model.University </h3>
+
+
+@*Html.ReportViewer(ViewBag.ReportViewer as Microsoft.Reporting.WebForms.ReportViewer)*@
+
+
+<div class="row">
+
+    <div class="col-xs-12 text-left">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <script>
+                var safetyItemSubmitObject =
+                {
+                    commentId: "",
+                    commentValue: "",
+                    descriptionContentIsReadonly: false,
+                    descriptionContentValue: "",
+                }
+
+                var safetyItemSubmitObjectList = [];
+
+            </script>
+            @{
+                var teamId = Model.TeamSafetyItemList.First().TeamId;
+            }
+            <ul id="tree1" class="tree cnct">
+
+                @foreach (var safetyItem in Model.SafetyItemList)
+                {
+                    var checklistIdsHiddenId = "checklistIdsHidden" + safetyItem.Id;
+
+                    var selectedFileNameContainerId = "selectedFileNameContainer" + safetyItem.Id;
+                    var attachedFileUrlHiddenId = "attachedFileUrlHidden" + safetyItem.Id;
+
+                    var teamSafetyItem = Model.TeamSafetyItemList.Where(t => t.SafetyItemId == safetyItem.Id);
+
+                    var parentColor = "tree-color-dark";
+                    var parentText = safetyItem.Name;
+                    var parentRedText = "";
+
+                    if (safetyItem.SafetyItemStatus == 1)
+                    {
+                        parentColor = "tree-color-light";
+
+                        parentRedText = "<span id='newSubmissionSpanId" + safetyItem.Id + "' style='color:#ff0000;'> (New Submission)</span>";
+
+                    }
+                    else
+                    if (safetyItem.SafetyItemStatus == 3)
+                    {
+                        parentColor = "green-tree-color";
+                        parentText += " (Approved)";
+                        parentRedText = "";
+                    }
+                    else
+                    {
+                        parentColor = "tree-color-dark";
+                    }
+
+                    var parentSafetyItemLiId = "parentSafetyItemLi" + safetyItem.Id;
+                    var parentTextId = "parentTextA" + safetyItem.Id;
+
+                    <li id="@parentSafetyItemLiId" class="cnct">
+
+                        <a id="@parentTextId" class="@parentColor">@parentText</a>@Html.Raw(parentRedText)
+                        <ul class="cnct">
+                            <li class="cnct">
+                                <div class="row text-justify text-left">
+
+                                    @MvcHtmlString.Create(safetyItem.Instruction.Replace("\r\n", "</br>"))
+
+                                    <hr />
+                                </div>
+                                @if (safetyItem.SafetyItemDetails.Count() > 0)
+                                {
+
+                                    <div class="row text-left">
+                                        <div class="col-xs-4">
+
+
+                                            <label class="note-form-label">@Model["WERC Benchscale Lab Checklist"]</label>
+
+                                            @{
+                                                var selectedItems = (safetyItem.ChecklistIds != null) ? string.Join(",", safetyItem.ChecklistIds) : "";
+                                            }
+
+                                            @Html.Partial("_ReadOnlySelectedList", new VmDropDownList
+                                                               {
+                                                                   HtmlElementId = "EditChecklistIds",
+                                                                   DataController = "SafetyAdmin",
+                                                                   DataAction = "gclddl" ,
+                                                                   OptionLabel = Model["Check item/s ..."],
+                                                                   SelectedItems = "selectFromJson", // select from selected Property of json data
+                                                                   OnItemSelected = "ChecklistDropDownList_OnClientSelectedItem",
+                                                                   QueryStringParameters = "teamId=" + teamId + "&safetyItemId=" + safetyItem.Id,
+                                                                   CssClass="col-xs-6",
+                                                                   ReadOnly=true,
+                                                               })
+
+                                            @Html.ValidationMessage(@Model["ChecklistIds"], "", new { @class = "text-danger" })
+
+                                            <script>
+                                            function ChecklistDropDownList_OnClientSelectedItem(ids) {
+
+                                                $("#@checklistIdsHiddenId").val(ids);
+                                            }
+                                            </script>
+
+
+
+                                            @Html.HiddenFor(model => safetyItem.ClientChecklistIds, htmlAttributes: new { @id = @checklistIdsHiddenId, @value = string.Join(",", selectedItems) })
+                                            <hr />
+
+                                        </div>
+                                    </div>
+
+                                }
+                                <div class="form-group">
+
+                                    <a href="@HttpUtility.HtmlDecode(safetyItem.AttachedFileUrl ?? "")" id="@selectedFileNameContainerId" class="display-block" target="_blank">
+
+                                        @if (string.IsNullOrWhiteSpace(safetyItem.AttachedFileUrl) == false)
+                                        {
+                                            var splitItem = safetyItem.AttachedFileUrl.Split(new string[] { "?CT" }, StringSplitOptions.RemoveEmptyEntries)[0];
+                                            var slashSplit = splitItem.Split('/');
+                                            <span class="col-xs-12 display-block">Attached File: @HttpUtility.HtmlDecode(@slashSplit[slashSplit.Length - 1])</span>
+                                        }
+
+                                    </a>
+                                    <hr />
+
+                                    @Html.HiddenFor(model => safetyItem.AttachedFileUrl, htmlAttributes: new { @id = @attachedFileUrlHiddenId })
+
+                                </div>
+
+                                <hr />
+
+                            </li>
+
+                            @foreach (var subItem in teamSafetyItem)
+                            {
+
+
+                                var headingId = "heading" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var collapseId = "collapse" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var accordionLinkId = "accordionLink" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var commentId = "comment" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var descriptionContentId = "descriptionContent" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var itemStatusId = "itemStatus" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var approveButtonId = "approveButton" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var inReviewButtonId = "inReviewButton" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var bkackgoundColor = "accordion-bkackgound-light";
+                                var statusImage = "/Resources/Images/Stylish_ok.png";
+                                var statusImageId = "statusImage" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var safetyCommentLogButtonId = "safetyCommentLogButton" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var safetyContentLogButtonId = "safetyContentLogButtonId" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var descriptionContentValueDivId = "descriptionContentValueDiv" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                var commentValueDivId = "commentValueDiv" + subItem.SafetyItemId + "_" + subItem.SubSafetyItemId;
+                                <li class="cnct">
+
+                                    @*Do not break div content by pressing Enter Key*@
+                                    <div id="@descriptionContentValueDivId" class="hidden">@MvcHtmlString.Create(subItem.LastContent.Replace("\r\n", "</br>"))</div>
+                                    <div id="@commentValueDivId" class="hidden"> @MvcHtmlString.Create(subItem.LastComment.Replace("\r\n", "</br>"))</div>
+                                    @*Do not break div content by pressing Enter Key*@
+
+                                    <script>
+
+                                       safetyItemSubmitObject = {
+
+                                           commentId : "@commentId",
+                                           commentValueDivId: '@commentValueDivId',
+
+                                           descriptionContentId : "@descriptionContentId",
+                                           descriptionContentValueDivId: '@descriptionContentValueDivId',
+
+                                        }
+
+                                        safetyItemSubmitObjectList.push(safetyItemSubmitObject);
+
+                                    </script>
+
+                                    @if (firstTime == true)
+                                    {
+                                        firstAccordionLinkId = accordionLinkId;
+                                        firstTime = false;
+                                    }
+
+                                    @if (subItem.ItemStatus == 1)
+                                    {
+                                        firstAccordionLinkId = accordionLinkId;
+                                        firstTime = false;
+                                    }
+
+                                    @if (subItem.ItemStatus == 1)
+                                    {
+                                        bkackgoundColor = "accordion-bkackgound-light";
+                                    }
+                                    else
+                                    {
+                                        bkackgoundColor = "accordion-bkackgound-dark";
+                                    }
+
+                                    @if (subItem.ItemStatus == 3)
+                                    {
+                                        statusImage = "/Resources/Images/Stylish_ok.png";
+                                    }
+                                    else
+                                    {
+                                        statusImage = "/Resources/Images/Stylish_not_ok.png";
+                                    }
+
+                                    <div class="panel panel-default">
+                                        @{
+                                            var panelClass = "panel-collapse collapse";
+                                        }
+
+                                        @if (string.IsNullOrWhiteSpace(subItem.Instruction) == false)
+                                        {
+                                            <div class="panel-heading border-round @bkackgoundColor" role="tab" id="@headingId"
+                                                 data-toggle="collapse" data-parent="#accordion" data-target="#@collapseId">
+                                                <div class="row">
+                                                    <div class="col-xs-11">
+                                                        <h4 class="panel-title">
+                                                            <a id="@accordionLinkId" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                                                                @subItem.SafetyItemName
+                                                            </a>
+                                                        </h4>
+
+                                                    </div>
+                                                    <div class="col-xs-1">
+                                                        <img src="@statusImage" id="@statusImageId" width="32" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            panelClass = "";
+                                        }
+                                        <div id="@collapseId" class="@panelClass" role="tabpanel" aria-labelledby="@headingId">
+                                            <div class="panel-body">
+                                                <div class="row text-justify text-left">
+                                                    <div class="col-xs-12">
+
+                                                        @MvcHtmlString.Create(subItem.Instruction.Replace("\r\n", "</br>"))
+                                                        @if (string.IsNullOrWhiteSpace(subItem.Instruction) == false)
+                                                        {
+                                                            <hr />
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div class="row text-left">
+                                                    <div class="form-group">
+                                                        @Html.Label(@Model["Content"], htmlAttributes: new { @class = "control-label col-xs-12" })
+
+                                                        <div class="col-xs-12">
+
+                                                            @*@Html.Label(item.LastContent, new { @class = "form-control description-content", @id = @descriptionContentId })*@
+
+
+                                                            <div class="form-control description-content" id="@descriptionContentId"></div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <div class="form-group">
+                                                            @Html.Label(@Model["Safety Admin Comment"], htmlAttributes: new { @class = "control-label col-xs-12" })
+                                                            <div class="col-xs-12">
+
+                                                                <div class="form-control description-content" id="@commentId"></div>
+
+                                                                <i class="text-danger fa-2x">*</i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <div class="col-xs-12">
+                                                            <button type="button" id="@approveButtonId" class="btn btn-group btn-success">Approve This Item</button>
+                                                            <button type="button" id="@inReviewButtonId" class="btn btn-group btn-primary">Save the Comment</button>
+                                                            <button type="button" id="@safetyCommentLogButtonId"
+                                                                    onclick="showSafetyLog('@subItem.SubSafetyItemId', '@subItem.SafetyItemName', true)"
+                                                                    class="btn btn-group btn-warning">
+                                                                Safety Admin Comment History
+                                                            </button>
+                                                            <button type="button" id="@safetyContentLogButtonId"
+                                                                    onclick="showSafetyLog('@subItem.SubSafetyItemId', '@subItem.SafetyItemName', false)"
+                                                                    class="btn btn-group btn-warning">
+                                                                Team Changes History
+                                                            </button>
+                                                        </div>
+                                                        <script>
+
+                                                            $('#@approveButtonId').click(function () {
+                                                                var safetyItemValueObject = {
+                                                                    safetyItemId: @subItem.SafetyItemId,
+                                                                    subSafetyItemId: @subItem.SubSafetyItemId,
+                                                                    comment: $('#@commentId').summernote('code'),
+                                                                    itemStatus: 3,
+                                                                    teamId: @subItem.TeamId,
+                                                                    attachedFileUrl : '@subItem.AttachedFileUrl',
+                                                                    descriptionContentValueDivId: '@descriptionContentValueDivId',
+                                                                    headingId: '@headingId',
+                                                                    statusImageId: '@statusImageId',
+                                                                };
+
+
+                                                                saveSaftyItem(safetyItemValueObject);
+
+                                                            });
+
+                                                        </script>
+
+                                                        <script>
+
+                                                            $('#@inReviewButtonId').click(function () {
+                                                                var safetyItemValueObject = {
+                                                                    safetyItemId: @subItem.SafetyItemId,
+                                                                    subSafetyItemId: @subItem.SubSafetyItemId,
+                                                                    comment: $('#@commentId').summernote('code'),
+                                                                    itemStatus: 2,
+                                                                    teamId: @subItem.TeamId,
+                                                                    attachedFileUrl : '@subItem.AttachedFileUrl',
+                                                                    descriptionContentValueDivId: '@descriptionContentValueDivId',
+                                                                    headingId: '@headingId',
+                                                                    statusImageId: '@statusImageId',
+
+                                                                };
+
+                                                                if (safetyItemValueObject.comment.length == 0) {
+
+                                                                    alert("Please enter the comment for this safety item");
+                                                                    return;
+                                                                }
+
+                                                                saveSaftyItem(safetyItemValueObject);
+
+                                                            });
+
+                                                        </script>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-xs-2"></div>
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <button type="button" id="finalInReviewButtonId" class="btn btn-group btn-danger">In review</button>
+
+            <button type="button" id="savetheESPButtonId" class="btn btn-group btn-success">Approve the ESP</button>
+
+            <button type="button" class="btn btn-group btn-primary" onclick="exportToPDF()">Export To PDF</button>
+
+            <script>
+
+                $('#finalInReviewButtonId').click(function () {
+
+                    HoldOn.open({
+                        theme: 'sk-cube-grid',
+                        message: "<h4>@Model["Please wait..."]</h4>"
+                    });
+
+                    $.ajax({
+                        url: "/safetyadmin/espa", //you can get also action attribute from form using form.attr('action')
+                        type: 'POST',
+                        data: { teamId: @teamId, itemStatus : 2},
+                        dataType: "json"
+
+                    }).done(
+                        function (result)
+                        {
+                            if (result.allowInReview == false) {
+                                alert("There is no new comment to send as a review");
+                            }
+                            else {
+
+                                alert("Operation successful");
+                            }
+
+                            HoldOn.close();
+                        });
+
+                });
+                $('#savetheESPButtonId').click(function () {
+
+                    HoldOn.open({
+                        theme: 'sk-cube-grid',
+                        message: "<h4>@Model["Please wait..."]</h4>"
+                    });
+
+                    $.ajax({
+                        url: "/safetyadmin/espa", //you can get also action attribute from form using form.attr('action')
+                        type: 'POST',
+                        data: { teamId: @teamId, itemStatus: 3 },
+                        dataType: "json"
+                    }).done(
+                        function (result)
+                        {
+
+                            alert("Operation successful");
+                            location.href = "/safetyadmin/gesp/?teamId=" + @teamId;
+
+                        });
+
+                });
+
+            </script>
+        </div>
+    </div>
+</div>
+
+<link href="~/Resources/CSS/modal-fixed-full-screen.css" rel="stylesheet" />
+
+<div class="modal-fixed-full-screen">
+    <div class="modal fade" id="safetyLogModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="text-center">@Model["Safety Admin Comment History"]</h5>
+                    <div class="row text-center">
+                        <h4 class="col-xs-12 text-left" id="safetyItemNameContainer"></h4>
+                        <div class="col-xs-12 text-left" id="safetyLogContainer"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function showSafetyLog(safetyItemId, safetyItemName, type) {
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/safetyadmin/scl", //you can get also action attribute from form using form.attr('action')
+            type: 'POST',
+            data: { safetyItemId: safetyItemId, teamId: @teamId, type: type },
+            dataType: "html",
+        }).done(
+            function (result) {
+                debugger
+                $("#safetyLogContainer").html(result);
+                $("#safetyItemNameContainer").html(safetyItemName);
+
+                $("#safetyLogModal").modal();
+
+                HoldOn.close();
+            });
+    }
+
+</script>
+
+<script type="text/javascript">
+    function saveSaftyItem(safetyItemValueObject) {
+
+        var formData = new FormData();
+
+        formData.append("safetyItemId", safetyItemValueObject.safetyItemId);
+        formData.append("subSafetyItemId", safetyItemValueObject.subSafetyItemId);
+        formData.append("teamId", safetyItemValueObject.teamId);
+        formData.append("comment", safetyItemValueObject.comment);
+        formData.append("itemStatus", safetyItemValueObject.itemStatus);
+        formData.append("attachedFileUrl", safetyItemValueObject.attachedFileUrl);
+        formData.append("lastContent", $('#' + safetyItemValueObject.descriptionContentValueDivId).html());
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/safetyadmin/ssi", //you can get also action attribute from form using form.attr('action')
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+        }).done(
+            function (result)
+            {
+                $("#" + safetyItemValueObject.headingId).addClass("accordion-bkackgound-dark").removeClass("accordion-bkackgound-light");
+
+                alert("Operation successful");
+
+                if (safetyItemValueObject.itemStatus == 3) {
+                    $("#" + safetyItemValueObject.statusImageId).attr("src", "/Resources/Images/Stylish_ok.png");
+                }
+                else
+                {
+                    $("#" + safetyItemValueObject.statusImageId).attr("src", "/Resources/Images/Stylish_not_ok.png");
+                }
+
+                var parentColor = "tree-color-dark";
+                var parentText = result.Name;
+                var parentRedText = "";
+
+                if (result.SafetyItemStatus == 1)
+                {
+                    parentColor = "tree-color-light";
+                    parentRedText = "<span id='newSubmissionSpanId" + result.safetyItemId + "' style='color:#ff0000;'> (New Submission)</span>";
+                }
+                else
+                    if (result.SafetyItemStatus == 3)
+                    {
+                        parentColor = "green-tree-color";
+                        parentText += " (Approved)";
+                        parentRedText = "";
+                    }
+                    else
+                    {
+                        parentColor = "tree-color-dark";
+                    }
+
+                if($("#newSubmissionSpanId"+ result.safetyItemId) != undefined)
+                {
+                    $("#newSubmissionSpanId"+ result.safetyItemId).remove();
+                }
+
+                $("#parentTextA" + result.safetyItemId).text(parentText);
+
+                if(parentRedText != '')
+                {
+                    $("#parentTextA" + result.safetyItemId).after(parentRedText);
+                }
+
+                $("#parentTextA" + result.safetyItemId).removeClass("null-tree-color").removeClass("tree-color-dark").removeClass("tree-color-light").removeClass("green-tree-color").addClass(parentColor);
+
+
+
+                HoldOn.close();
+            });
+
+    }
+
+</script>
+
+<script src="~/Resources/Scripts/treeview.js"></script>
+
+<script>
+    $('#tree1').treed();
+
+    $(window).on("load", function () {
+        console.log("window loaded @firstAccordionLinkId");
+
+        for (i = 0; i < safetyItemSubmitObjectList.length; i++)
+        {
+            var contentElement = $("#" + safetyItemSubmitObjectList[i].descriptionContentId);
+
+            contentElement.summernote({
+                height: 300, minHeight: null, maxHeight: null, focus: false,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']], ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ],
+            });
+            contentElement.summernote('code', $('#' + safetyItemSubmitObjectList[i].descriptionContentValueDivId).html());
+
+            contentElement.summernote('disable');
+
+            var commentElement = $("#" + safetyItemSubmitObjectList[i].commentId);
+
+            commentElement.summernote({
+                height: 300, minHeight: null, maxHeight: null, focus: false,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']], ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ],
+            });
+
+            commentElement.summernote('code', $('#' + safetyItemSubmitObjectList[i].commentValueDivId).html());
+        }
+    });
+
+    function exportToPDF()
+    {
+
+        $.ajax({
+            url: '/SafetyAdmin/espr/' + @Model.TeamId,
+            cache: false,
+            type: "GET",
+            success: function (data) {
+                //let pdfWindow = window.open("");
+                //pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64," + data + "'></iframe>");
+                
+                window.open(data.downloadURL);
+
+            }
+        });
+    }
+</script>

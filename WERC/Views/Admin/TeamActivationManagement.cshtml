@@ -1,0 +1,143 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Team;
+
+@model VmTeamFullInfoManagement
+
+@{
+    ViewBag.Title = "Team Full Info Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Model.ReadOnly = false;
+}
+
+<h4>  @Model["Team Activation"]  </h4>
+
+<hr />
+<div class="col-xs-12">
+    <div class="col-xs-6">
+
+        <button type="button" class="btn btn-success col-xs-4 button-margin" onclick="AllowAllTeamsViewScores()">Enable view scores for all team members</button>
+
+        <button type="button" class="btn btn-danger col-xs-4 button-margin" onclick="SuppressAllTeamsViewScores()">Disable view scores for all team members</button>
+
+    </div>  
+    @*<div class="col-xs-6">
+
+        <button type="button" class="btn btn-success col-xs-4 button-margin" onclick="AllowAllTeams()">Allow scoring for all teams</button>
+
+        <button type="button" class="btn btn-danger col-xs-4 button-margin" onclick="SuppressAllTeams()">Suppress scoring for all teams</button>
+
+    </div>*@
+
+    <br />
+    <hr />
+
+</div>
+<div class="col-xs-12 col-sm-12">
+    @Html.Partial("PartialviewTeamActivationGrid", new VmJsGrid()
+{
+    DataAction = "gta",
+    DataController = "team",
+
+    EditAction = "etps",
+    EditController = "team",
+
+    ReadOnly = false,
+    HtmlElementId = "TeamFullInfo_TeamFullInfoJsGrid",
+    CurrentUserRoles = Model.CurrentUserRoles,
+    LanguageDictionary = Model.LanguageDictionary
+})
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+
+    function SuppressAllTeams() {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+
+            type: "POST",
+            url: "/team/ssa_ats",
+
+        }).done(function (response) {
+
+            alert("All teams has been suppressed to scoring.");
+            window.location.reload();
+            HoldOn.close();
+
+        });
+
+    }
+
+    function AllowAllTeams() {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+
+            type: "POST",
+            url: "/team/sa_ats",
+
+        }).done(function (response) {
+
+            alert("All teams has been allowed to scoring.");
+            window.location.reload();
+            HoldOn.close();
+
+        });
+
+    }
+
+    function SuppressAllTeamsViewScores() {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+
+            type: "POST",
+            url: "/team/sa_atsvs",
+
+        }).done(function (response) {
+
+            alert("You have successfully disabled view scores for team members.");
+
+            window.location.reload();
+            HoldOn.close();
+
+        });
+
+    }
+
+    function AllowAllTeamsViewScores() {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+
+            type: "POST",
+            url: "/team/ssa_atsvs",
+
+        }).done(function (response) {
+
+            alert("Now all team members are able to view their scores.");
+            window.location.reload();
+            HoldOn.close();
+
+        });
+
+    }
+</script>
+

@@ -1,0 +1,531 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <button type="button" id="sendEmailToSelectedUsers" class="btn btn-primary">Send email to selected judges to assign tasks</button>
+        @*    <button type="button" id="submitJudgesAssignedTasks" class="btn btn-primary">Send email to selected judges to assign tasks</button>*@
+    </div>
+    <hr />
+    <div id="externalPager_1" style="font-size: 16px; font-weight: bold;"></div>
+    <div id="@jsGridHtmlElementId"></div>
+
+    <link href="~/Resources/CSS/modal-fixed-full-screen.css" rel="stylesheet" />
+    <div class="modal-fixed-full-screen">
+        <div class="modal fade" id="profileInfoModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close profile-info-modal-close-button">&times;</button>
+                        <h4 class="modal-title"><span id="profileNameSpan"></span> Profile Info</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="profileDiv" class="row text-left"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default profile-info-modal-close-button">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="additionalEmailHidden" />
+
+<div class="hidden">
+
+    <div class="config-panel">
+        <label><input id="heading" type="checkbox" checked /> Heading</label>
+        <label><input id="filtering" type="checkbox" /> Filtering</label>
+        <label><input id="inserting" type="checkbox" /> Inserting</label>
+        <label><input id="editing" type="checkbox" checked /> Editing</label>
+        <label><input id="paging" type="checkbox" checked /> Paging</label>
+        <label><input id="sorting" type="checkbox" /> Sorting</label>
+        <label><input id="selecting" type="checkbox" checked /> Selecting</label>
+    </div>
+
+    <div id="sendEmailDialogDialog" class="">
+
+        <div class="col-xs-12">
+
+            <div class="form-group">
+
+                <label for="" class="control-label">@Model["Add other email(s)"]</label>
+
+                <div id="generateAdditionalEmailButton" class="btn btn-primary btn-xs btn-add-user" onclick="generateAdditionalEmailTextBox()"> </div>
+                <div id="additionalEmailTextBoxContainer" class="row">
+                    <!--Textboxes will be added here -->
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                <label for="emailSubject" class="control-label">@Model["Subject"]</label>
+
+                <input type="text" id="emailSubject" name="emailSubject" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="emailBody" class="control-label">@Model["Message"]</label>
+                <div id="emailBody" name="emailBody"></div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+@*Email TextBoxs*@
+<script type="text/javascript">
+
+    function getCommaSeparateElementsValue(elementName) {
+
+        var values = "";
+        $("input[name='" + elementName + "']")
+            .map(function () {
+                if ($(this).val() != '') {
+                    values += $(this).val() + ",";
+                }
+
+            }).get();
+
+        if (values.length > 0) {
+            values = values.substring(0, values.length - 1);
+        }
+        debugger
+        return values;
+
+    }
+
+    function collectAdditionalEmails()
+    {
+        $("#additionalEmailHidden").val(getCommaSeparateElementsValue('DynamicAdditionalEmailTextBox'));
+    }
+
+
+    function GetDynamicEmailElements(additionalEmail) {
+        var element =
+
+            "<div class='col-xs-12 col-sm-4'>" +
+                "<div class='input-group row'>" +
+                    "<input class='form-control' name = 'DynamicAdditionalEmailTextBox' type='email' placeholder='@Model["Email"]' value = '" + additionalEmail + "' autocomplete='off' />" +
+                    "<span class='input-group-btn'>" +
+                    "<button type='button' class='btn btn-danger btn-xs submit-btn-delete' onclick = 'RemoveEmailElements(this)'></button>" +
+                    "</span>" +
+                "</div>" +
+            "</div>";
+
+        return element;
+    }
+
+    function generateAdditionalEmailTextBox() {
+        var div = document.createElement('DIV');
+        $(div).addClass("form-group element-group");
+        div.innerHTML = GetDynamicEmailElements("", "");
+        document.getElementById("additionalEmailTextBoxContainer").appendChild(div);
+    }
+
+    function RemoveEmailElements(div) {
+        document.getElementById("additionalEmailTextBoxContainer").removeChild(div.parentNode.parentNode.parentNode.parentNode);
+    }
+
+
+
+</script>
+<script>
+    $("#sendEmailToSelectedUsers").click(function () {
+        showsendEmailDialogDialog();
+    });
+
+    function showsendEmailDialogDialog() {
+
+        var showsendEmailDialogDialogObject =
+        {
+            sender: '',
+            width: "50%",
+            height: "auto",
+            dialogConfirmId: "sendEmailDialogDialog",
+            yesButton:'@Html.Raw(Model["Send Message"])',
+            noButton:'@Model["Cancel"]',
+            acceptCallbak: function () {
+                HoldOn.open({
+                    theme: 'sk-cube-grid',
+                    message: "<h4>@Model["Please wait..."]</h4>"
+                });
+
+        collectAdditionalEmails();
+        debugger
+        var additionalEmail = $("#additionalEmailHidden").val() != '' ? $("#additionalEmailHidden").val().split(",") : null;
+
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/se",
+            data:
+            {
+                userIds: selectedItems,
+                additionalEmails: additionalEmail,
+                emailSubject: $("#emailSubject").val(),
+                emailBody: $("#emailBody").summernote('code')
+            },
+            dataType: "json",
+            success: function (response) {
+
+                alert(response.message);
+                HoldOn.close();
+            },
+            error: function (data, textStatus, XMLHttpRequest) {
+
+                alert(data.message);
+                HoldOn.close();
+            },
+        });
+
+    },
+
+    rejectCallbak: function () {
+
+
+    }
+    }
+
+    openConfirmDialog(showsendEmailDialogDialogObject);
+    }
+
+    $(document).ready(
+        function () {
+            $(".profile-info-modal-close-button").click(function () {
+                debugger
+                $("#profileInfoModal").modal("toggle");
+            });
+
+            $("#submitJudgesAssignedTasks").click(function () {
+                HoldOn.open({
+                    theme: 'sk-cube-grid',
+                    message: "<h4>@Model["Please wait..."]</h4>"
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/judge/sjat",
+                    data: { userIdList: selectedItems },
+                    dataType: "html",
+
+                }).done(function (response) {
+                    HoldOn.close();
+
+                }).fail(function (data, textStatus, XMLHttpRequest) {
+                        HoldOn.close();
+                    });
+
+            });
+        });
+
+
+    var taskRowIndex = 0;
+    var preferredTaskRowIndex = 0;
+
+    $(document).ready(function () {
+        $("#emailBody").summernote({
+            height: 300, minHeight: null, maxHeight: null, focus: false,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']], ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'hr', 'uploadfile']],
+                ['view', ['fullscreen', 'codeview']],
+                ['help', ['help']]
+            ],
+        });
+        var gridRowIndex_1 = 0;
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            height: "auto",
+            editing: true,
+            inserting: false,
+            autoload: true,
+            paging: true,
+            pageSize: 1500,
+            pageIndex: 1,
+            pageButtonCount: 5,
+            datatype: "json",
+            updateOnResize: false,
+
+            rowClick: function (args) {
+                $.ajax({
+                    type: "POST",
+                    url: "/person/gpi",
+                    data: { userId: args.item.UserId },
+                    dataType: "html",
+
+
+                }).done(function (response) {
+                    if (response == '') {
+                        response = 'Profile not completed';
+                    }
+                    debugger
+                    $("#profileDiv").html(response);
+                    $("#profileNameSpan").text(args.item.FirstName + " " + args.item.LastName);
+                    $("#profileInfoModal").modal();
+
+                }).fail(function (data, textStatus, XMLHttpRequest) {});
+
+            },
+            onDataLoading: function (args) {
+
+
+            },
+            onDataLoaded: function (args) {
+
+                for (i = taskRowIndex - 1; i >= 0; i--) {
+                    $("#taskDiv" + i).on('shown.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-up");
+                        $(this).prev().removeClass("glyphicon-chevron-down");
+                    });
+
+                    $("#taskDiv" + i).on('hide.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-down");
+                        $(this).prev().removeClass("glyphicon-chevron-up");
+                    });
+
+                }
+                 for (i = preferredTaskRowIndex - 1; i >= 0; i--) {
+                    $("#preferredTaskDiv" + i).on('shown.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-up");
+                        $(this).prev().removeClass("glyphicon-chevron-down");
+                    });
+
+                    $("#preferredTaskDiv" + i).on('hide.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-down");
+                        $(this).prev().removeClass("glyphicon-chevron-up");
+                    });
+
+                }
+
+            },
+            controller: {
+                loadData: function (filter) {
+
+                    return $.ajax({
+                        type: "GET",
+                        url: "@jsGridLoadDataUrl",
+                        data: { filter }
+                    });
+                }
+            },
+
+            onRefreshing: function (args) {gridRowIndex_1 = 0;}, fields:
+                [
+                   {
+                        name: "Id", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div class='text-center'>" + (gridRowIndex_1 + 1) + "</div>");
+                            gridRowIndex_1++;
+                            $("#externalPager_1").html('Total rows: ' + gridRowIndex_1);
+
+                            return result.add(customDiv);
+                        }
+                    },
+                    { name: "UserId", type: "text", visible: false },
+                    {
+                        type: "control",
+                        align: "center",
+                        sorting: false,
+                        width: 40,
+                        headerTemplate: function () {
+
+                            return $("<span>").text("All").css({ display: "block" })
+                                .add($("<input>").attr("type", "checkbox").attr("id", "selectAllCheckbox")
+                                    .click(function () {
+                                        selectedItems = [];
+                                        if (this.checked) { // check select status
+                                            $('.singleCheckbox').each(function () {
+                                                this.checked = true;
+                                                selectItem($(this).data("value"));
+                                            });
+                                        } else {
+
+                                            $('.singleCheckbox').each(function () {
+                                                this.checked = false;
+                                                unselectItem($(this).data("value"));
+                                            });
+                                            selectedItems = [];
+                                        }
+                                    }).css({ width: "20px", height: "20px" }));
+                        },
+                        itemTemplate: function (_, item) {
+
+                            return $("<input>").attr("type", "checkbox")
+                                .attr(
+                                    {
+                                        "class": "singleCheckbox",
+                                        "data-value": item.UserId,
+                                    })
+                                .prop("checked", $.inArray(item.UserId, selectedItems) > -1)
+                                .on("click", function (item) {
+                                    event.stopPropagation();
+                                }).on("change", function (item) {
+                                    $(this).is(":checked") ? selectItem($(this).data("value")) : unselectItem($(this).data("value"));
+                                }).css({ width: "20px", height: "20px" });
+                        },
+
+                    },
+                    { name: "FirstName", title: "@Model["First Name"]", type: "text", width: 80 },
+                    { name: "LastName", title: "@Model["Last Name"]", type: "text", width: 80 },
+                    { name: "Email", title: "@Model["Email"]", type: "text", width: 150 },
+
+                    {
+                        name: "Tasks", title: "@Model["Assigned TASKs"]", width: 100, type: "text",
+                        itemTemplate: function (item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+                            var taskList = [''];
+                            if (item != null) {
+                                taskList = item.split(',');
+                            }
+                            var taskHtmlList = '';
+
+                            for (i = 0; i < taskList.length; i++) {
+                                taskHtmlList += '<li>' + taskList[i] + '</li>';
+                            }
+
+                            var collapsElement = $(
+                                '<div id="taskDiv' + taskRowIndex + '" class="collapse in">' +
+                                '<ul>' + taskHtmlList + '</ul>' +
+                                '</div>');
+
+                            var customButton = $("<button>")
+                                .attr({
+                                    "data-toggle": "collapse",
+                                    "class": "btn btn-success glyphicon glyphicon-chevron-up",
+                                    "data-target": "#taskDiv" + taskRowIndex,
+                                })
+                                .on("click", function () {
+                                    $(this).next().collapse("toggle");
+                                    return false;
+                                });
+
+                            taskRowIndex++;
+                            return result.add(customButton).add(collapsElement);
+                        }
+                    },
+
+                    {
+                        name: "PreferredTasks", title: "@Model["Preferred TASKs"]", width: 100, type: "text",
+                        itemTemplate: function (item) {
+                             
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+                            var preferredTaskList = [''];
+                            if (item != null) {
+                                preferredTaskList = item.split(',');
+                            }
+                            var preferredTaskHtmlList = '';
+
+                            for (i = 0; i < preferredTaskList.length; i++) {
+                                preferredTaskHtmlList += '<li>' + preferredTaskList[i] + '</li>';
+                            }
+
+                            var collapsElement = $(
+                                '<div id="preferredTaskDiv' + preferredTaskRowIndex + '" class="collapse in">' +
+                                '<ul>' + preferredTaskHtmlList + '</ul>' +
+                                '</div>');
+
+                            var customButton = $("<button>")
+                                .attr({
+                                    "data-toggle": "collapse",
+                                    "class": "btn btn-success glyphicon glyphicon-chevron-up",
+                                    "data-target": "#preferredTaskDiv" + preferredTaskRowIndex,
+                                })
+                                .on("click", function () {
+                                    $(this).next().collapse("toggle");
+                                    return false;
+                                });
+
+                            preferredTaskRowIndex++;
+                            return result.add(customButton).add(collapsElement);
+                        }
+                    },
+
+
+                    {
+                        name: "Agreement", title: "@Model["Registration Status"]", width: 80,
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+
+            ]
+        });
+
+        $(".config-panel input[type=checkbox]").on("click", function () {
+            var $cb = $(this);
+
+            $("#@jsGridHtmlElementId").jsGrid("option", $cb.attr("id"), $cb.is(":checked"));
+        });
+
+        //$("#filtering").click();
+        $("#sorting").click();
+
+
+    });
+
+
+    var selectedItems = [];
+
+    var selectItem = function (item) {
+
+        selectedItems.push(item);
+        if ($(".singleCheckbox").length == $(".singleCheckbox:checked").length) {
+            $("#selectAllCheckbox").prop("checked", true);
+        } else {
+            $("#selectAllCheckbox").prop("checked", false);
+        }
+    };
+
+    var unselectItem = function (item) {
+        selectedItems = $.grep(selectedItems, function (i) {
+            return i !== item;
+        });
+        if (selectedItems.length == 0) {
+            $('#selectAllCheckbox').attr('checked', false);
+        }
+        if ($(".singleCheckbox").length == $(".singleCheckbox:checked").length) {
+            $("#selectAllCheckbox").prop("checked", true);
+        } else {
+            $("#selectAllCheckbox").prop("checked", false);
+        }
+    };
+
+
+</script>

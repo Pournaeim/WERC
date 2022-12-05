@@ -1,0 +1,239 @@
+﻿
+@model Model.ViewModels.TeamSafetyItem.VmTeamSafetyItemCollection
+
+@{
+    ViewBag.Title = "Experimental Safety Plan";
+    Layout = "~/Views/Shared/_LayoutSafetyAdmin.cshtml";
+    var firstTime = true;
+    var firstAccordionLinkId = "";
+}
+<link href="~/Resources/CSS/_accordion.css" rel="stylesheet" />
+<link href="~/Resources/CSS/esp-report-page.css" rel="stylesheet" />
+<div class="col-xs-12">
+    <button class="btn btn-primary" onclick="printDiv()">Print</button>
+</div>
+<div id="DivIdToPrint" class="col-xs-8">
+    <h2>Experimental Safety Plan. </h2>
+    <h3>Team Name: <span style="color:#850d0d">@Model.TeamName</span> ---- <span style="color:#850d0d">@Model.TaskName.ToUpper()</span></h3>
+    <h3> @Model.University </h3>
+    <div>
+        <div class="WordSection1">
+
+            <p class="MsoNormal" style="margin-bottom:6.0pt">
+                <span style="font-size:10.0pt">
+                    An
+                    Experiment Safety Plan (ESP) is required for every experiment conducted and
+                    performed by students in the WERC Design Contest.&nbsp; The purpose of the ESP is to
+                    assure the safety of all by identifying the safest possible methods to conduct
+                    an experiment.&nbsp; By signing below the individual(s) conducting the experiment, College
+                    of Engineering Safety Specialist (COE Safety), and the faculty advisor
+                    acknowledge responsibility for the following requirements.
+                </span>
+            </p>
+
+            <p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:6.0pt;
+margin-left:.25in;text-indent:-.25in">
+                <span style="font-size:10.0pt">1)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span dir="LTR"></span><span style="font-size:10.0pt">
+                    Appropriate Personal Protective Equipment
+                    (PPE) <b><i>must always </i></b>be worn while in the lab (as described in the
+                    ESP). <b>
+                        The minimum required PPE to enter a research/teaching lab is (1) long
+                        pants, (2) closed toe shoes, (3) lab coat or long sleeve shirt, and (4) safety
+                        glasses with side shields.
+                    </b>
+                </span>
+            </p>
+
+            <p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:6.0pt;
+margin-left:.25in;text-indent:-.25in">
+                <span style="font-size:10.0pt">2)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span dir="LTR"></span><span style="font-size:10.0pt">
+                    For safety reasons, no researcher
+                    is permitted to work alone in the lab at any time. Because the labs are open
+                    24/7, there may be occasions (such as a late night or over weekends) when there
+                    are no other people working in the lab. If you plan to work during a time when
+                    the lab might be expected to be empty, please plan ahead and coordinate your
+                    work schedule with another lab member.
+                </span>
+            </p>
+
+            <p class="MsoNormal" style="margin-top:0in;margin-right:0in;margin-bottom:6.0pt;
+margin-left:.75in"><span style="font-size:10.0pt">&nbsp;</span></p>
+
+            <table class="MsoNormalTable" border="1" cellspacing="0" cellpadding="0" style="margin-left:23.4pt;border-collapse:collapse;border:none">
+                <tbody>
+                    <tr>
+                        <td width="182" valign="top" style="width:136.85pt;border:none;border-bottom:
+  solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+                            <p class="MsoNormal"><span style="font-size:10.0pt">&nbsp;</span></p>
+                        </td>
+                        <td width="244" valign="top" style="width:182.65pt;border:none;border-bottom:
+  solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt">
+                            <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt">&nbsp;</span></p>
+                        </td>
+                        <td width="133" valign="top" style="width:99.9pt;border:none;border-bottom:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+                            <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt">Date</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="182" valign="top" style="width:136.85pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt">
+                            <p class="MsoNormal" style="margin-top:11.0pt;margin-right:0in;margin-bottom:
+  11.0pt;margin-left:0in">
+                                <span style="font-size:10.0pt">
+                                    ESP Phase I approval:<br>
+                                    <b>&nbsp;COE Safety</b>
+                                </span>
+                            </p>
+                        </td>
+                        <td width="244" valign="top" style="width:182.65pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+                            <p class="MsoNormal" align="center" style="margin-top:11.0pt;margin-right:0in;
+  margin-bottom:11.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt">&nbsp;</span></p>
+                        </td>
+                        <td width="133" valign="top" style="width:99.9pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+                            <p class="MsoNormal" align="center" style="margin-top:11.0pt;margin-right:0in;
+  margin-bottom:11.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt">&nbsp;</span></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="182" valign="top" style="width:136.85pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt">
+                            <p class="MsoNormal" style="margin-top:11.0pt;margin-right:0in;margin-bottom:
+  11.0pt;margin-left:0in">
+                                <span style="font-size:10.0pt">
+                                    ESP Phase II approval<br>
+                                    <b>&nbsp;COE Safety</b>
+                                </span>
+                            </p>
+                        </td>
+                        <td width="244" valign="top" style="width:182.65pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+                            <p class="MsoNormal" align="center" style="margin-top:11.0pt;margin-right:0in;
+  margin-bottom:11.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt">&nbsp;</span></p>
+                        </td>
+                        <td width="133" valign="top" style="width:99.9pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt">
+                            <p class="MsoNormal" align="center" style="margin-top:11.0pt;margin-right:0in;
+  margin-bottom:11.0pt;margin-left:0in;text-align:center"><span style="font-size:10.0pt">&nbsp;</span></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="MsoNormal" style="margin-top:6.0pt;margin-right:0in;margin-bottom:6.0pt;
+margin-left:.25in;text-indent:-.25in">
+                <span style="font-size:10.0pt">3)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span dir="LTR"></span><span style="font-size:10.0pt">
+                    By signing below, both faculty
+                    advisor and researchers(s) understand that the CHO can approve/disapprove any
+                    part of the ESP. &nbsp;The CHO can further assemble a committee of individuals with
+                    appropriate technical or EH&amp;S background to assist in reviewing the ESP. It
+                    is the goal of the CHO to help the researcher(s) find the safest method(s) of
+                    conducting an experiment. The CHO, or any faculty member, may stop lab activity
+                    of individuals not following good lab practices. &nbsp;
+                </span>
+            </p>
+
+
+        </div>
+    </div>
+    <table class="table table-responsive table-bordered" border="1" cellpadding="0" cellspacing="0">
+        <tr>
+
+            <th style="min-width:200px">
+                School and Team
+            </th>
+            <th style="min-width:200px">
+                Name
+            </th>
+
+            <th style="min-width:200px">
+                @Html.DisplayName("Signature")
+            </th>
+            <th style="min-width:200px">
+                @Html.DisplayName("Date")
+            </th>
+        </tr>
+        @{var adivsorData = @Model.TeamMemberList.Where(a => a.RoleId == "58c326dd-38ea-4d3c-92f9-3935e3763e68").First(); }
+
+        <tr>
+
+            <td style="min-width:200px;height:50px">Faculty Advisor</td>
+            <td style="min-width:200px;height:50px">
+                @Html.DisplayFor(modelItem => @adivsorData.FirstName)  @Html.DisplayFor(modelItem => @adivsorData.LastName)
+            </td>
+            <td style="min-width:200px;height:50px"></td>
+
+            <td style="min-width:200px;height:50px"></td>
+
+
+        </tr>
+
+        @foreach (var item in Model.TeamMemberList)
+        {
+
+
+            if (item.RoleId != "58c326dd-38ea-4d3c-92f9-3935e3763e68")
+            {
+
+                <tr>
+
+                    <td style="min-width:200px;height:50px">Researcher</td>
+                    <td style="min-width:200px;height:50px">
+                        @Html.DisplayFor(modelItem => item.FirstName)  @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td style="min-width:200px;height:50px"></td>
+
+                    <td style="min-width:200px;height:50px"></td>
+
+
+                </tr>
+            }
+
+        }
+        <tr>
+
+            <td style="min-width:200px;height:50px">
+                EH&S (at request of COE Safety)
+            </td>
+            <td style="min-width:200px;height:50px"></td>
+            <td style="min-width:200px;height:50px"></td>
+
+            <td style="min-width:200px;height:50px"></td>
+
+
+        </tr>
+    </table>
+</div>
+
+<div class="col-xs-12">
+    <button class="btn btn-primary" onclick="printDiv()">Print</button>
+</div>
+<script>
+
+    function printDiv() {
+
+        $("#gradingEvaluationDetailModalContainer").hide();
+        var divToPrint = document.getElementById('DivIdToPrint');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+        $("#gradingEvaluationDetailModalContainer").show();
+
+    }
+
+</script>
+
+

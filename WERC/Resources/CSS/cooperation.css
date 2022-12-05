@@ -1,0 +1,161 @@
+﻿
+.cooperation-banner {
+    background-image: url('../Images/building-joy-planning-plans.jpg');
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-attachment: fixed;
+    background-size: cover;
+    width: 100%;
+    /*max-height: 400px !important;*/
+    height: 360px;
+    /*object-position: bottom !important;*/
+}
+
+.text-size-banner-big {
+    text-align: center;
+    padding-top: 3%;
+    font-size: 6em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.8) !important;
+}
+
+.text-size-banner-small {
+    text-align: center;
+    padding-top: 3%;
+    font-size: 3em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.8) !important;
+}
+
+.cooperation-joy {
+    background-image: url('../Images/building-joy-planning-plans.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    min-height: 600px !important;
+}
+
+#text-size-in-image {
+    text-align: center;
+    font-family: sans-serif;
+    padding-top: 15%;
+    font-size: 4.5em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.8) !important;
+}
+
+#text-size-in-image2 {
+    font-family: sans-serif;
+    font-size: 3em;
+    font-weight: bold;
+    color: #ff4716;
+    padding-top: 5%;
+    text-shadow: 2px 3px 6px rgba(0, 0, 0, 1) !important;
+    text-align: center;
+}
+
+    #text-size-in-image2:hover {
+        color: #fc681f;
+        text-shadow: 2px 3px 6px #040e35 !important;
+        cursor: pointer;
+    }
+
+.right-sidebar-image {
+    background-image: url('../Images/coop-side-image.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 88%;
+    height: 480px;
+    background-position: center;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+    .right-sidebar-image p {
+        font-family: sans-serif;
+        padding-top: 10%;
+        font-size: 46px;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8) !important;
+        text-align: center;
+    }
+
+    .right-sidebar-image input {
+        width: 60%;
+    }
+
+.partners {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+    .partners input {
+        background-color: rgba(222, 61, 9, 1);
+        box-shadow: 1px 1px 2px 2px rgb(110, 110, 110);
+        border-radius: 10px;
+        color: #fff;
+        width: 190px;
+        height: 32px;
+        font-weight: bold;
+        font-size: 1em;
+        margin-top: 10px;
+    }
+
+        .partners input:hover {
+            color: rgb(6, 6, 6);
+            text-shadow: 0px 1px 13px rgb(251, 251, 247);
+            box-shadow: 0px 0px 1px 0px rgb(255, 255, 165);
+        }
+
+    .partners p {
+        padding-left: 30%;
+        text-align: justify;
+    }
+
+.cooperation-titles h1 b, .cooperation-titles h3 b, .cooperation-titles b {
+    font-family: sans-serif;
+    font-size: 1.1em;
+    color: #616060;
+}
+
+.join-network span {
+    position: relative;
+    top: 50px !important;
+    font-family: sans-serif;
+    text-align: center !important;
+    font-size: 3.5em;
+    font-weight: bold;
+    text-shadow: 4px 4px 2px #302e2e;
+    color: #fff;
+}
+
+.see-all-top {
+    position: relative;
+    top: 100px;
+}
+
+@media screen and (max-width:768px) {
+    .text-size-banner-big {
+        font-size: 3em;
+    }
+
+    .text-size-banner-small {
+        font-size: 2em;
+    }
+
+    #text-size-in-image {
+        font-size: 3em;
+    }
+
+    #text-size-in-image2 {
+        font-size: 2em;
+    }
+
+    .join-network span {
+        font-size: 2.5em;
+    }
+}

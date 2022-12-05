@@ -1,0 +1,22 @@
+.survey-textbox {
+    margin-bottom: 3px;
+}
+
+.survey-radio-label {
+    margin-right: 30px;
+}
+
+.survey-radio {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.survey-checkbox {
+    margin-right: 30px;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.survey-desctiption {
+    margin-bottom: 3px;
+}

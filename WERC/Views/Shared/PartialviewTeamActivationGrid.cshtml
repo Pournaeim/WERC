@@ -1,0 +1,396 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+    /**/
+
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+}
+
+<div class="row">
+
+    <div id="externalPager"></div><div id="@jsGridHtmlElementId"></div>
+    <link href="~/Resources/CSS/modal-fixed-full-screen.css" rel="stylesheet" />
+    <div class="modal-fixed-full-screen">
+        <div class="modal fade" id="teamMemberModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><span id="teamNameSpan"></span> Team Members</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="teamMemberDiv" class="row text-left"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+
+    var labResultUrlRowIndex = 0;
+    var ActiveRowIndex = 0;
+    var AdminSuppressScoringRowIndex = 0;
+    var SuppressScoringRowIndex = 0;
+
+    $(document).ready(function () {
+        var gridRowIndex = 0;
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            height: "auto",
+            filtering: false,
+            editing: true,
+            inserting: false,
+            autoload: true,
+            paging: true,
+            pageSize: 1500,
+            pageIndex: 1,
+            pageButtonCount: 5,
+            datatype: "json",
+            updateOnResize: false,
+            rowClick: function (args) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/teammember/shtm",
+                    data: { teamId: args.item.Id },
+                    dataType: "html",
+                }).done(function (response) {
+
+                    $("#teamMemberDiv").html(response);
+                    $("#teamNameSpan").text(args.item.Name);
+                    $("#teamMemberModal").modal();
+                }).fail(function (data, textStatus, XMLHttpRequest) {});
+
+            },
+            onDataLoading: function (args) { 
+
+
+            },
+            onDataLoaded: function (args) {
+
+                for (i = labResultUrlRowIndex - 1; i >= 0; i--) {
+                    $("#labResultUrlDiv" + i).on('shown.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-up");
+                        $(this).prev().removeClass("glyphicon-chevron-down");
+                    });
+
+                    $("#labResultUrlDiv" + i).on('hide.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-down");
+                        $(this).prev().removeClass("glyphicon-chevron-up");
+                    });
+
+                }
+            },
+            controller: {
+                loadData: function (filter) { gridRowIndex = 0;
+
+                    return $.ajax({
+                        type: "GET",
+                        url: "@jsGridLoadDataUrl",
+                        data: { filter }
+                    });
+                }
+            },
+
+            onRefreshing: function (args) {gridRowIndex = 0;}, fields:
+                [
+                   {
+                        name: "Id", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div class='text-center'>" + (gridRowIndex + 1) + "</div>");
+                            gridRowIndex++;
+                            $("#externalPager").html('Total rows: ' + gridRowIndex);
+
+                            return result.add(customDiv);
+                        }
+                    },
+                    { name: "PayStatus", type: "bool", visible: false },
+                    { name: "SafetyStatus", type: "bool", visible: false },
+                    { name: "Name", title: "@Model["Team Name"]", type: "text", width: 120 },
+                    {
+                        name: "ViewFinalScore", title: "@Model["View Scores by Team Members"]", width: 80, visible: true,
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+
+                    {
+                        name: "PayStatus", title: "@Model["Pay Status"]", width: 50,visible:false,
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+                    {
+                        name: "SafetyStatus", title: "@Model["Safety Status"]", width: 50, visible: false,
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+                    {
+                        name: "WrittenReportUrl", title: "@Model["Written Report"]", width: 50, visible: false,
+                        itemTemplate: function (item) {
+
+
+                            val = '/Resources/Images/Mimetypes128x128/' + item.split("?CT=")[1];
+
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+                    {
+                        name: "Shipping", title: "@Model["Shipping"]", width: 80, visible: false,
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+                    {
+                        name: "LabResultUrl", title: "@Model["Lab Result"]", width: 50, visible: false,
+                        itemTemplate: function (item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var labResultUrlList = ['/Resources/Images/Stylish_not_ok.png?CT=Stylish_not_ok.png'];
+
+                            if (item != null) {
+                                labResultUrlList = item.split(',');
+                            }
+
+                            var labResultUrlHtmlList = '';
+
+                            for (i = 0; i < labResultUrlList.length; i++) {
+                                labResultUrlHtmlList +=
+                                    '<div class="text-left"><a href = "' + labResultUrlList[i] +
+                                    '"><img src="/Resources/Images/Mimetypes128x128/' + labResultUrlList[i].split("?CT=")[1] +
+                                    '" class="image-list">' + '</a></div>';
+                            }
+
+                            var collapsElement = $(
+                                '<div id="labResultUrlDiv' + labResultUrlRowIndex + '" class="collapse">' +
+                                    labResultUrlHtmlList +
+                                '</div>');
+
+                            var customButton = $("<button>")
+                                .attr({
+                                    "data-toggle": "collapse",
+                                    "class": "btn btn-success glyphicon glyphicon-chevron-down",
+                                    "data-target": "#labResultUrlDiv" + labResultUrlRowIndex
+                                })
+                                .on("click", function () {
+                                    $(this).next().collapse("toggle");
+                                    return false;
+                                });
+
+                            labResultUrlRowIndex++;
+                            return result.add(customButton).add(collapsElement);
+                        }
+                    },
+                    {
+                        name: "Survey", title: "@Model["Survey"]", width: 50, visible: false,
+                        itemTemplate: function (item) {
+
+                                    if (item == true) {
+                                        val = '/Resources/Images/Stylish_ok.png';
+                                    }
+                                    else
+                                    {
+                                        val = '/Resources/Images/Stylish_not_ok.png';
+                                    }
+
+                                    return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+                    {
+                        name: "Deactivation", title: "@Model["Deactivate"]", width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var activeImageUrl = '';
+                            if (item.Deactivate == true) {
+                                activeImageUrl = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else {
+                                activeImageUrl = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            var customButton = $("<button type='button' title='Click to change activation status' data-teamId='" + item.Id + "' " + "id='answerButton"
+                                + ActiveRowIndex + "' class='btn btn-default'><img id='activeImage" + item.Id + "' src='" + activeImageUrl + "' width='32px'\> </button>")
+                                .on("click", function () {
+
+                                    var teamId = $(this).data('teamid');
+                                    reversTeamActivationStatus(teamId, 'activeImage' + teamId);
+
+                                return false;
+                            });
+
+                            ActiveRowIndex++;
+                            return result.add(customButton);
+                        }
+                    },
+                    {
+                        name: "AdminSuppressScoring", title: "@Model["Scoring Exception"]", width: 50,visible:false,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var suppressScoringImage = '';
+
+                            if (item.AdminSuppressScoring == true) {
+                                suppressScoringImage = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else {
+                                suppressScoringImage = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            var customButton = $("<button type='button' title='Click to change Exception Scoring Status' data-teamId='" + item.Id + "' " + "id='suppressScoringButton"
+                                + AdminSuppressScoringRowIndex + "' class='btn btn-default'><img id='suppressScoringImage" + item.Id + "' src='" + suppressScoringImage + "' width='32px'\> </button>")
+                                .on("click", function () {
+
+                                    var teamId = $(this).data('teamid');
+                                    reversTeamSuppressScoringStatus(teamId, 'suppressScoringImage' + teamId);
+
+                                return false;
+                            });
+
+                            AdminSuppressScoringRowIndex++;
+                            return result.add(customButton);
+                        }
+                    },
+                    {
+                        name: "SuppressScoring", title: "@Model["Allowance Scoring by Deadline"]", width: 50, visible:true,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var suppressScoringImage = '';
+
+                            debugger
+
+                            if (item.SuppressScoring == false) {
+                                suppressScoringImage = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else {
+                                suppressScoringImage = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            var customButton = $("<img id='suppressScoringImage" + item.Id + "' src='" + suppressScoringImage + "' width='32px'\>");
+
+                            return result.add(customButton);
+                        }
+                    },
+
+            ]
+        });
+    });
+
+    function reversTeamActivationStatus(teamId, activeImageUrl) {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/team/uta",
+            data: { teamId: teamId },
+        }).done(function (response) {
+            debugger
+
+            if (response.lastStatus == true) {
+                $("#" + activeImageUrl).attr('src', '/Resources/Images/Stylish_ok.png');
+            }
+            else {
+                $("#" + activeImageUrl).attr('src', '/Resources/Images/Stylish_not_ok.png');
+            }
+
+            HoldOn.close();
+
+        });
+
+    }
+
+    function reversTeamSuppressScoringStatus(teamId, suppressScoringImageUrl) {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/team/utss",
+            data: { teamId: teamId },
+        }).done(function (response) {
+            debugger
+
+            if (response.lastStatus == false) {
+                $("#" + suppressScoringImageUrl).attr('src', '/Resources/Images/Stylish_ok.png');
+            }
+            else {
+                $("#" + suppressScoringImageUrl).attr('src', '/Resources/Images/Stylish_not_ok.png');
+            }
+            window.location.reload();
+            HoldOn.close();
+
+        });
+
+    }
+
+
+</script>

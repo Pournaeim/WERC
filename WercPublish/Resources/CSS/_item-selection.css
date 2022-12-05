@@ -1,0 +1,168 @@
+﻿.item-image {
+    /*margin-left: -14px !important;*/
+    margin-top: 1px;
+    max-width: 100% !important;
+    /* overflow-x: hidden !important;*/
+}
+.item-image-team {
+    /*margin-left: -14px !important;*/
+    margin-top: 1px;
+    max-width: 100% !important;
+    min-height: 144px !important;
+    /* overflow-x: hidden !important;*/
+}
+
+.item-icon {
+    max-width: 64px !important;
+    margin-top: 1px;
+}
+
+.new-team-style {
+    background-image: url(../Images/new.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    width: 70px;
+    height: 70px;
+}
+
+.margin-div-container {
+    padding: 4px !important;
+    height: 210px !important;
+    margin-bottom: 10px !important;
+}
+
+.itemList-div-content {
+    font-size: 0.85em !important;
+    height: 210px !important;
+    overflow: hidden !important;
+}
+
+.itemList-div-content-full-height {
+    height: 400px !important;
+    overflow: scroll !important;
+}
+
+.itemList-div-sub-content {
+    margin: 20px 0px 20px 0px;
+}
+
+.itemList-div-content:hover, .itemList-div-content:focus {
+    font-size: 0.85em !important;
+    padding: 0 2px 2px 2px !important;
+    box-shadow: 2px 2px 2px #aaaaaa !important;
+    height: 210px !important;
+    overflow: hidden !important;
+    cursor: pointer;
+}
+
+.select-item-hihghlight {
+    font-size: 0.85em !important;
+    padding: 0 5px 5px 2px !important;
+    box-shadow: 5px 5px 5px #aaaaaa !important;
+    height: 210px !important;
+    overflow: hidden !important;
+}
+
+.dropped-select-item-hihghlight {
+    font-size: 0.85em !important;
+    padding: 0 5px 5px 2px !important;
+    box-shadow: 5px 5px 5px #aaaaaa !important;
+    height: 170px !important;
+    overflow: hidden !important;
+}
+
+.temp-select-item-hihghlight {
+    font-size: 0.85em !important;
+    padding: 0 5px 5px 2px !important;
+    box-shadow: 5px 5px 5px #aaaaaa !important;
+    height: 60px !important;
+    overflow: hidden !important;
+}
+
+@media (max-width:991px) {
+
+    .item-image {
+        margin-left: -14px !important;
+        margin-top: 1px;
+    }
+
+    .item-icon {
+        max-width: 96px !important;
+        margin-top: 1px;
+    }
+
+    .margin-div-container {
+        padding: 4px !important;
+        height: 100% !important;
+    }
+
+    .itemList-div-content {
+        font-size: 0.85em !important;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+
+        .itemList-div-content:hover, .itemList-div-content:focus {
+            font-size: 0.85em !important;
+            padding: 0 2px 2px 2px !important;
+            box-shadow: 2px 2px 2px #aaaaaa !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            cursor: pointer;
+        }
+
+    .select-item-hihghlight {
+        font-size: 0.85em !important;
+        padding: 0 5px 5px 2px !important;
+        box-shadow: 5px 5px 5px #aaaaaa !important;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+
+    .dropped-select-item-hihghlight {
+        font-size: 0.85em !important;
+        padding: 0 5px 5px 2px !important;
+        box-shadow: 5px 5px 5px #aaaaaa !important;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+}
+/*********************************************************************************************************************************/
+.margin-div-container-min-height {
+    padding: 4px !important;
+    height: 100px !important;
+    margin-bottom: 10px !important;
+}
+
+.itemList-div-content-min-height {
+    font-size: 0.85em !important;
+    height: 100px !important;
+    overflow: hidden !important;
+}
+
+    .itemList-div-content-min-height:hover, .itemList-div-content-min-height:focus {
+        font-size: 0.85em !important;
+        padding: 0 5px 5px 2px !important;
+        box-shadow: 5px 5px 5px #aaaaaa !important;
+        height: 100px !important;
+        overflow: hidden !important;
+        cursor: pointer;
+    }
+
+.select-item-hihghlight-min-height {
+    font-size: 0.85em !important;
+    padding: 0 5px 5px 2px !important;
+    box-shadow: 5px 5px 5px #aaaaaa !important;
+    height: 100px !important;
+    overflow: hidden !important;
+}
+
+.dropped-select-item-hihghlight-min-height {
+    font-size: 0.85em !important;
+    padding: 0 5px 5px 2px !important;
+    box-shadow: 5px 5px 5px #aaaaaa !important;
+    height: 70px !important;
+    overflow: hidden !important;
+}

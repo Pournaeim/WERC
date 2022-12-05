@@ -1,0 +1,354 @@
+﻿body {
+    font-family: 'Segoe UI' !important;
+}
+
+.header-image {
+    background-image: url(../Images/Header2.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+@media (min-width:3500px) and (max-width:5500px) {
+    header {
+        position: relative;
+        height: 300px;
+        overflow: hidden;
+        background-color: #882345;
+    }
+
+    .header-image {
+        background-image: url(../Images/Header2.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+}
+
+@media (min-width:2000px) and (max-width:3500px) {
+    header {
+        position: relative;
+        height: 220px;
+        overflow: hidden;
+        background-color: #882345;
+    }
+
+    .header-image {
+        background-image: url(../Images/Header2.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+}
+
+@media (min-width:1200px) and (max-width:1999px) {
+    header {
+        position: relative;
+        height: 130px;
+        overflow: hidden;
+        background-color: #882345;
+    }
+
+    .header-image {
+        background-image: url(../Images/Header2.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+}
+
+
+@media (min-width:992px) and (max-width:1199px) {
+    header {
+        position: relative;
+        height: 100px;
+        overflow: hidden;
+        background-color: #882345;
+    }
+
+    .header-left-image {
+        background-image: url('../Images/banner-overlay_blue-sm-md-left.png');
+        position: absolute;
+        width: 100%;
+        height: 120px;
+        right: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .header-right-image {
+        background-image: url(../Images/banner-overlay_blue-sm-md-right.png);
+        position: absolute;
+        width: 100%;
+        height: 120px;
+        right: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+@media (min-width:768px) and (max-width:991px) {
+    header {
+        position: relative;
+        height: 100px;
+        overflow: hidden;
+        background-color: #882345;
+    }
+
+    .header-left-image {
+        background-image: url('../Images/banner-overlay_blue-sm-md-left.png');
+        position: absolute;
+        width: 100%;
+        height: 120px;
+        right: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .header-right-image {
+        background-image: url(../Images/banner-overlay_blue-sm-md-right.png);
+        position: absolute;
+        width: 100%;
+        height: 120px;
+        right: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+@media (max-width:767px) {
+    header {
+        position: relative;
+        height: 100px;
+        overflow: hidden;
+        background-color: #882345;
+    }
+
+    .header-content-text {
+        /* font-family: Geneva; */
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #fff;
+        /* text-align: center; */
+        /* padding-top: 20px !important; */
+    }
+
+    .header-left-image {
+        background-image: url('../Images/banner-overlay_blue-xs-left.png');
+        position: absolute;
+        width: 100%;
+        height: 120px;
+        right: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .header-right-image {
+        background-image: url(../Images/banner-overlay_blue-xs-right.png);
+        position: absolute;
+        width: 100%;
+        height: 120px;
+        right: 0;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+.header-fixed {
+    position: fixed !important;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.header-static {
+    position: static !important;
+}
+
+.header-content {
+    position: absolute;
+    height: 77px;
+    /*top: 32px;*/
+    color: #fff !important;
+    width: 100%;
+}
+
+.header-content-text {
+    /* font-family: Geneva; */
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #fff;
+    padding-left: 2px; /* text-align: center; */
+    /* padding-top: 20px !important; */
+}
+
+.main-content {
+    position: relative !important;
+    /*top: 173px !important;*/
+    width: 100% !important;
+}
+
+.top-head {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    /*background-color: #021b61 !important;*/
+}
+
+.top-head-languages {
+    margin-top: 2px;
+}
+
+.brand-languages {
+    margin-top: -7px;
+}
+
+.header-content .social-icons > ul > li {
+    display: inline-block;
+}
+
+.top-head-text-pre-line:hover {
+    color: #f9e808 !important;
+}
+
+.top-head-text-pre-line {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 10px;
+    margin-top: 12px;
+    display: inline-block;
+}
+
+.top-head .text-pre-line {
+    display: inline-block;
+    /*margin-top: 10px;
+    font-size: 1.2em;*/
+    color: #fdff9a;
+}
+
+.after-top-head-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    border: solid 1px #16fa0d;
+}
+
+.middle-header-text {
+    font-family: 'Times New Roman',Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2.2em;
+    font-weight: 800;
+    color: #021b61;
+    text-align: center;
+}
+
+.hide-marginerDiv {
+    display: none !important;
+}
+
+
+
+.banner-menu-text > li > a {
+    color: #2a2a2a;
+    font-size: 1.1em;
+}
+
+.banner-homepage-image {
+    background-image: url('../Images/banner_lg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 320px;
+    background-color: none !important;
+    text-align: center;
+    background-attachment: fixed;
+}
+
+.banner-text-and-button {
+    padding-top: 8%;
+}
+
+.text-font-banner {
+    font-size: 48px !important;
+    /*text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8) !important;*/
+    color: rgba(0,0,0, 0.5);
+    text-align: center;
+}
+
+.banner-register-button {
+    margin-top: 28px !important;
+    display: inline-block;
+    width: 11em;
+    background-color: rgba(245, 61, 9, 1);
+    border-radius: 10px;
+    border: none;
+    color: #fff;
+    font-size: 1.3em;
+    padding: 5px;
+    text-decoration: none;
+    box-shadow: 1px 1px 1px 1px gray;
+    position: relative;
+    left: -30px;
+}
+
+    .banner-register-button:hover {
+        background-color: rgba(222, 61, 9, 0.8);
+        color: #fff;
+        text-decoration: none;
+    }
+
+.banner-button {
+    margin-top: 40px;
+    width: 9em;
+    height: 1.8em;
+    background-color: rgba(222, 61, 9, 0.7);
+    border-radius: 10px;
+    border: none;
+    color: #fff;
+    font-size: 1.7em;
+}
+
+    .banner-button:hover {
+        background-color: rgba(222, 61, 9, 1);
+        color: #aeaeae;
+    }
+
+.head-back-color {
+    background-color: #fff !important;
+}
+
+.footer-back-color {
+    background-image: -webkit-linear-gradient(top,#882345 0,#882345 100%);
+    background-image: -o-linear-gradient(top,#3c3c3c 0,#222 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#882345),to(#882345));
+    background-image: linear-gradient(to bottom,#882345 0,#882345 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#882345', endColorstr='#882345', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    background-repeat: repeat-x;
+    border-radius: 0;
+}
+
+.user-menu-back-color {
+    background-color: #16375a !important;
+}
+
+.home-middle-main-text {
+    margin-top: 0.5em;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.responsive-width-height {
+    width: 100% !important;
+    display: block !important;
+    height: auto !important;
+    position: relative;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+.announcement {
+    font-size: 3em;
+    font-weight: bold;
+}

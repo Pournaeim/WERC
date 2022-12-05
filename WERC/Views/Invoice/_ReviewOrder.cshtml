@@ -1,0 +1,406 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model Model.ViewModels.Invoice.VmInvoice
+
+<link href="~/Resources/CSS/Invoice.css" rel="stylesheet" />
+
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.UserId)
+
+@{
+    var disabled = true;
+    var columnCount = "9";
+    var columnHeaderCaptionCount = "11";
+}
+@if (Model.ScholarshipDiscount > 0)
+{
+    columnCount = "11";
+    columnHeaderCaptionCount = "12";
+
+}
+@if (Model.AllowCheckFisrtTeam == true)
+{
+    disabled = false;
+}
+
+<div class="col-xs-9">
+
+
+    <table id="invoiceTable" class="table table-condensed table-bordered">
+
+        <tr>
+            <th colspan="@columnHeaderCaptionCount" class="invoice-title">
+                <span>Review Order</span>
+            </th>
+        </tr>
+
+        <tr>
+
+            <th>
+                Team List
+            </th>
+            <th>
+                Type of Registration
+            </th>
+            <th>
+                Select First Team
+            </th>
+            <th>
+                Select Team/s For Payment
+            </th>
+            <th>
+                First Team or Additional Team
+            </th>
+            <th>
+                Number of Additional Participants
+            </th>
+            <th>
+                @*Origin Cost For Every Team Base on Type of Registration*@
+                Fee
+            </th>
+            <th>
+                Cost For Additional Participant
+            </th>
+
+            <th>
+                Amount
+            </th>
+            <th>
+                Transaction Fee (2.75%)
+            </th>
+            @if (Model.ScholarshipDiscount > 0)
+            {
+
+                <th>
+                    Scholarship Discount (%)
+
+                </th>
+                <th>
+                    Discount Amount
+
+                </th>
+
+            }
+        </tr>
+
+        @foreach (var item in Model.InvoiceDetails)
+        {
+            var teamCheckboxId = "teamCheckbox" + item.TeamId;
+            var teamRadioId = "teamRadio" + item.TeamId;
+
+            <tr class="invoice-tr invoice-row" data-LastCheckedId="@item.TeamId">
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeamName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfRegistration)
+                </td>
+                <td>
+                    @{var checkedRadio = item.IsFirstTeam & !disabled;}
+                    <input type="radio" id="@teamRadioId" checked="@checkedRadio" disabled="@disabled"
+                           data-id="@item.TeamId" name="teamRadioGroup" class="team-radio checkbox-lg"
+                           onclick="handelFirstTeam('@item.TeamId')" />
+
+                </td>
+                <td>
+                    <input type="checkbox" id="@teamCheckboxId" checked="@item.IsChecked"
+                           data-id="@item.TeamId" class="team-checkbox checkbox-lg"
+                           onclick="processInvoice('@item.TeamId')" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstTeamOrExtraTeam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExtraParticipantCount)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.TeamUnitCost)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.ExtraParticipantAmount)
+                </td>
+                <td>
+                    <b>$@Html.DisplayFor(modelItem => item.Amount)</b>
+                </td>
+                <td>
+                    <b>$@Html.DisplayFor(modelItem => item.ConventionalFee)</b>
+
+                </td>
+                @if (Model.ScholarshipDiscount > 0)
+                {
+                    <td>
+                        <b>%@Html.DisplayFor(modelItem => item.ScholarShipDiscountPercentage)</b>
+
+                    </td>
+                    <td>
+                        <b>$@Html.DisplayFor(modelItem => item.DiscountAmount)</b>
+
+                    </td>
+                }
+            </tr>
+        }
+        @*<tr>
+                <td colspan="8"></td>
+                <td colspan="2">
+                    <b>  @Html.DisplayName("SubTotal")</b>
+                </td>
+                <td>
+                    <b>@Html.DisplayName(@Model.Subtotal.ToString())</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8"></td>
+                <td colspan="2">
+                    <b>@Html.DisplayName("Tax")</b>
+                </td>
+                <td>
+                    <b>  @Html.DisplayName(@Model.Tax.ToString())</b>
+                </td>
+            </tr>*@
+        <tr>
+            <td colspan="@columnCount">
+                <b class="pull-right">    @Html.DisplayName("Total Transaction Fee")</b>
+            </td>
+            <td>
+                <b>$@Html.DisplayFor(model => model.TotalConventionalFee)</b>
+            </td>
+        </tr>
+        @if (Model.ScholarshipDiscount > 0)
+        {
+            <tr>
+                <td colspan="@columnCount">
+                    <b class="pull-right">@Html.DisplayName("Scholarship Discount")</b>
+                </td>
+                <td>
+                    <b>$@Html.DisplayFor(model => model.ScholarshipDiscount)</b>
+
+                </td>
+            </tr>
+
+        }
+        <tr>
+            <td colspan="@columnCount">
+                <b class="pull-right">@Html.DisplayName("Total Payment")</b>
+            </td>
+            <td>
+                <b>$@Html.DisplayFor(model => model.Total)</b>
+            </td>
+        </tr>
+
+    </table>
+
+    <div class="col-xs-12 text-left text-danger">
+        <h3><b>Please complete all team member(s) profile before proceeding to payment.</b></h3>
+        <hr />
+    </div>
+    <div class="col-xs-12 col-sm-12">
+        @Html.Partial("~/Views/Advisor/_AdvisorTeamFullInfoGrid.cshtml", new VmJsGrid()
+    {
+        DataAction = "gtfibfad",
+        DataController = "team",
+
+        EditAction = "etps",
+        EditController = "team",
+
+        ReadOnly = true,
+        HtmlElementId = "TeamFullInfo_TeamFullInfoJsGrid",
+        CurrentUserRoles = Model.CurrentUserRoles
+    })
+    </div>
+
+</div>
+<div class="col-xs-3">
+    <div class="row">
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <td>
+                    <span class="invoice-amount-due-label">  @Html.DisplayNameFor(model => model.AmountDue)</span>
+                </td>
+                <td>
+                    <span id="amountDueSpan" class="invoice-amount-due-value">$@Html.DisplayFor(model => model.AmountDue)</span>
+                    @Html.HiddenFor(model => model.AmountDue, htmlAttributes: new { @name = "amountDue", @id = "amountDue" })
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @if (Model.InvoiceTotal == 0)
+                    {
+                        <button id="Checkout" onclick="showTeamSelectMessage()" class="btn btn-primary btn-lg btn-block">Checkout</button>
+                    }
+                    else
+                    {
+                        <button id="Checkout" onclick="checkoutConfirmation()" class="btn btn-primary btn-lg btn-block">Checkout</button>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    var firstTeamId = -1;
+    function processInvoice(currentTeamId) {
+
+        var clientTeamSelectionList = [];
+
+        var checkedList = $("input[type=checkbox].team-checkbox:checked");
+
+
+        if ($("#teamRadio" + currentTeamId).attr('disabled') === undefined || $("#teamRadio" + currentTeamId).attr('disabled') === false) {
+
+            if (checkedList.length > 0 && $("#teamRadio" + currentTeamId).prop("checked") == true && $("#teamCheckbox" + currentTeamId).prop("checked") == false) {
+                $("#teamCheckbox" + currentTeamId).prop("checked", true);
+                alert("If you are ready to pay, you may not uncheck the box for the first team");
+                return;
+            }
+
+           if (checkedList.length == 1 && $("#teamCheckbox" + currentTeamId).prop("checked") == true) {
+                $("#teamRadio" + currentTeamId).prop("checked", true);
+                firstTeamId = currentTeamId;
+            }
+
+            if (checkedList.length == 0) {
+                $("#teamRadio" + currentTeamId).prop("checked", false);
+                firstTeamId = -1;
+
+            }
+        }
+
+        $("input[type=checkbox].team-checkbox").each(function () {
+
+            clientTeamSelectionList.push(
+                {
+                    TeamId: $(this).data("id"),
+                    Checked: $(this).prop("checked"),
+                    IsFirstTeam: $("#teamRadio" + $(this).data("id")).prop("checked"),
+                })
+        });
+
+        jsonData = JSON.stringify(
+            {
+                "currentTeamId": currentTeamId,
+                "teamSelectionList": clientTeamSelectionList,
+            });
+
+        $.ajax(
+            {
+                type: 'POST',
+                contentType: 'application/json',
+                url: '/invoice/pi',
+                dataType: "html",
+                data: jsonData,
+
+            }).done(function (data, textStatus, jqXHR) {
+                $("#invoiceDetailContainer").html(data);
+            }).fail(function (xhr, status) {
+                var jsonObject = JSON.parse(xhr.responseText);
+                if (jsonObject.hasError === true) {
+                    alert(jsonObject.message);
+                }
+            });
+    }
+
+    function handelFirstTeam(currentTeamId) {
+        firstTeamId = currentTeamId;
+
+        $("#teamCheckbox" + currentTeamId).prop("checked", true);
+
+        processInvoice(currentTeamId);
+    }
+
+    $(document).ready(function () {
+
+        $("#invoiceTable tr.invoice-tr").each(function () {
+            if ($(this).data("lastcheckedid") == "@Model.LastCheckedId" ) {
+                $(this).addClass("invoice-row-highlight").removeClass("invoice-row");
+            }
+        });
+    });
+
+    $(".invoice-tr").click(function () {
+
+        $("#invoiceTable tr.invoice-tr").each(function () {
+            $(this).removeClass("invoice-row-highlight").addClass("invoice-row");
+        });
+
+        $(this).addClass("invoice-row-highlight").removeClass("invoice-row");
+    });
+
+</script>
+
+<script>
+    function showTeamSelectMessage()
+    {
+        alert('@Model["Please select the team(s) in order to checkout registration fees."]');
+    }
+
+    function checkoutConfirmation()
+    {
+        var confirmChangeCheckoutObject =
+        {
+            title: "Checkout confirmation",
+            message: '@Model["Do you want to proceed the checkout?"]',
+            sender: "",
+            height: "auto",
+            dialogConfirmId: "confirmDialogContainer",
+            yesButton: '@Model["Yes"]',
+            noButton: '@Model["No"]',
+            acceptCallbak: function (sender) {
+
+                updatePayment()
+            },
+            rejectCallbak: function () {
+
+            }
+        }
+
+        openConfirmDialog(confirmChangeCheckoutObject);
+
+    }
+
+    function updatePayment() {
+
+        var clientTeamSelectionList = [];
+
+        $("input[type=checkbox].team-checkbox").each(function () {
+
+            clientTeamSelectionList.push(
+                {
+                    TeamId: $(this).data("id"),
+                    Checked: $(this).prop("checked"),
+                    IsFirstTeam: $("#teamRadio" + $(this).data("id")).prop("checked"),
+                })
+        });
+
+        jsonData = JSON.stringify(
+            {
+                "teamSelectionList": clientTeamSelectionList,
+            });
+debugger
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            type: "POST",
+            contentType: 'application/json',
+            url: "/team/etps",
+            data: jsonData,
+        }).done(function (response) {
+            debugger
+            HoldOn.close();
+            location.href = response.redirectCheckoutURL;
+            //location.href = "/invoice/lif";
+            }).fail(function (data, textStatus, XMLHttpRequest) {
+                HoldOn.close();
+
+            });
+
+    }
+@if(string.IsNullOrEmpty(Model.ErrorMessage) == false)
+{
+    @Html.Raw("alert('" + @Model.ErrorMessage +"');");
+}
+</script>

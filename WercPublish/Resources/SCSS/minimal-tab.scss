@@ -1,0 +1,189 @@
+﻿
+
+$color: rgba(22, 195, 255,0.5);
+$border: rgba(0,0,0,0.2);
+$background: #fff;
+
+$darkcolor: rgba(175,227,100, 0.6);
+$darkborder: rgba(255,255,255, 0.3);
+$darkbackground: #333;
+
+
+
+.mintabs > ul {
+    /*text-align: center !important;*/
+    font-weight: 500 !important;
+    /*margin: 50px 0 0 !important;*/
+    padding: 0 !important;
+    position: relative !important;
+    border-bottom: 1px solid $border !important;
+    z-index: 1 !important;
+
+    > li {
+        display: inline-block !important;
+        background: $background !important;
+        padding: 0.6em 0 !important;
+        position: relative !important;
+        width: 15% !important;
+        margin: 0 0 0 -4px !important;
+
+        &:before,
+        &:after {
+            opacity: 0 !important;
+            transition: 0.3s ease !important;
+        }
+
+        &.ui-tabs-active:before, &.ui-tabs-active:after,
+        &.ui-state-hover:before, &.ui-state-hover:after,
+        &.ui-state-focus:before, &.ui-state-focus:after {
+            opacity: 1 !important;
+        }
+        // this is the shadow under the text/mask
+        &:before,
+        &.ui-state-active.ui-state-hover:before,
+        &.ui-state-active.ui-state-focus:before {
+            content: "" !important;
+            position: absolute !important;
+            z-index: -1 !important;
+            box-shadow: 0 2px 3px $color !important;
+            top: 50% !important;
+            bottom: 0px !important;
+            left: 5px !important;
+            right: 5px !important;
+            border-radius: 100px / 10px !important;
+        }
+        // this is the "diamond" mask that creates the
+        // nice indent effect.
+        &:after,
+        &.ui-state-active.ui-state-hover:after,
+        &.ui-state-active.ui-state-focus:after {
+            content: "" !important;
+            background: $background !important;
+            position: absolute !important;
+            width: 12px !important;
+            height: 12px !important;
+            left: 50% !important;
+            bottom: -6px !important;
+            margin-left: -6px !important;
+            transform: rotate(45deg) !important;
+            box-shadow: inset 3px 3px 3px $color, inset 1px 1px 1px opacify($border,0.1) !important;
+        }
+
+        &.ui-state-hover:before,
+        &.ui-state-focus:before {
+            box-shadow: 0 2px 3px $border !important;
+        }
+
+        &.ui-state-hover:after,
+        &.ui-state-focus:after {
+            box-shadow: inset 3px 3px 3px $border, inset 1px 1px 1px opacify($border,0.1) !important;
+        }
+
+        &.ui-state-focus a {
+            text-decoration: underline !important;
+        }
+
+        &:focus {
+            outline: none !important;
+        }
+
+        a {
+            color: #444 !important;
+            text-decoration: none !important;
+            font-size: 1em !important;
+            font-weight: 600 !important;
+
+            &:focus {
+                outline: none !important;
+            }
+
+            span {
+                position: relative !important;
+                top: -0.5em !important;
+            }
+        }
+    }
+}
+
+.mintabs > ul > li:hover {
+    /*background-color: #ffc627 !important;*/
+}
+
+.mintabs.dark > ul {
+    border-bottom-color: $darkborder !important;
+
+    > li {
+        background: $darkbackground !important;
+        // this is the shadow under the text/mask
+        &:before,
+        &.ui-state-active.ui-state-hover:before,
+        &.ui-state-active.ui-state-focus:before {
+            box-shadow: 0 2px 3px $darkborder !important;
+        }
+        // this is the "diamond" mask that creates the
+        // nice indent effect.
+        &:after,
+        &.ui-state-active.ui-state-hover:after,
+        &.ui-state-active.ui-state-focus:after {
+            background: $darkbackground !important;
+            box-shadow: inset 3px 3px 3px $darkborder, inset 1px 1px 1px opacify($darkborder,0.2) !important;
+        }
+
+        &.ui-state-hover:before,
+        &.ui-state-focus:before {
+            box-shadow: none !important;
+        }
+
+        &.ui-state-hover:after,
+        &.ui-state-focus:after {
+            box-shadow: inset 1px 1px 0px opacify($darkborder,0.1) !important;
+        }
+
+        a {
+            color: white !important;
+        }
+    }
+}
+
+
+
+
+// misc setup CSS.
+
+
+.mintabs {
+    width: 90% !important;
+    min-width: 360px !important;
+    margin: auto !important;
+}
+
+.contents {
+    padding: 20px 50px !important;
+    min-height: 200px !important;
+}
+
+.darkpage {
+    background: #333 !important;
+    color: white !important;
+}
+
+.darkpage,
+.lightpage {
+    padding: 50px 0 !important;
+}
+
+
+@media screen and (min-width: 1000px) {
+    .darkpage,
+    .lightpage {
+        width: 100% !important;
+        float: left !important;
+        padding: 0 !important;
+    }
+}
+
+.ui-widget *, .ui-widget input, .ui-widget select, .ui-widget button {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+}

@@ -1,0 +1,183 @@
+﻿@model Model.ViewModels.Grade.VmGrade
+
+@{
+    ViewBag.Title = "DEFINE EVALUATION CRITERIA";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@if (!string.IsNullOrEmpty(Model.ActionMessageHandler.Message))
+{
+    <h2>@Model.ActionMessageHandler.Message</h2>
+}
+
+<h4>DEFINE EVALUATION CRITERIA</h4>
+
+@using (Html.BeginForm("cg", "grade", FormMethod.Post, new { enctype = "multipart/form-data", @class = "col-xs-12", id = "gradeForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal text-left">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.Label(@Model["Score Sheet Name"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+            <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+                @Html.Editor(@Model["Name"], new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage(@Model["Name"], "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-1 col-xs-1 text-right">
+                <label class="" for="ABET">ABET</label>
+            </div>
+            <div class="col-xs-6 text-left">
+                @Html.CheckBoxFor(model => model.ABET, new { @class = "" })
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            @Html.Label(@Model["EvaluationItem(s)"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+            <div class="col-sm-10 col-xs-12 col-md-8 col-lg-8">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <button id="addEvaluationItems" type="button" class="btn btn-primary btn-xs submit-btn-add-evaluation" onclick="AddEvaluationItemTextBox()"> </button>
+                    </div>
+                    <div class="col-xs-10">
+                        <div class="col-xs-12 col-sm-5 text-left">
+                        </div>
+                        <div class="col-xs-2 col-sm-2 row">
+                            Point
+                        </div><div class="col-xs-2 col-sm-2 row">
+                            Coefficient
+                        </div>
+
+                    </div>
+                    <div id="EvaluationItemElementsContainer" class="col-xs-12">
+                        <!--Textboxes will be added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-sm-10 col-xs-12 col-md-6 col-lg-4">
+                <input type="submit" value="@Model["Save & Create"]" class="btn btn-primary" onclick="collectData();return validateCustomElements();" />
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.EvaluationItems, htmlAttributes: new { @id = "evaluationItemsHidden" })
+        @Html.HiddenFor(model => model.Points, htmlAttributes: new { @id = "pointsHidden" })
+        @Html.HiddenFor(model => model.Coefficients, htmlAttributes: new { @id = "coefficientsHidden" })
+    </div>
+}
+
+@*Collect generated elements data*@
+<script type="text/javascript">
+    function getCommaSeparateElementsValue(elementName) {
+
+        var values = "";
+        $("input[name='" + elementName + "']")
+            .map(function () {
+
+                values += $(this).val() + "■";
+
+            }).get();
+
+        if (values.length > 0) {
+            values = values.substring(0, values.length - 1);
+        }
+
+        return values;
+    }
+
+    function getGeneratedElementsCount(elementName) {
+
+        return $("input[name='" + elementName + "']").length;
+    }
+
+    function collectData() {
+        $("#evaluationItemsHidden").val(getCommaSeparateElementsValue('DynamicEvaluationItemNameTextBox'));
+        $("#pointsHidden").val(getCommaSeparateElementsValue('DynamicEvaluationItemPointTextBox'));
+        $("#coefficientsHidden").val(getCommaSeparateElementsValue('DynamicEvaluationItemCoefficientTextBox'));
+    }
+</script>
+
+@*EvaluationItem TextBoxs*@
+<script type="text/javascript">
+
+    function GetDynamicEvaluationItemElements(evaluationItemValue, pointValue, coefficientValue) {
+         var element =
+            "<div class='col-xs-12 col-sm-6'>" +
+                "<input class='form-control text-box single-line' name = 'DynamicEvaluationItemNameTextBox' required placeholder='@Model["Evaluation Item"]' type='text' value = '"
+                + evaluationItemValue + "' />" +
+                '@Html.ValidationMessage(@Model["DynamicEvaluationItemNameTextBox"], "", new { @class = "text-danger" })' +
+            "</div>" +
+            "<div class='col-xs-2 col-sm-1'>" +
+                "<div class='input-group row'>" +
+                    "<input class='form-control text-box single-line' name = 'DynamicEvaluationItemPointTextBox' type='number' required  placeholder='@Model["Point"]' value = '"
+                        + pointValue + "' />" +
+                "</div>" +
+                '<div>@Html.ValidationMessage(@Model["DynamicEvaluationItemPointTextBox"], "", new { @class = "text-danger" })</div>' +
+            "</div>" +
+            "<div class='col-xs-4 col-sm-2'>" +
+                "<div class='input-group row'>" +
+                    "<input class='form-control text-box single-line' name = 'DynamicEvaluationItemCoefficientTextBox' type='number' required  placeholder='@Model["Coefficient"]' value = '"
+                        + coefficientValue + "' />" +
+                    "<span class='input-group-btn'>" +
+                        "<button type='button' class='btn btn-danger btn-xs submit-btn-delete' onclick = 'RemoveEvaluationItemElements(this)'></button>" +
+                    "</span>" +
+                "</div>" +
+                '<div>@Html.ValidationMessage(@Model["DynamicEvaluationItemCoefficientTextBox"], "", new { @class = "text-danger" })</div>' +
+            "</div>";
+         return element;
+    }
+
+    function AddEvaluationItemTextBox() {
+        var div = document.createElement('DIV');
+        $(div).addClass("form-group element-group");
+        div.innerHTML = GetDynamicEvaluationItemElements("", "");
+        document.getElementById("EvaluationItemElementsContainer").appendChild(div);
+    }
+
+    function RemoveEvaluationItemElements(div) {
+        document.getElementById("EvaluationItemElementsContainer").removeChild(div.parentNode.parentNode.parentNode.parentNode);
+    }
+
+
+    function RecreateDynamicEvaluationItemElements() {
+        var evaluationItems = '@Model.EvaluationItems';
+        var points = '@Model.Points';
+        var coefficients = '@Model.Coefficients';
+
+        if (evaluationItems != '') {
+
+            var evaluationItemNameArray = evaluationItems.split('■');
+            var pointArray = points.split('■');
+            var coefficientArray = coefficients.split('■');
+            var html = "";
+            for (var i = 0; i < evaluationItemNameArray.length; i++) {
+                html += "<div class='form-group element-group'>" + GetDynamicEvaluationItemElements(evaluationItemNameArray[i], pointArray[i], coefficientArray[i]) + "</div>";
+            }
+            document.getElementById("EvaluationItemElementsContainer").innerHTML = html;
+        }
+    }
+
+</script>
+
+@*Initialize*@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        AddEvaluationItemTextBox();
+    });
+
+    window.onload = callInitialFunctions;
+
+    function callInitialFunctions() {
+    }
+
+</script>
+

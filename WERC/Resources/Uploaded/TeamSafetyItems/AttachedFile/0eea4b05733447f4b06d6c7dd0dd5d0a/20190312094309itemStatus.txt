@@ -1,0 +1,9 @@
+CASE WHEN (NOT EXISTS
+                             (SELECT       Id
+                               FROM             dbo.TeamSafetyItem
+                               WHERE         TeamId = T .Id) OR
+							EXISTS
+                             (SELECT       tsi.ItemStatus
+                               FROM             dbo.TeamSafetyItem tsi
+                               WHERE         tsi.TeamId = T .Id AND (tsi.ItemStatus <> 1 AND tsi.ItemStatus <> 3))) THEN CAST(0 AS BIT) ELSE CAST(1 AS BIT) END AS SubmitStatus, 
+							

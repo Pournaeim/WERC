@@ -1,0 +1,147 @@
+﻿
+
+@using WERC.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = @Model["Login"];
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@if (Request.IsAuthenticated)
+{
+    Response.Redirect("~/home");
+}
+<div class="col-lg-1 col-md-1 col-sm-1 hidden-xs"></div>
+
+<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+    <div class="row row-offcanvas row-offcanvas-right">
+
+        <div id="loginPageContentContainerTop" class="col-sm-6 clear-col-left-margin visible-xs text-justify">
+
+        </div>
+
+        <div class="col-xs-12 col-sm-6 clear-col-left-margin">
+            @* @class = "form-horizontal"*@
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
+            {
+                //<input type="hidden" id="googleRecaptchaResponseHidden" name="GoogleRecaptchaResponse" />
+
+                @Html.AntiForgeryToken()
+
+                <h4><b>WERC @Model["Sign In"]</b></h4>
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group row">
+                    @Html.Label(@Model["User Name"], new { @class = "col-xs-12  control-label" })
+                    <div class="col-xs-12">
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                        @* @Html.ValidationMessageFor(m => m.Email, @Model["E-Mail"], new { @class = "text-danger" }, "*")*@
+                    </div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label(@Model["Password"], new { @class = "col-xs-12 control-label" })
+                    <div class="col-xs-12">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessage(@Model["Password"], @Model["The Password Is Required."], new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6 col-xs-12">
+                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "text-danger remember-me" })
+                        @Html.Label(@Model["Remember Me?"])
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn btn-primary col-xs-6 login-button">
+                            <i class="fa fa-sign-in icon-size-1-3"></i>
+                            <span class="">@Model["Sign In"]</span>
+                        </button>
+
+                        @Html.ActionLink(@Model["Forgot Password?"], "ForgotPassword", "Account", new { @class = "btn btn-danger col-xs-6 login-button" })
+                        
+                        @if (Model.ActiveRegisteration == true)
+                        {
+                            <a href="/Account/Register?ReturnUrl=@ViewBag.ReturnUrl" class="activeRegisteration btn btn-success col-xs-12 login-button">
+
+                                <i class="fa fa-user-plus icon-size-1-3"></i>
+                                <span class="">@Model["Faculty and Judges: "]   </span>
+                                <span class="">@Model["Sign up for the 2023 contest"]</span>
+                            </a>
+                        }
+                    </div>
+
+                </div>
+            }
+        </div>
+
+        <div id="loginPageContentContainerBottom" class="col-sm-6 clear-col-left-margin hidden-xs text-justify">
+
+
+        </div>
+
+        @*<div class="col-xs-4 visible-xs">
+                <h4><b>@Model["Social"] @Model["Login"].</b></h4>
+
+                <a class="offCanvasButton"
+                   data-toggle="offcanvas"
+                   value="Social log in">
+
+                    <img src="/Resources/Images/magearray-sociallogin-icon-1.jpg"
+                         class="social-button"
+                         title="@Model["Login With Your Social Network Account"]" />
+                </a>
+            </div>*@
+
+        @*<div class="col-xs-12 sidebar-offcanvas visible-xs" id="sidebar">
+                <div class="row">
+                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel
+               {
+                   LanguageDictionary = Model.LanguageDictionary,
+                   ReturnUrl = ViewBag.ReturnUrl
+               })
+                </div>
+                <hr />
+                <div class="row visible-xs">
+                    <div class="col-xs-8">
+                        <a class="col-xs-2"
+                           data-toggle="offcanvas"
+                           value="@Model["Social Login"]">
+                            <i class="fa fa-arrow-left fa-2x back-arrow"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+</div>
+
+@*<div class="col-lg-4 col-md-5 col-sm-6 hidden-xs">
+        <div class="row">
+
+            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel
+       {
+           LanguageDictionary = Model.LanguageDictionary,
+           ReturnUrl = ViewBag.ReturnUrl
+       })
+        </div>
+    </div>*@
+<div class="col-lg-1 col-md-1 col-sm-1 hidden-xs"></div>
+
+<script>
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "Get",
+            url: "/PageContent/glpc",
+            dataType: "html",
+
+        }).done(function (response) {
+            $("#loginPageContentContainerTop").html(response);
+            $("#loginPageContentContainerBottom").html(response);
+        }).fail(function (data, textStatus, XMLHttpRequest) {
+            $("#loginPageContentContainerTop").html(data.responseText);
+            $("#loginPageContentContainerBottom").html(data.responseText);
+        });
+    });
+</script>

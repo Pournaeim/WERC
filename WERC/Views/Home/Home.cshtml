@@ -1,0 +1,43 @@
+﻿
+@using Model.ViewModels;
+
+
+@model VmHome
+@{
+    ViewBag.Title = "WERC";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    // OperatingSystem os = Environment.OSVersion;
+
+    // var s = "OS Version: " + os.Version.ToString() +
+    // " OS Platoform: " +os.Platform.ToString() +
+
+    // " OS SP: " + os.ServicePack.ToString() +
+
+    //" OS Version String: " + os.VersionString.ToString();
+
+}
+
+ 
+<div class="col-xs-12" id="firstPageContentContainer">
+
+</div>
+<div class="col-md-2 hidden-xs"></div>
+
+<div class="col-md-2 hidden-xs"></div>
+
+<script>
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "Get",
+            url: "/PageContent/gfpc",
+            dataType: "html",
+
+        }).done(function (response) {
+            $("#firstPageContentContainer").html(response);
+        }).fail(function (data, textStatus, XMLHttpRequest) {
+            $("#firstPageContentContainer").html(data.responseText);
+        });
+    });
+</script>

@@ -1,0 +1,168 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+}
+<div class="row">
+
+    <div id="externalPager"></div><div id="@jsGridHtmlElementId"></div>
+
+</div>
+
+<script>
+    var rowIndex = 0;
+    var gridItem = {};
+    var gridRowIndex = 0;
+
+    $(document).ready(function () {
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            filtering: true,
+            editing: true,
+            inserting: false,
+            autoload: true,
+            paging: false,
+            datatype: "json",
+            updateOnResize: false,
+            rowClick: function (args) {
+
+                gridItem = args.item;
+            },
+            onDataLoading: function (args) { 
+
+                //if (args.item.RoleName == "Advisor") {
+                //    args.item.University.visible = false;
+                //}
+            },
+            onDataLoaded: function (args) {
+                initialCombobox();
+            },
+            controller: {
+                loadData: function (filter) { gridRowIndex = 0;
+
+                    return $.ajax({
+                        type: "GET",
+                        url: "@jsGridLoadDataUrl",
+                        data: filter
+                    });
+                }
+            },
+
+            onRefreshing: function (args) {gridRowIndex = 0;}, fields:
+                [
+                    {
+                            name: "UserId", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div class='text-center'>" + (gridRowIndex + 1) + "</div>");
+                            gridRowIndex++;
+
+                            $("#externalPager").html('Total rows: ' + gridRowIndex);
+
+                            return result.add(customDiv);
+                        }
+                    },
+                    { name: "Approval", type: "number", visible: false },
+                    { name: "University", title: "@Model["University Name"]", type: "text", visible: true, width: 100 },
+                    { name: "Name", title: "@Model["Full Name"]", type: "text", visible: false, width: 100 },
+                    { name: "FirstName", title: "@Model["First Name"]", type: "text", width: 80, visible: true },
+                    { name: "LastName", title: "@Model["Last Name"]", type: "text", width: 80, visible: true },
+                    { name: "Email", title: "@Model["Email"]", type: "text", width: 150, visible: true },
+                    { name: "RoleName", title: "@Model["Role"]", type: "text", visible: false },
+                    { name: "PhoneNumber", title: "@Model["Phone No"]", type: "text", width: 100 },
+                    {
+                        name: "Approval",
+                        title: "Approval",
+                        itemTemplate: function (value, item)
+                        {
+                            var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var combo = $('<select style="width:150px;" class="approval-ddl' + rowIndex + '" name="approval-ddl' + rowIndex + '" id="approval-ddl' + rowIndex + '"></select>');
+                            combo.append('<option value = "0" data-image="../../Resources/Images/waiting.png">' + 'Pending' + "</option>");
+                            combo.append('<option value = "1" data-image="../../Resources/Images/approve.png">' + 'Approve' + "</option>");
+                            combo.append('<option value = "2" data-image="../../Resources/Images/reject.png">' + 'Reject' + "</option>");
+
+
+                            $(combo).on("change", function (e) {
+
+                                item.Approval = e.target.value;
+                                debugger
+                                showAdvisorApprovalConfirmDialog(this, item, this.options[e.target.value].innerText);
+                            });
+
+                            rowIndex++;
+
+                            $(combo).val(item.Approval);
+
+                            var comboBox = $result.add(combo);
+                            return comboBox;
+                        }
+                    }
+            ]
+        });
+    });
+
+    function initialCombobox()
+    {
+        for (i = 0; i < rowIndex; i++) {
+            $("#approval-ddl"+ i).msDropdown();
+        }
+
+    }
+    function showAdvisorApprovalConfirmDialog(sender, item, title) {
+
+        debugger
+        var ApprovalConfirmDialog =
+            {
+                title: title,
+                sender: sender,
+                width: "",
+                height: "auto",
+                dialogConfirmId: "confirmDialogContainer",
+                yesButton:'@Model["Yes"]',
+                noButton: '@Model["No"]',
+                acceptCallbak: function (sender) {
+
+                    HoldOn.open(
+                    {
+                        theme: 'sk-cube-grid',
+                        message: "<h4>@Model["Please wait..."]</h4>"
+                        });
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        url: "@jsGridUpdateDataUrl",
+                        cache: false,
+                        data: { model: item }
+                    })
+                        .done(function (response) {
+                            if (response.success === false) {
+                                alert(response.message);
+                            }
+                            HoldOn.close();
+                        }).fail(function () { HoldOn.close(); });
+
+                    $("#@jsGridHtmlElementId").jsGrid("render");
+
+                },
+
+                rejectCallbak: function (sender) {
+                    $("#@jsGridHtmlElementId").jsGrid("render");
+                }
+            }
+
+        openConfirmDialog(ApprovalConfirmDialog);
+    }
+</script>

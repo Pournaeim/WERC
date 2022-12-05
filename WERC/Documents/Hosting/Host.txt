@@ -1,0 +1,5 @@
+﻿DB :
+  174.142.210.218     
+  UserId = InjaMaAdmin
+  Password: @Robotic_123
+

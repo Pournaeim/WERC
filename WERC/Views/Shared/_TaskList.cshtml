@@ -1,0 +1,328 @@
+﻿@using Model.ViewModels.Task
+@using Model.ApplicationDomainModels
+
+@model  VmTaskCollection
+
+
+@{
+    var draggable = Model.Draggable ? "card orginalCard" : "margin-div-container";
+    var callInitialDragable = Model.Draggable ? "initialDragable(" + @Html.Raw(@Model.OnItemDragged) + ");" : "";
+    var cardDetail = Model.Draggable ? "card-detail" : "";
+    var clickEvent = Model.Draggable ? "_dragableTaskList_OnClick" : "_taskList_OnClick";
+    var newTaskStyle = "";
+
+}
+
+@if (Model.ShowSearchBox)
+{
+    <div class="form-group">
+        <input type="text" id="taskSearch" class="form-control" placeholder="Search task here..." />
+    </div>
+}
+
+@if (Model.Draggable)
+{
+    @Html.Raw("<div id='launchPad' class='row'>");
+}
+@foreach (var item in Model.TaskList)
+{
+    <div class="col-xs-12 @draggable" id="@item.Id">
+        <div class="margin-div itemList-div-content" onclick="@clickEvent@Html.Raw("(this,")@item.Id)">
+            <div class="@newTaskStyle"></div>
+            <div id="taskImageDiv" class="col-xs-12 col-sm-12 col-md-5">
+                <div class="row">
+                    <img src="@item.ImageUrl"
+                         class="img-responsive" />
+                </div>
+            </div>
+
+            <div class="@cardDetail col-xs-12 col-sm-12 col-md-7">
+                <div class="card-item-detail">
+
+                    <span for="Name" class="card-item-detail-label">@Model["Name"]</span>
+
+                    <span id="Name" name="Name" class="card-item-detail-value" title=@Model["Task Name"]>
+                        @item.Name
+                    </span>
+
+                </div>
+                <div class="card-item-detail">
+                    <details open>
+                        <summary><span class="card-item-detail-label">Description</span></summary>
+                        <div class="scrollable-description">
+                            @item.Description
+                        </div>
+                    </details>
+
+                </div>
+                <div class="card-item-detail">
+
+                    <details>
+                        <summary><span class="card-item-detail-label">@Model["Score Sheet/s"]</span></summary>
+                        <div class="">
+                            @foreach (var ss in item.Grades)
+                            {
+                                <span>@ss</span><b>/</b>
+                            }
+                        </div>
+                    </details>
+
+                </div>
+
+            </div>
+            @if (Model.Draggable)
+            {
+                <p id="removeSection" class="col-xs-12 text-left hidden dropped-remove-item-position">
+                    <button type='button' id="@item.Id" class='btn btn-danger btn-sm btn-delete remove-draged-item-img'
+                            title="@Model["Delete"]" onclick='showDroppedDeleteItemConfirmDialog(this)'></button>
+                </p>
+            }
+            <div class="col-xs-offset-6 col-xs-6 text-right operation-key-bottom">
+
+                @if (Model.AllowEdit == true)
+                {
+                    <div class="col-xs-3 text-right">
+                        <a href='/@Model.DataController/ltef/@item.Id' title="@Model["Edit"]" class='btn btn-success btn-sm btn-edit'></a>
+                    </div>
+                }
+
+                @if (Model.ReadOnlyForm == true)
+                {
+                    <div class="col-xs-3 text-right">
+                        <a href='/@Model.DataController/ltef/@item.Id' title="@Model["Show"]" class='btn btn-success btn-sm btn-detail'></a>
+                    </div>
+                }
+
+                @if (Model.AllowDelete == true)
+                {
+                    <div class="col-xs-3 text-right">
+                        <button type='button' class='btn btn-danger btn-sm btn-delete'
+                                data-id="@item.Id" title="@Model["Delete"]"
+                                onclick='showDeleteTaskConfirmDialog(this)'></button>
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+    </div>
+}
+@if (Model.Draggable)
+{
+    @Html.Raw("</div>");
+}
+
+@if (Model.ShowSearchBox)
+{
+    <script>
+        $(document).ready(function () {
+
+            if (deviceIsTouchable == false) {
+                $("#taskSearch").focus();
+            }
+
+            $("#taskSearch").val('@Model.SearchText');
+
+            $("#taskSearch").keyup(function (e) {
+
+                if (e.keyCode != 13) {
+                    return;
+                }
+
+                var text = $("#taskSearch").val();
+                loadTaskData(text);
+
+            });
+
+            @callInitialDragable
+
+        });
+
+
+    </script>
+}
+
+<script>
+    var @Model.HtmlControlId = {
+      refresh : loadTaskData,
+    }
+
+    function loadTaskData(searchText) {
+        $.ajax({
+            type: "POST",
+            url: "/@Model.DataController/@Model.DataAction",
+            data:
+                {
+                    dataAction: '@Model.DataAction',
+                    dataController: '@Model.DataController',
+                    allowEdit: '@Model.AllowEdit.ToString().ToLower()',
+                    showSearchBox: '@Model.ShowSearchBox.ToString().ToLower()',
+                    allowDelete: '@Model.AllowDelete.ToString().ToLower()',
+                    taskName: searchText,
+                    htmlControlId: '@Model.HtmlControlId',
+                    ParentHtmlControlId: '@Model.ParentHtmlControlId',
+                    onItemDragged: '@Model.OnItemDragged',
+                    OnItemSelected: '@Model.OnItemSelected',
+                    draggable: '@Model.Draggable.ToString().ToLower()',
+                },
+            dataType: "html",
+        }).done(function (response) {
+                $("#@Model.ParentHtmlControlId").html(response);
+            }).fail(function (data, textStatus, XMLHttpRequest) {
+                $("#@Model.ParentHtmlControlId").html(response);
+
+            });
+    }
+
+    function _taskList_OnClick(thisDiv, id) {
+
+        $(".itemList-div-content").each(function (index) {
+            $(this).removeClass("select-item-hihghlight");
+
+        });
+
+        $(thisDiv).addClass("select-item-hihghlight");
+
+        @{
+            var callFunction = "";
+            if (Model.OnItemSelected != "")
+            {
+                callFunction = Model.OnItemSelected  + Html.Raw("(id);");
+            }
+            @callFunction
+        }
+    }
+
+
+    function _dragableTaskList_OnClick(thisDiv, id) {
+
+        $("#launchPad").children().find(".itemList-div-content").each(function (index) {
+            $(this).removeClass("select-item-hihghlight");
+
+        });
+
+        $(thisDiv).addClass("select-item-hihghlight");
+
+        @{
+            var callFunctionDragable = "";
+            if (Model.OnItemSelected != "")
+            {
+                callFunctionDragable = Model.OnItemSelected  + Html.Raw("(id);");
+            }
+
+            @callFunctionDragable
+        }
+    }
+
+    function showDeleteTaskConfirmDialog(sender) {
+
+        var confirmDeleteDialogObjec =
+            {
+                title: "Delete Task",
+                sender: sender,
+                width: "",
+                height: "auto",
+                dialogConfirmId: "confirmDialogContainer",
+                yesButton:'@Model["Yes"]',
+                noButton: '@Model["No"]',
+                acceptCallbak: function (sender) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/task/dt",
+                        data: { id: $(sender).data("id") }
+                    }).done(function (result) {
+                        debugger
+                        alert(result.message);
+                        window.location.reload();
+                            @Html.Raw(@Model.HtmlControlId +".refresh()");
+                        });
+                },
+                rejectCallbak: function () { }
+            }
+
+        openConfirmDialog(confirmDeleteDialogObjec);
+    }
+
+    function showDroppedDeleteItemConfirmDialog(sender) {
+
+        var confirmDeleteDroppedDialogObjec =
+            {
+                title: "Delete Task",
+                sender: sender,
+                width: "",
+                height: "auto",
+                dialogConfirmId: "confirmDialogContainer",
+                yesButton:'@Model["Yes"]',
+                noButton: '@Model["No"]',
+                acceptCallbak: function (sender) {
+                    var taskIds = [];
+
+                    taskIds[0] = $(sender).attr("id");
+
+                    var id = $("#lab_DropDownList").val();
+                    debugger
+                    var message = '';
+                    if (id != undefined) {
+
+                        $.ajax({
+                            url: '/task/chut',
+                            type: 'POST',
+                            data: { id: id, taskIds: taskIds },
+                            dataType: "json",
+                            cache: false,
+                            async: false,
+                        }).done(function (data) {
+                            if (data.success == false) {
+                                message = data.message;
+                            }
+                        });
+                    }
+                    else {
+                        var id = $("#judge_DropDownList").val();
+
+                        $.ajax({
+                            url: '/task/chjut',
+                            type: 'POST',
+                            data: { id: id, taskIds: taskIds },
+                            dataType: "json",
+                            cache: false,
+                            async: false,
+                        }).done(function (data) {
+                            if (data.success == false) {
+                                message = data.message;
+                            }
+                        });
+                    }
+
+                    if (message != '')
+                    {
+                        alert(message);
+                    }
+                    else
+                    {
+                        $(sender).parent().parent().parent().fadeOut("slow", function () {
+
+                            $(this).remove();
+                            var id = $(this).attr("id");
+
+                            $("#launchPad").children("div[id=" + id + "]").find(".new-sign").removeClass("hidden");
+
+                            @if (!string.IsNullOrEmpty(@Model.OnItemDragged))
+                            {
+                                @Html.Raw(@Model.OnItemDragged + "();")
+                            }
+                        });
+                    }
+
+                },
+                rejectCallbak: function (sender) { }
+            }
+
+        openConfirmDialog(confirmDeleteDroppedDialogObjec);
+    }
+
+</script>
+
+

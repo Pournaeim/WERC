@@ -1,0 +1,363 @@
+﻿
+@using WERC.Models
+
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Styles.Render("~/Resources/CSS/jquery-ui")
+
+@section adminMenu{
+    <!--Admin Menu start-->
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid menu-height">
+            <div class="row">
+
+                <div class="navbar-header head-foot-back-color">
+
+                    <!--Menu Button-->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target=".navbar-ex1-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="partialLogin text-left visible-xs col-xs-6">
+                        @Html.Partial("_LoginPartial",
+                            new LoginPartialViewModel
+                            {
+                                LanguageDictionary = Model.LanguageDictionary,
+                                Layout = Model.Layout,
+                                WelcomeMessage = Model.WelcomeMessage
+                            })
+                    </div>
+                </div>
+                <!--Menu Items-->
+                <div class="collapse navbar-collapse navbar-ex1-collapse head-foot-back-color">
+
+                    <ul class="nav navbar-nav navbar-left col-xs-12">
+                        <li class="">
+                            <a href="~/Home">@Model["HOME"] </a>
+                        </li>
+                        <li>
+                            <a href="~/SafetyAdmin/index" class="animate-user-menu-item">
+                                <span class="menuItemText">@Model["SAFETY ADMIN PANEL"]</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/admin/lupf">
+                                <i class="fa fa-user-circle-o fa-1x" aria-hidden="true"></i>
+                                <span class="">@Model["PROFILE"] </span>
+                            </a>
+                        </li>
+
+                        <li class="dropdown">
+
+                            <a href="./test" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="menuItemText">@Model["SITE SETUP"]<i class="caret"></i></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+
+                                <li class="dropdown-submenu">
+
+                                    <a href="./test" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <span class="menuItemText">@Model["Announcements"] </span>
+                                    </a>
+
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="/PageContent/lfpc">@Model["Home Page Content"]</a>
+                                        </li>
+                                        <li>
+                                            <a href="/PageContent/llpc">@Model["Login Page Content"]</a>
+                                        </li>
+                                        <li>
+                                            <a href="/PageContent/lspc">@Model["Sign Up Page Content"]</a>
+                                        </li>
+
+                                    </ul>
+
+                                </li>
+
+                                <li>
+                                    <a href="/admin/gl">@Model["Define Evaluation Criteria"] </a>
+
+                                </li>
+
+                                <li>
+                                    <a href="/admin/unim">@Model["Add University"] </a>
+
+                                </li>
+
+                                <li class="dropdown-submenu">
+
+                                    <a href="./test" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                       aria-haspopup="true" aria-expanded="false">
+                                        <span class="menuItemText">@Model["Deadlines"] </span>
+                                    </a>
+
+                                    <ul class="dropdown-menu">
+
+                                        <li>
+                                            <a href="/admin/ssrm">@Model["Scoring Deadline"] </a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/srm">@Model["Submission Deadlines"] </a>
+                                        </li>
+
+                                    </ul>
+
+                                </li>
+
+                                <li class="dropdown-submenu">
+
+                                    <a href="./test" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <span class="menuItemText">@Model["Payments"] </span>
+                                    </a>
+
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="/admin/ptm">@Model["Payment Types"] </a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/prm">@Model["Payment Rules"] </a>
+
+                                        </li>
+                                        <li>
+                                            <a href="/admin/emrf">@Model["Extra Participants Should be Paid"]</a>
+                                        </li>
+
+                                    </ul>
+
+                                </li>
+
+                                <li>
+                                    <a href="/admin/tl">@Model["Task Setup"]</a>
+                                </li>
+                                <li>
+                                    <a href="/admin/mtm">@Model["Meal Preference Setting"]</a>
+                                </li>
+                                <li>
+                                    <a href="/admin/ocr">@Model["Open/Close Registration"]</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+
+                            <a href="./test" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="menuItemText">@Model["LABS"]<i class="caret"></i></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+
+                                <li>
+                                    <a href="/admin/testl">@Model["Test Management"]</a>
+                                </li>
+                                <li>
+                                    <a href="/Admin/attlm">@Model["Assigning Task To Lab"]</a>
+                                </li>
+                                <li>
+                                    <a href="/Admin/lrr">@Model["Test Results"]</a>
+                                </li>
+
+                            </ul>
+
+                        </li>
+                        <li class="dropdown">
+
+                            <a href="./test" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="menuItemText">@Model["TEAMS"]<i class="caret"></i></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+
+                                <li class="">
+                                    <a href="~/admin/ups_tfim">@Model["Team Status"] </a>
+                                    @*  <a href="~/admin/tfim">@Model["TEAM"] </a>*@
+                                </li>
+                                <li class="">
+                                    <a href="~/admin/tam">@Model["Enable Team Score View/Team Deactivation"] </a>
+                                </li>
+                                <li>
+                                    <a href="/Admin/lrr">@Model["Test Results"]</a>
+                                </li>
+
+                            </ul>
+
+                        </li>
+                        <li class="dropdown">
+
+                            <a href="./test" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="menuItemText">@Model["JUDGING"]<i class="caret"></i></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+
+                                <li>
+                                    <a href="/Admin/attjm">@Model["Assigning Task To Judge"]</a>
+                                </li>
+
+                                <li>
+                                    <a href="/Admin/jtfim">@Model["Judges' Task Overview"]</a>
+                                </li>
+
+                                <li class="">
+                                    <a href="~/admin/gjbtc">@Model["Team Comments"] </a>
+                                </li>
+                               
+
+                                <li class="">
+                                    <a href="~/admin/lnag">@Model["Check for unscored items"] </a>
+                                </li>
+                                <li class="">
+                                    <a href="~/admin/fgrm">@Model["Final Scores"] </a>
+                                </li>
+                                <li class="">
+                                    <a href="~/admin/bsfgrm">@Model["Bench Scale Quality Final Score"] </a>
+                                </li>
+                            </ul>
+
+                        </li>
+                        <li class="dropdown">
+
+                            <a href="./test" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="menuItemText">@Model["USER ACCESS/EMAIL/EXPORT"]<i class="caret"></i></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="~/user/ul">
+                                        <i class="fa fa-users fa-1x" aria-hidden="true"></i>
+                                        <span class="menuItemText">@Model["Delete Users/Sign in as User"] </span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="~/admin/ruem">
+                                        <i class="fa fa-search-plus fa-1x" aria-hidden="true"></i>
+                                        <span class="menuItemText">@Model["Search, Email, and Export Registration Data"] </span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="~/admin/tem">
+                                        <i class="fa fa-mail-forward fa-1x" aria-hidden="true"></i>
+                                        <span class="menuItemText">@Model["Sending email to Team/s"] </span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="/Account/acu">
+                                        <i class="fa fa-user-plus fa-1x" aria-hidden="true"></i>
+                                        <span class="">@Model["Create User"] </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Account/ForgotPassword?Length=7">
+                                        <i class="fa fa-lock fa-1x" aria-hidden="true"></i>
+                                        <span class="">@Model["Admin Reset Password"] </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        @*<li>
+                                <button class="btn btn-danger" onclick="deleteAllDataOfUsers(this)">
+                                    <i class="fa fa-warning fa-1x" aria-hidden="true"></i>
+                                    <span class="">@Model["Delete All Data Of Users"] </span>
+                                </button>
+                            </li>*@
+
+                        @*<li>
+                                <a href="#">@Model["Change Personal Information"]</a>
+                            </li>*@
+
+
+                        <li class="dropdown">
+
+                            <a href="./test" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="menuItemText">@Model["DOWNLOAD FILES"]<i class="caret"></i></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+
+                                <li class="">
+                                    <a href="~/admin/lelm">@Model["Emails' Log"] </a>
+                                </li>
+
+                                <li class="">
+                                    <a href="~/admin/jam">@Model["Judges' Address List"] </a>
+                                </li>
+
+                                <li class="">
+                                    <a href="~/admin/dlo">@Model["Logos"] </a>
+                                </li>
+
+                                <li class="">
+                                    <a href="~/admin/dpho">@Model["Photos"] </a>
+                                </li>
+
+                                @foreach (var item in Model.MenuSubmissionRuleList)
+                                {
+
+                                    <li class="">
+                                        <a href="~/admin/dsrf/@item.Id">@item.Name</a>
+                                    </li>
+
+                                }
+
+
+                            </ul>
+
+                        </li>
+
+                        @*<li class=""><a href="~/admin/arm">@Model["APPROVAL / REJECT"] </a></li>*@
+
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+}
+<div class="col-xs-12">
+    @RenderBody()
+</div>
+
+
+<script>
+
+    function deleteAllDataOfUsers(sender) {
+
+        var confirmDeleteAllDataOfUsersDialogObjec =
+           {
+               title: "Delete All Data Of Users",
+               sender: sender,
+               width: "",
+               height: "auto",
+               dialogConfirmId: "confirmDialogContainer",
+               yesButton:'@Model["Yes"]',
+               noButton: '@Model["No"]',
+               acceptCallbak: function (sender) {
+                   $.ajax({
+                       url: "/admin/dadou",
+                       type: 'POST',
+
+                   }).done(function (result) {
+                       if (result.success == true) {
+                           alert("You have successfuly deleted all data of users");
+                       }
+
+                   });
+               },
+
+               rejectCallbak: function (sender) { }
+           }
+
+        openConfirmDialog(confirmDeleteAllDataOfUsersDialogObjec);
+    }
+</script>

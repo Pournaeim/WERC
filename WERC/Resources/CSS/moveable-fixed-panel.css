@@ -1,0 +1,85 @@
+﻿
+#dropZone {
+    width: 100% !important;
+    height: 400px;
+    cursor: initial;
+    /*margin-top: 10px;*/
+}
+
+.drop-zone-scroll {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.set-fixed {
+    position: fixed !important;
+}
+
+    .set-fixed .panel-heading {
+        cursor: move;
+    }
+
+.set-absolute {
+    position: absolute !important;
+    cursor: initial;
+}
+
+.set-pin {
+    background-image: url('../Images/pin.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.set-unpin {
+    background-image: url('../Images/un-pin.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.group-handle {
+    height: 34px;
+    width: 10px;
+    cursor: move;
+}
+
+.panel-heading {
+}
+
+.draggable-group {
+    float: left;
+}
+
+#sortable {
+    padding: 0px;
+}
+
+#sort-holder {
+    display: none;
+}
+
+#toggle-dropZone {
+    cursor: pointer;
+}
+
+#close-dropZone {
+    cursor: pointer;
+}
+
+.toggle-button-group {
+    cursor: pointer;
+}
+
+.draggable-group {
+    overflow: hidden;
+}
+
+.minimized {
+    width: 12px;
+    height: 36px;
+}

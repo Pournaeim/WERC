@@ -1,0 +1,156 @@
+﻿
+@using System.Linq
+@model  Model.ViewModels.Judge.VmGradeDetailManagement
+<script src="~/Resources/Controls/Signature/jSignature.min.js"></script>
+<!-- optional plugins -->
+<script src="~/Resources/Controls/Signature/jSignature.CompressorBase30.js"></script>
+<script src="~/Resources/Controls/Signature/jSignature.CompressorSVG.js"></script>
+<script src="~/Resources/Controls/Signature/jSignature.UndoButton.js"></script>
+<script src="~/Resources/Controls/Signature/jSignature.SignHere.js"></script>
+
+@{
+    var firstTime = true;
+    var makeHiddenComment = "";
+}
+
+@if (Model.GradeDetailList.Any())
+{
+    var judgeDetailDataArrayIndex = 0;
+
+    <script>
+
+        var judgeDetailDataArray = [];
+    </script>
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
+        <button type="button" class="btn btn-danger" onclick="showGradeDetailDescriptionModal('@judgeDetailDataArrayIndex')"> Comment</button>
+
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+        <table class="table table-condensed table-bordered table-striped grade-report-table">
+            <tr class="grade-report-border">
+
+                <th>Evaluation Item</th>
+                @{
+                    var JudgeNameIndex = 1;
+                    var judgeNameList = new List<string>();
+                }
+
+
+                @foreach (var grade in Model.GradeDetailList.First().JudgeList)
+                {
+
+                    if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Admin"))
+                    {
+                        <th>@grade.JudgeName</th>
+                    }
+                    else
+                    {
+                        <th>Judge  @JudgeNameIndex</th>
+
+                        JudgeNameIndex++;
+                    }
+
+                    judgeNameList.Add(grade.JudgeName);
+                }
+
+
+            </tr>
+
+            @foreach (var grade in Model.GradeDetailList)
+            {
+
+                JudgeNameIndex = 0;
+                judgeDetailDataArrayIndex++;
+
+                <tr>
+                    <td>@grade.EvaluationItem</td>
+
+                    @Html.Raw("<script>\n var judgeDetailData_" + grade.Id + " = {descriptionArray: [''],singnatureArray: [''],} \n");
+
+                    @*                @foreach (var judge in grade.JudgeList)*@
+                    @foreach (var judge in judgeNameList)
+                    {
+                        JudgeNameIndex++;
+                        var description = grade.JudgeList.Where(p => p.JudgeName == judge).First().Description ?? "";
+
+                        if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Admin"))
+                        {
+                            @Html.Raw("judgeDetailData_" + grade.Id + ".descriptionArray.push(\"" + "<h3> " +
+                                @grade.JudgeList.Where(p => p.JudgeName == judge).First().JudgeName + "</h3><hr/>" + description.Replace("\"", "'") + "\");\n ");
+                        }
+                        else
+                        {
+                            @Html.Raw("judgeDetailData_" + grade.Id + ".descriptionArray.push(\"" + "<h3> Judge " + JudgeNameIndex + "</h3><hr/>" +
+                                description.Replace("\"", "'") + "\");\n ");
+                        }
+                        @*@Html.Raw("judgeDetailData.singnatureArray.push('" + judge.Signature + "')\n ");*@
+                    }
+
+                    @Html.Raw("judgeDetailDataArray.push(judgeDetailData_" + grade.Id + ");\n  </script>")
+
+
+                    @foreach (var judge in judgeNameList)
+                    {
+                        <td>
+                            <span>@grade.JudgeList.Where(p => p.JudgeName == judge).First().Point</span>
+                        </td>
+                    }
+
+
+
+
+                    <button type="button" class="btn btn-danger hidden" onclick="showGradeDetailDescriptionModal('@judgeDetailDataArrayIndex')"> Comment</button>
+
+
+                </tr>
+
+            }
+
+        </table>
+
+    </div>
+}
+<link href="~/Resources/CSS/modal-fixed.css" rel="stylesheet" />
+<div class="modal-fixed">
+
+    <div class="modal fade" id="gradingEvaluationDetaildescriptionModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" onclick="$('#gradingEvaluationDetaildescriptionModal').modal('toggle');">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="gradingEvaluationDetaildescriptionDiv" class="col-xs-12 text-left"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="$('#gradingEvaluationDetaildescriptionModal').modal('toggle');">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showGradeDetailDescriptionModal(judgeDetailDataArrayIndex) {
+        debugger
+        var detalDataObject = judgeDetailDataArray[judgeDetailDataArrayIndex];
+        $("#gradingEvaluationDetaildescriptionDiv").html('');
+        for (i = 0; i < detalDataObject.descriptionArray.length; i++) {
+
+            //if (detalDataObject.singnatureArray[i] != "") {
+            //    var tempHTML = $("#gradingEvaluationDetaildescriptionDiv").html();
+            //    $("#gradingEvaluationDetaildescriptionDiv").html(tempHTML + detalDataObject.descriptionArray[i] + "<br/><img src = '" + detalDataObject.singnatureArray[i] + "'/>");
+            //}
+            //else
+            {
+                var tempHTML = $("#gradingEvaluationDetaildescriptionDiv").html();
+                $("#gradingEvaluationDetaildescriptionDiv").html(tempHTML + detalDataObject.descriptionArray[i] + "<br/>");
+
+            }
+        }
+
+        $("#gradingEvaluationDetaildescriptionModal").modal("show");
+    }
+</script>

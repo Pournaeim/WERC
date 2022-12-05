@@ -1,0 +1,193 @@
+﻿
+@model Model.ViewModels.Judge.VmNoneAnsweredGradeManagement
+
+@{
+    ViewBag.Title = "Non-scored Items Status";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Resources/CSS/treeview.css" rel="stylesheet" />
+<h2>Non-scored Items Status</h2>
+<style>
+    .glyphicon {
+        position: relative;
+        top: 1px;
+        display: inline-block;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        font-size: 21px !important;
+        -moz-osx-font-smoothing: grayscale;
+        color: #369 !important;
+    }
+</style>
+<div>
+    <img src="/Resources/Images/Stylish_not_ok.png" class="image-list-small">: There is/are non-scored item/s
+</div>
+<div>
+    <img src="/Resources/Images/Stylish_ok.png" class="image-list-small">: Scoring completed
+</div>
+<div>
+    <p>   Click on the <i class="indicator glyphicon glyphicon-plus-sign"></i> icon and expand to see the details of the non-scored items</p>
+
+</div>
+<hr />
+
+<div class="col-xs-12 col-sm-12 col-md-8">
+    <ul id="tree1" class="tree cnct">
+
+        @foreach (var judge in Model.JudgeBaseGrades)
+        {
+            <li class="cnct first-li-element">
+                @{ var judgeResult = false;}
+                @foreach (var teamGrade in judge.TeamGradeList)
+                {
+                    foreach (var gradeReport in teamGrade.GradeReportList)
+                    {
+                        if (gradeReport.TeamGradeDetails.Count > 0)
+                        {
+                            judgeResult = true;
+                            break;
+                        }
+                    }
+                    if (judgeResult == true)
+                    {
+                        break;
+                    }
+                }
+                @judge.JudgeName
+                @if (judgeResult == false)
+                {
+
+                    <img src="/Resources/Images/Stylish_ok.png" style="width:20px" />
+                }
+                else
+                {
+
+                    <img src="/Resources/Images/Stylish_not_ok.png" style="width:20px" />
+
+                    <img src="/Resources/Images/98-981805_mail-icon-icon-sign-symbol-png-and-vector-email-icon.png" onclick="sendEmailConfirmation(this, '@judge.JudgeUserId')"
+                         style="width:30px" />
+                }
+
+
+
+                <ul class="cnct">
+
+                    @foreach (var teamGrade in judge.TeamGradeList)
+                    {
+                        var result = false;
+                        <li class="cnct">
+
+                            @foreach (var gradeReport in teamGrade.GradeReportList)
+                            {
+                                if (gradeReport.TeamGradeDetails.Count > 0)
+                                {
+                                    result = true;
+                                    break;
+                                }
+                            }
+                            @if (result == false)
+                            {
+                                @teamGrade.TeamName
+                                <img src="/Resources/Images/Stylish_ok.png" style="width:20px" />
+                            }
+                            else
+                            {
+                                @teamGrade.TeamName
+                                <img src="/Resources/Images/Stylish_not_ok.png" style="width:20px" />
+                            }
+
+                            <ul class="cnct">
+                                @foreach (var gradeReport in teamGrade.GradeReportList)
+                                {
+                                    <li class="cnct">
+
+                                        @gradeReport.GradeType (@gradeReport.TeamGradeDetails.Count Non-Scored Items )
+
+                                        <ul class="cnct">
+
+                                            @foreach (var teamGradeDetail in gradeReport.TeamGradeDetails)
+                                            {
+                                                <li class="cnct">
+                                                    @teamGradeDetail.EvaluationItem
+                                                </li>
+                                            }
+
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+
+            </li>
+        }
+    </ul>
+
+</div>
+<script src="~/Resources/Scripts/treeview.js"></script>
+<script>
+
+    //Initialization of treeviews
+
+    $('#tree1').treed();
+
+    //$('#tree2').treed({ openedClass: 'glyphicon-folder-open', closedClass: 'glyphicon-folder-close' });
+
+    //$('#tree3').treed({ openedClass: 'glyphicon-chevron-right', closedClass: 'glyphicon-chevron-down' });
+
+    //$('.first-li-element > i').each(function (i, obj) {
+    //    $(this).click();
+    //});
+
+</script>
+
+<script>
+    function sendEmailConfirmation(sender, judgeUserId) {
+
+        var confirmsendEmailConfirmationDialogObjec =
+           {
+               title: "Send Email",
+               sender: sender,
+               width: "",
+               height: "auto",
+               dialogConfirmId: "confirmDialogContainer",
+               yesButton:'@Model["Yes"]',
+               noButton: '@Model["No"]',
+               acceptCallbak: function (sender) {
+                   sendNoneScoredItemEmail(judgeUserId);
+               },
+
+               rejectCallbak: function (sender) { }
+           }
+
+        openConfirmDialog(confirmsendEmailConfirmationDialogObjec);
+    }
+
+    function sendNoneScoredItemEmail(judgeUserId) {
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/snsie",
+            data:
+            {
+                judgeUserId: judgeUserId,
+            },
+            dataType: "json",
+            success: function (response) {
+
+                alert(response.message);
+                HoldOn.close();
+            },
+            error: function (data, textStatus, XMLHttpRequest) {
+
+                alert(data.message);
+                HoldOn.close();
+            },
+        });
+    }
+
+</script>

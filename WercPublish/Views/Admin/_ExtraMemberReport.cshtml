@@ -1,0 +1,123 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model Model.ViewModels.Invoice.VmInvoiceReport
+
+<link href="~/Resources/CSS/Invoice.css" rel="stylesheet" />
+
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.UserId)
+
+<input type="hidden" id="invoiceIdHiddenField" value="@Model.Id" />
+
+@{var disabled = true;}
+
+@if (Model.AllowCheckFisrtTeam == true)
+{
+    disabled = false;
+}
+
+<div class="col-xs-9">
+
+
+    <table id="invoiceTable" class="table table-condensed table-bordered">
+
+        <tr>
+            <th colspan="11" class="invoice-title">
+                <span>Review Order</span>
+            </th>
+        </tr>
+
+        <tr>
+
+            <th>
+                @Html.DisplayName("Team Name")
+            </th>
+            <th>
+                @Html.DisplayName("Advisor")
+            </th>
+
+            <th>
+                @Html.DisplayName("Number of Extra Participants Should be Paid")
+            </th>
+
+            <th>
+                @Html.DisplayName("Cost For Extra Participant")
+            </th>
+            <th>
+                @Html.DisplayName("Amount")
+            </th>
+            <th>
+                @Html.DisplayName("Conventional fee")
+            </th>
+        </tr>
+
+        @foreach (var item in Model.InvoiceDetails)
+        {
+            var teamCheckboxId = "teamCheckbox" + item.TeamId;
+            var teamRadioId = "teamRadio" + item.TeamId;
+
+            <tr class="invoice-tr invoice-row" data-LastCheckedId="@item.TeamId">
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeamName)
+                </td>
+                 <td>
+                    @Html.DisplayFor(modelItem => Model.Name)
+                </td>
+ 
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExtraParticipantCount)
+                </td>
+
+                <td>
+                    $@Html.DisplayFor(modelItem => item.ExtraParticipantAmount)
+                </td>
+                <td>
+                    <b>$@Html.DisplayFor(modelItem => item.Amount)</b>
+                </td>
+                <td>
+                    <b>$@Html.DisplayFor(modelItem => item.ConventionalFee)</b>
+
+                </td>
+            </tr>
+        }
+         
+        <tr>
+            <td colspan="9">
+                <b class="pull-right">    @Html.DisplayName("Total Transaction Fee")</b>
+            </td>
+            <td>
+                <b>$@Html.DisplayFor(model => model.TotalConventionalFee)</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="9">
+                <b class="pull-right">    @Html.DisplayName("Total Payment")</b>
+            </td>
+            <td>
+                <b>$@Html.DisplayFor(model => model.Total)</b>
+            </td>
+        </tr>
+    </table>
+ 
+
+</div>
+<div class="col-xs-3">
+    <div class="row">
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <td>
+                    <span class="invoice-amount-due-label">  @Html.DisplayNameFor(model => model.AmountDue)</span>
+                </td>
+                <td>
+                    <span id="amountDueSpan" class="invoice-amount-due-value">$@Html.DisplayFor(model => model.AmountDue)</span>
+                    @Html.HiddenFor(model => model.AmountDue, htmlAttributes: new { @name = "amountDue", @id = "amountDue" })
+
+                </td>
+            </tr>
+            
+        </table>
+    </div>
+</div>
+ 

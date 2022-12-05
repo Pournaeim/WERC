@@ -1,0 +1,24 @@
+﻿
+@using Model.ViewModels.Test
+
+@model VmTestCollection
+
+@{
+    ViewBag.Title = "Test Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2>Test Management</h2>
+
+<div class="col-xs-12">
+    <a href="/test/lctf" class="btn btn-primary btn-lg">@Model["Create Test"]</a>
+</div>
+
+<div id="TestList_ParentHtmlControlId" class="col-xs-12 scroll-article-list">
+    @Html.Partial("_TestList", Model)
+</div>
+
+<script>
+    function TestManagement_OnClientSelectedItem(selectedId) {
+
+    }
+</script>

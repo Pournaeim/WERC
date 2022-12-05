@@ -1,0 +1,254 @@
+﻿@model Model.ViewModels.Task.VmTask
+@using Model.ToolsModels.DropDownList
+
+@{
+    ViewBag.Title = "Create Task";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@if (!string.IsNullOrEmpty(Model.ActionMessageHandler.Message))
+{
+    <h2>@Model.ActionMessageHandler.Message</h2>
+}
+<h4>Create New Task</h4>
+
+@using (Html.BeginForm("ct", "Task", FormMethod.Post, new { enctype = "multipart/form-data", @class = "col-xs-12", id = "TaskForm" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal text-left">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.Label(@Model["Grade"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+            @Html.Partial("_DropDownListMultipleSelect", new VmDropDownList
+       {
+           HtmlElementId = "GradeIds",
+           DataController = "grade",
+           DataAction = "ggddl",
+           SelectedItems = "selectFromJson", // select from selected Property of json data
+           OptionLabel = Model["Select grade type(s) ..."],
+           OnItemSelected = "GradeDropDownList_OnClientSelectedItem",
+
+       })
+
+            @Html.ValidationMessage(@Model["GradeIds"], "", new { @class = "text-danger" })
+
+            <script>
+                function GradeDropDownList_OnClientSelectedItem(ids) {
+                    debugger
+                    $("#gradeIdsHidden").val(ids);
+                }
+
+            </script>
+        </div>
+        <span class="text-danger fa-2x">*</span>
+
+    </div>
+    <div class="form-group">
+        @Html.Label(@Model["Test"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+            @Html.Partial("_DropDownListMultipleSelect", new VmDropDownList
+       {
+           HtmlElementId = "EditTestIds",
+           DataController = "Test",
+           DataAction = "gtddl",
+           SelectedItems = "selectFromJson", // select from selected Property of json data
+           OptionLabel = Model["Select Test/s ..."],
+           OnItemSelected = "TestDropDownList_OnClientSelectedItem",
+
+       })
+
+            @Html.ValidationMessage(@Model["TestIds"], "", new { @class = "text-danger" })
+
+            <script>
+                function TestDropDownList_OnClientSelectedItem(ids) {
+
+                    debugger
+                    $("#testIdsHidden").val(ids);
+                }
+
+            </script>
+        </div>
+        <span class="text-danger fa-2x">*</span>
+    </div>
+    <div class="form-group">
+        @Html.Label(@Model["Name"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessage(@Model["Name"], "", new { @class = "text-danger" })
+        </div>
+        <span class="text-danger fa-2x">*</span>
+    </div>
+    <div class="form-group">
+        @Html.Label(@Model["Payment Type"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+            @Html.Partial("_DropDownList",
+
+                    new VmDropDownList
+                    {
+                        HtmlElementId = "PaymentTypeDdl",
+                        DataController = "PaymentType",
+                        DataAction = "gptddl",
+                        OptionLabel = Model["Select Payment Type..."],
+                        OnItemSelected = "paymentTypeDropDownList_OnClientSelectedItem",
+                    })
+
+            @Html.ValidationMessage(@Model["PaymentTypeIdHidden"], "", new { @class = "text-danger" })
+
+            <script>
+                function paymentTypeDropDownList_OnClientSelectedItem(id) {
+                    debugger
+                    $("#PaymentTypeIdHidden").val(id);
+                }
+            </script>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-xs-offset-1 col-xs-1 text-right">
+            @Html.CheckBoxFor(model => model.Preliminary, new { @class = "" })
+
+        </div>
+        <div class="col-xs-6 text-left">
+            <label class="" for="Preliminary">When advisores create a team to compete in this task, they should define a project title</label>
+        </div>
+    </div>
+
+    <div class="form-group hidden">
+        <div class="col-xs-offset-1 col-xs-1 text-right">
+            @Html.CheckBoxFor(model => model.RegisterForFlashTalk, new { @class = "" })
+
+        </div>
+        <div class="col-xs-6 text-left">
+            <label class="" for="RegisterForFlashTalk">A team that select this task can register for Flash Talk</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-xs-offset-1 col-xs-1 text-right">
+            @Html.CheckBoxFor(model => model.OpenTaskTestPlan, new { @class = "" })
+
+        </div>
+        <div class="col-xs-6 text-left">
+            <label class="" for="OpenTaskTestPlan">Show this task in the judges' Preference List</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label(@Model["Task Logo"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12 col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+            <div class="input-group input-file" name="uploadedDocument">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary btn-xs  submit-btn-choose-file" type="button"></button>
+                </span>
+                <input type="text" class="form-control path-container" placeholder='Choose a file...' />
+                <span class="input-group-btn">
+                    <button class="btn btn-danger btn-reset" type="button">Reset</button>
+                </span>
+            </div>
+
+            @Html.HiddenFor(model => model.ClientGradeIds, htmlAttributes: new { @id = "gradeIdsHidden" })
+            @Html.HiddenFor(model => model.ClientTestIds, htmlAttributes: new { @id = "testIdsHidden" })
+            @Html.HiddenFor(model => model.PaymentTypeId, htmlAttributes: new { @id = "PaymentTypeIdHidden", @value = Model.PaymentTypeId })
+
+            @Html.ValidationMessage(@Model["TaskImageUrl"], "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12 col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+            @Html.TextAreaFor(model => model.Description, new { @class = "form-control short-bio" })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+        <span class="text-danger fa-2x">*</span>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-sm-10 col-xs-12 col-md-6 col-lg-4">
+            <input type="submit" value="@Model["Add"]" class="btn btn-primary" onclick="return validateCustomElements();" />
+        </div>
+    </div>
+
+</div>
+}
+
+
+@*validate*@
+<script>
+     function validateTask() {
+
+        if ($("#gradeIdsHidden").val() == '')
+        {
+            var message = '@Model["Please select grade/s"]';
+            alert(message);
+
+            return false;
+         }
+         debugger
+        if ($("#testIdsHidden").val() == '')
+        {
+            var message = '@Model["Please select test/s"]';
+            alert(message);
+
+            return false;
+        }
+
+        return true;
+
+    }
+
+    function validateCustomElements() {
+
+        @*if ($(".input-ghost").val() == '') {
+            alert("@Model["please select task logo..."]");
+            return false;
+        }*@
+        return validateTask();
+
+    }
+
+</script>
+@*Initialize*@
+<script type="text/javascript">
+    function bs_input_file() {
+        $(".input-file").before(
+            function () {
+                if (!$(this).prev().hasClass('input-ghost')) {
+                    var element = $("<input type='file' class='input-ghost' style='visibility:hidden; height:0'>");
+                    element.attr("name", $(this).attr("name"));
+                    element.change(function () {
+                        element.next(element).find('input').val((element.val()).split('\\').pop());
+                    })
+                    $(this).find("button.submit-btn-choose-file").click(function () {
+                        element.click();
+                    })
+                    $(this).find("button.btn-reset").click(function () {
+                        element.val(null);
+                        $(this).parents(".input-file").find('input').val('');
+                    })
+                    $(this).find('input').css("cursor", "pointer");
+                    $(this).find('input').mousedown(function () {
+                        $(this).parents('.input-file').prev().click();
+                        return false;
+                    })
+                    return element;
+                }
+            }
+        );
+    }
+
+    $(document).ready(function () {
+
+        bs_input_file();
+
+
+    });
+
+
+
+</script>

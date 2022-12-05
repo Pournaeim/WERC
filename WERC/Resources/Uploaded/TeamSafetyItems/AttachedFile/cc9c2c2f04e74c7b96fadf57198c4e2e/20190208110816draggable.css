@@ -1,0 +1,118 @@
+﻿
+.dragscroll {
+    overflow: auto;
+    cursor: grab;
+    cursor: -o-grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+#launchPad {
+    border: 1px solid #eaeaea;
+    background-color: #fff;
+    margin-top: 10px;
+    height: 400px !important;
+    overflow-y: scroll;
+}
+
+.card {
+    padding: 4px;
+}
+
+.margin-div {
+    border: 1px solid #dcdcdb;
+}
+
+.darg-drop-title {
+    background-color: #ffc627;
+}
+
+.stack-header {
+    text-align: center;
+    font-size: 1em;
+    font-weight: 600;
+    color: #000;
+}
+
+.stack {
+    height: inherit;
+}
+
+.stack-drop {
+    height: 400px;
+    /*border: 1px solid #ccc;
+    background-color: #f5f5f5;*/
+    overflow-y: scroll;
+}
+
+#launchPad:hover {
+    cursor: grab;
+    cursor: -webkit-grab;
+}
+
+#launchPad:active {
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.stack-drop-hover {
+    background-color: #2355f8;
+}
+
+.items, .remove-button-ol {
+    padding: 0;
+    list-style-type: none;
+}
+
+.remove-button {
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid #DDDDDD;
+    background: #ff6a00;
+    width: 100px;
+}
+
+    .remove-button .ui-selecting {
+        background: #ffffcc;
+    }
+
+    .remove-button .ui-selected {
+        background: #000000;
+    }
+
+#removeSection {
+    position: relative;
+    /*top: 10px;
+    right: -100px;*/
+    cursor: pointer;
+}
+
+.remove-draged-item-img {
+    /*position: static;
+    width: 15px;
+    height: 15px;*/
+}
+
+input.checkboxtext[type=checkbox] {
+    /* Double-sized Checkboxes */
+    -ms-transform: scale(1.5); /* IE */
+    -moz-transform: scale(1.5); /* FF */
+    -webkit-transform: scale(1.5); /* Safari and Chrome */
+    -o-transform: scale(1.5); /* Opera */
+    margin: 10px;
+    vertical-align: baseline;
+}
+
+ 
+.card-detail {
+}
+    div.card-detail label {
+        /*font-size: 0.8em*/
+    }
+.darg-width {
+    width: 50%;
+}
+
+.drop-width {
+    width: 50%;
+}

@@ -1,0 +1,17 @@
+﻿
+.drop-placeholder {
+    background-color: lightgray;
+    height: 3.5em;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    line-height: 1.2em;
+}
+
+.list-item {
+    cursor: move;
+}
+
+.checkbox-list-item {
+    cursor: default;
+    margin-right: 20px !important;
+}

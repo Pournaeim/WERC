@@ -1,0 +1,133 @@
+﻿
+@model  Model.ViewModels.Reference.VmReferenceCollection
+
+@{
+    ViewBag.Title = "Upload References";
+    Layout = "~/Views/Shared/_LayoutSafetyAdmin.cshtml";
+}
+
+<h2>Upload My Reference Files</h2>
+
+<div class="form-group">
+    @Html.Label(@Model["Title"], htmlAttributes: new { @class = "control-label col-xs-12" })
+    <div class="col-xs-6">
+        @Html.TextBox(Model["Title"], "", new { @class = "form-control", @id = "titleTextBox", @placeholder = "Title of refrenece file" })
+        <i class="text-danger fa-2x">*</i>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-xs-12">
+        <button type="button" id="uploadNewReference" class="btn btn-primary"
+                onclick="validateRefrenceTitle()">
+            @Model["Upload New Reference"]
+        </button>
+        <input id="referenceFileFileInput" name="file" type="file" class="form-control hidden" />
+    </div>
+</div>
+<hr />
+<div class="col-xs-12">
+    <table class="table">
+        <tr>
+            <th>
+                @Model["Title"]
+            </th>
+            <th>
+                @Model["Reference File"]
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.ReferenceList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    <a href="@HttpUtility.HtmlDecode(@item.ReferenceFileUrl??"")">@Model["Download"]</a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" id="deleteReferenceFile" onclick="deleteReferenceFile('@item.Id')">@Model["Delete"]</button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<script>
+    function deleteReferenceFile(id) {
+        var confirmDeleteDialogObjec =
+            {
+                title: "Delete Reference File",
+                sender: this,
+                width: "",
+                height: "auto",
+                dialogConfirmId: "confirmDialogContainer",
+                yesButton:'@Model["Yes"]',
+                noButton: '@Model["No"]',
+                acceptCallbak: function (sender) {
+                     HoldOn.open({
+                        theme: 'sk-cube-grid',
+                        message: "<h4>@Model["Please wait..."]</h4>"
+                    });
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/safetyAdmin/drf",
+                        data: { id }
+                    }).done(function (result) {
+                        location.href = "/safetyAdmin/larf";
+                        HoldOn.close();
+
+                    });
+                },
+                rejectCallbak: function () { }
+            }
+
+        openConfirmDialog(confirmDeleteDialogObjec);
+    }
+    function validateRefrenceTitle() {
+      if ($("#titleTextBox").val().length == 0) {
+            alert('@Model["Please enter tilte of reference file"]');
+            return;
+        }
+        $('#referenceFileFileInput').click()
+    }
+
+    $('#referenceFileFileInput').on('change', function (e) {
+        debugger
+
+
+        var formData = new FormData();
+
+        var ReferenceFile_file = document.getElementById("referenceFileFileInput").files[0];
+
+        formData.append("uploadedReferenceFile", ReferenceFile_file);
+
+        formData.append("title", $("#titleTextBox").val());
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/safetyAdmin/urf", //you can get also action attribute from form using form.attr('action')
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+        }).done(
+            function (result)
+            {
+                debugger
+                if (result.success == true) {
+                    location.href = "/safetyAdmin/larf"
+                }
+
+                HoldOn.close();
+            });
+
+    });
+
+</script>

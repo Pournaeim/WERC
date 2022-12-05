@@ -1,0 +1,248 @@
+﻿@using Model.ApplicationDomainModels;
+
+@model IEnumerable<Model.ViewModels.Team.VmTeamMember>
+@{
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+}
+
+<script>
+    var teamEmailMemberselectedItems = [];
+
+</script>
+<table class="table table-responsive table-bordered table-hover">
+    <tr>
+        <th>
+            <span class="display-block">All</span>
+            <input type="checkbox" id="teamEmailMembersSelectAllCheckbox" style="width: 20px; height: 20px;" />
+
+        </th>
+        <th>
+            @Html.DisplayName("First Name")
+        </th>
+        <th>
+            @Html.DisplayName("Last Name")
+        </th>
+        <th>
+            @Html.DisplayName("Phone (work)")
+        </th>
+        <th>
+            @Html.DisplayName("Phone (at contest)")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+
+        <th>
+            @Html.DisplayName("Role Name")
+        </th>
+        <th>
+            @Html.DisplayName("Registration Status")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Survey)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        var showProfileValue = "";
+        var checkboxId = "teamEmeilMemberCheckbox" + item.MemberUserId;
+        showProfileValue = "onclick = \"showProfile('" + @item.MemberUserId + "','" + @item.FirstName + " " + @item.LastName + "')\"";
+
+        <tr id="@item.Id" @Html.Raw(@showProfileValue)>
+
+            <td>
+                <input type="checkbox" id="@checkboxId" class="teamEmailMembersSingleCheckbox" data-value='@item.MemberUserId' style="width: 20px; height: 20px;" />
+
+                <script>
+                    $("#@checkboxId").prop("checked", $.inArray('@item.MemberUserId', teamEmailMemberselectedItems) > -1)
+                        .on("click", function (item) {
+
+                            event.stopPropagation();
+                        }).on("change", function (item) {
+
+                            event.stopPropagation(); event.preventDefault();
+
+                            $(this).is(":checked") ? teamEmailSelectItem($(this).data("value")) : teamEmailUnselectItem($(this).data("value"));
+
+                            $("#teamCheckboxSelectionContainer" +@item.TeamId).val(JSON.stringify(teamEmailMemberselectedItems));
+                            $("#selectAllTeamWithMembersCheckbox").prop("checked", false);
+
+                    });
+                </script>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkPhoneNumber)
+            </td>
+             <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleName)
+            </td>
+            <td>
+                @if (item.RegistrationStatus == true)
+                {
+                    <img src='/Resources/Images/Stylish_ok.png' class="status-img" />
+                }
+                else
+                {
+                    <img src='/Resources/Images/Stylish_not_ok.png' class="status-img" />
+                }
+            </td>
+            <td>
+                @if (item.Survey == true)
+                {
+                    <img src='/Resources/Images/Stylish_ok.png' class="status-img" />
+                }
+                else
+                {
+                    <img src='/Resources/Images/Stylish_not_ok.png' class="status-img" />
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+<link href="~/Resources/CSS/modal-fixed.css" rel="stylesheet" />
+<script>
+    $(".profile-info-modal-close-button").click(function () {
+        $("#profileInfoModal").modal("toggle");
+
+    });
+
+    function showProfile(userId, name) {
+        event.stopPropagation(); event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/person/gpi",
+            data: { userId },
+            dataType: "html",
+        }).done(function (response) {
+            if (response == '') {
+                response = 'Profile not completed';
+            }
+            $("#profileDiv").html(response);
+            $("#profileNameSpan").text(name);
+            $("#profileInfoModal").modal();
+        }).fail(function (data, textStatus, XMLHttpRequest) {
+
+        });
+
+    }
+
+
+    var teamEmailSelectItem = function (item) {
+
+        teamEmailMemberselectedItems.push(item);
+        if ($(".teamEmailMembersSingleCheckbox").length == $(".teamEmailMembersSingleCheckbox:checked").length) {
+            $("#teamEmailMembersSelectAllCheckbox").prop("checked", true);
+        } else {
+            $("#teamEmailMembersSelectAllCheckbox").prop("checked", false);
+        }
+
+
+    };
+
+    var teamEmailUnselectItem = function (item) {
+        teamEmailMemberselectedItems = $.grep(teamEmailMemberselectedItems, function (i) {
+            return i !== item;
+        });
+        if (teamEmailMemberselectedItems.length == 0) {
+            $('#teamEmailMembersSelectAllCheckbox').prop('checked', false);
+        }
+        if ($(".teamEmailMembersSingleCheckbox").length == $(".teamEmailMembersSingleCheckbox:checked").length) {
+            $("#teamEmailMembersSelectAllCheckbox").prop("checked", true);
+        } else {
+            $("#teamEmailMembersSelectAllCheckbox").prop("checked", false);
+        }
+    };
+
+    $("#teamEmailMembersSelectAllCheckbox").click(function () {
+        event.stopPropagation();
+
+        teamEmailMemberselectedItems = [];
+        if (this.checked) { // check select status
+            $('.teamEmailMembersSingleCheckbox').each(function () {
+                this.checked = true;
+                teamEmailSelectItem($(this).data("value"));
+
+
+            });
+        } else {
+
+            $('.teamEmailMembersSingleCheckbox').each(function () {
+                this.checked = false;
+                teamEmailUnselectItem($(this).data("value"));
+
+
+            });
+            teamEmailMemberselectedItems = [];
+        }
+
+        var teamId = $("#selectedTeamIdHidden").val();
+
+        $("#teamCheckboxSelectionContainer" + teamId).val(JSON.stringify(teamEmailMemberselectedItems));
+
+    });
+
+    $(document).ready(function () {
+
+        
+        var teamId = $("#selectedTeamIdHidden").val();
+
+        if ($("#teamCheckboxSelectionContainer" + teamId).val() != "") {
+            teamEmailMemberselectedItems = JSON.parse($("#teamCheckboxSelectionContainer" + teamId).val());
+            $.each(teamEmailMemberselectedItems, function (index, value) {
+                $("#teamEmeilMemberCheckbox" + value).prop("checked", true);
+            });
+        }
+        else if ($("#teamCheckboxStatusHidden").val() == 'true') {
+            $("#teamEmailMembersSelectAllCheckbox").click();
+            $("#teamCheckboxStatusHidden").val('');
+        }
+
+        //if ($("#teamCheckboxStatusHidden").val() == 'true') {
+
+        //    $("#teamCheckboxStatusHidden").val('');
+
+        //    if ($.inArray(teamId, teamMemberFirstTimeLoad) == -1) {
+
+        //        teamMemberFirstTimeLoad.push(teamId);
+
+        //        $("#teamEmailMembersSelectAllCheckbox").click();
+        //    }
+        //}
+    });
+
+</script>
+
+<div class="modal-fixed">
+    <div class="modal fade" id="profileInfoModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn btn-default profile-info-modal-close-button text-left"><i class='fa fa-arrow-left'></i> Preview</button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="modal-title"><span id="profileNameSpan"></span> Profile Info</h4>
+
+                    <div id="profileDiv" class="row text-left"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default profile-info-modal-close-button text-left"><i class='fa fa-arrow-left'></i> Preview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

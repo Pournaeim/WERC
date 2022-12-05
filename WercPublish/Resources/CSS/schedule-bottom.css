@@ -1,0 +1,120 @@
+/*-- schedule-bottom --*/
+.schedule-bottom {
+    background: #2fdab8;
+}
+
+.agileits_schedule_bottom_right, .agileinfo_schedule_bottom_left {
+    padding: 0;
+}
+
+    .agileinfo_schedule_bottom_left img {
+        width: 100%;
+    }
+
+.w3ls_schedule_bottom_right_grid_siteDef {
+    padding: 1em 0 1.1em 0;
+    background: #fff;
+    margin: 2.5em 0 1.5em 0;
+    width: 100%;
+    height: 270px;
+    overflow-y: hidden;
+    -webkit-animation: mymove 5s infinite; /* Chrome, Safari, Opera */
+    animation: mymove 5s infinite;
+    -webkit-animation-iteration-count: 1; /* Safari 4.0 - 8.0 */
+    animation-iteration-count: 1;
+    box-shadow: 5px 5px 15px;
+    border-radius: 30px;
+}
+
+.schedule_bottom-text {
+    height: 50px !important;
+    width: 100% !important;
+    overflow-y: hidden;
+}
+
+.schedule_bottom-button {
+    height: 50px !important;
+    width: 90% !important;
+    border-radius: 0;
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes mymove {
+    0% {
+        box-shadow: 5px 5px 10px;
+    }
+
+    50% {
+        box-shadow: 5px 5px 100px;
+    }
+
+    100% {
+        box-shadow: 5px 5px 10px;
+    }
+}
+
+/* Standard syntax */
+@keyframes mymove {
+    0% {
+        box-shadow: 5px 5px 10px;
+    }
+
+    50% {
+        box-shadow: 5px 5px 100px;
+    }
+
+    100% {
+        box-shadow: 5px 5px 10px;
+    }
+}
+
+
+.w3ls_schedule_bottom_right_grid_siteDef h2 {
+    text-transform: uppercase;
+    font-size: 1.4em;
+    color: #212121;
+    font-weight: 700;
+}
+
+    .w3ls_schedule_bottom_right_grid_siteDef h2 span {
+        color: #fc636b;
+    }
+
+.schedule_bottom-padding-top {
+    padding-top: 30px;
+}
+
+.w3l_schedule_bottom_right_grid_siteDef1 {
+    text-align: center;
+}
+
+    .w3l_schedule_bottom_right_grid_siteDef1 i {
+        font-size: 3em;
+        color: #fe4615;
+        display: block;
+    }
+
+    .w3l_schedule_bottom_right_grid_siteDef1 p.w3l_schedule {
+        margin-top: 40px;
+        color: #0c1a1e;
+        font-size: 1em;
+        font-weight: 600;
+        display: block;
+        height: 25px;
+    }
+
+h3.wthree_text_info {
+    font-size: 2.5em;
+    font-weight: 700;
+    text-align: center;
+    color:#2a2a2a;
+    margin-bottom: 1em;
+    margin-top: 1.5em;
+    text-transform: uppercase;
+}
+
+    h3.wthree_text_info span {
+        font-weight: 300;
+    }
+
+
+/*-- //schedule-bottom --*/

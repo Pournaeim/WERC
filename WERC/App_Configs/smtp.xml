@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+ 
+
+<!--<smtp
+  deliveryMethod="Network"
+  from="werc@nmsu.edu">
+  <network
+    host="smtp.nmsu.edu"
+    password="wercDesignC0ntest!"
+    port="25"
+    userName="werc@nmsu.edu"
+    enableSsl="true" />
+</smtp>-->
+
+
+<smtp
+  deliveryMethod="Network"
+  from="info@cyberneticcode.com">
+  <network
+    host="webmail.cyberneticcode.com"
+    password="Robotic@1364"
+    port="25"
+    userName="info@cyberneticcode.com"
+    enableSsl="true" />
+</smtp>
+
+<!--port="587"-->
+

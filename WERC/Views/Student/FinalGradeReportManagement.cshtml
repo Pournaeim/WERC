@@ -1,0 +1,47 @@
+﻿
+@model Model.ViewModels.Judge.VmFinalGradeReportManagement
+
+@{
+    ViewBag.Title = "Final Scores Management";
+    Layout = Model.ViewLayout;
+}
+<link href="~/Resources/CSS/_grading.css" rel="stylesheet" />
+<h2>@ViewBag.BS_Title</h2>
+
+<div>
+    <hr />
+    <div>
+        <button class="btn btn-primary" onclick="printDiv()">Print</button>
+    </div>
+    <div id="DivIdToPrint">
+        <hr />
+        @Html.Partial("_FinalGradesReportTable", Model)
+
+        @*<hr />
+        @Html.Partial("_OtherTeamsFinalGradesReportTable", Model.OtherTeamsGradeReportList)*@
+    </div>
+    <div>
+        <button class="btn btn-primary" onclick="printDiv()">Print</button>
+    </div>
+</div>
+<script>
+
+    function printDiv() {
+
+        $("#gradingEvaluationDetailModalContainer").hide();
+        var divToPrint = document.getElementById('DivIdToPrint');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+        $("#gradingEvaluationDetailModalContainer").show();
+
+    }
+
+</script>

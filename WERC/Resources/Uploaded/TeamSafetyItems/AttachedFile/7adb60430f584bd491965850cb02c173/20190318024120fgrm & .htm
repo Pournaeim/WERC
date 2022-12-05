@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)https://localhost:44337/judge/fgrm -->
+<html lang="en-us" style="" class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" href="https://localhost:44337/favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <title></title>
+
+    <link href="./fgrm_files/main.css" rel="stylesheet">
+<link href="./fgrm_files/bootstrap.css" rel="stylesheet">
+<link href="./fgrm_files/font-awesome.min.css" rel="stylesheet">
+<link href="./fgrm_files/font-awesome-animation.min.css" rel="stylesheet">
+<link href="./fgrm_files/site.css" rel="stylesheet">
+<link href="./fgrm_files/menu.css" rel="stylesheet">
+<link href="./fgrm_files/search.css" rel="stylesheet">
+<link href="./fgrm_files/footer.css" rel="stylesheet">
+<link href="./fgrm_files/logo.css" rel="stylesheet">
+<link href="./fgrm_files/about-modal.css" rel="stylesheet">
+<link href="./fgrm_files/modal.css" rel="stylesheet">
+<link href="./fgrm_files/contact-modal.css" rel="stylesheet">
+<link href="./fgrm_files/login.css" rel="stylesheet">
+<link href="./fgrm_files/members.css" rel="stylesheet">
+<link href="./fgrm_files/logout.css" rel="stylesheet">
+<link href="./fgrm_files/google-api-fonts.css" rel="stylesheet">
+<link href="./fgrm_files/spin-button.css" rel="stylesheet">
+<link href="./fgrm_files/offcanvas.css" rel="stylesheet">
+<link href="./fgrm_files/tootip.css" rel="stylesheet">
+<link href="./fgrm_files/jsgrid.min.css" rel="stylesheet">
+<link href="./fgrm_files/jsgrid-theme.min.css" rel="stylesheet">
+<link href="./fgrm_files/detail-style.css" rel="stylesheet">
+<link href="./fgrm_files/chosen.min.css" rel="stylesheet">
+<link href="./fgrm_files/collapse-expand.css" rel="stylesheet">
+<link href="./fgrm_files/slick-team-slider.css" rel="stylesheet">
+<link href="./fgrm_files/portfolio.css" rel="stylesheet">
+<link href="./fgrm_files/draggable.css" rel="stylesheet">
+<link href="./fgrm_files/item-selection.css" rel="stylesheet">
+<link href="./fgrm_files/moveable-fixed-panel.css" rel="stylesheet">
+<link href="./fgrm_files/editor.css" rel="stylesheet">
+<link href="./fgrm_files/bootstrap-select.min.css" rel="stylesheet">
+<link href="./fgrm_files/text-circle.css" rel="stylesheet">
+<link href="./fgrm_files/HoldOn.min.css" rel="stylesheet">
+
+    <link href="./fgrm_files/style.css" rel="stylesheet">
+
+    <script src="./fgrm_files/modernizr-2.6.2.js.download"></script>
+
+    <script src="./fgrm_files/jquery-3.3.1.js.download"></script>
+<script src="./fgrm_files/jquery.countup.js.download"></script>
+<script src="./fgrm_files/jquery.waypoints.min.js.download"></script>
+
+    <script src="./fgrm_files/chosen.jquery.min.js.download"></script>
+<script src="./fgrm_files/chosen.proto.min.js.download"></script>
+
+    <script src="./fgrm_files/jquery.dd.min.js.download"></script>
+    <link href="./fgrm_files/dd.css" rel="stylesheet">
+    <script>
+        var deviceIsTouchable = false;
+        var deviceIsApple = false;
+
+        $(document).ready(function () {
+
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                deviceIsTouchable = true;
+
+            }
+
+            if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                deviceIsApple = true;
+            }
+
+            var deviceIsApple = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+
+            $("#bsTopHeadNavbarCollapseButton").click(function () {
+                $("#bsTopHeadNavbar").toggleClass("bring-to-front-top-nav");
+            });
+
+            $(".top, .bottom").lettering();
+
+
+        });
+
+        var is_chrome = !!window.chrome && !is_opera;
+        var is_explorer = typeof document !== 'undefined' && !!document.documentMode && !isEdge;
+        var is_firefox = typeof window.InstallTrigger !== 'undefined';
+        var is_safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        var is_opera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+
+
+    </script>
+
+    <script src="./fgrm_files/summernote.js.download"></script>
+    <link href="./fgrm_files/summernote.css" rel="stylesheet">
+</head>
+<body onload="loadGoogleMap();" onresize="">
+
+    <header id="site-header-div" class="site-header">
+
+        
+        <div class="header-content">
+
+            <div class="col-xs-12 col-sm-5 col-md-4 text-left">
+                <div class="">
+                    <img src="./fgrm_files/WERCMain.png" class="logo">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-7 col-md-8">
+                <div class="col-xs-12 col-sm-8 header-content-text text-left">
+
+                </div>
+
+                <div class="hidden-xs col-sm-4">
+                    <div class="partialLogin  pull-right">
+                        
+<form action="https://localhost:44337/Account/LogOff" class=" text-center" id="logoutForm" method="post"><input name="__RequestVerificationToken" type="hidden" value="nGk0AHLoVbWMbCg9a2CgDVpCBE5StU4uY0hWqHrA4E9-3MFD_LAweRGZtnoSHzw6xR7OkGgKoKxUC8UbfdGhxv0xdsmzA4DJ1DOJg64hfS-fj7IO7f385TrQBMvAV-SOAruqmk1dwPVOb89zUQSe2A2">        <a href="javascript:document.getElementById(&#39;logoutForm&#39;).submit()" class="logout">
+            <i class="fa fa-sign-out" aria-hidden="true">
+                <span>Log out</span>
+            </i>
+        </a>
+        <span class="welcome">Welcome   melshinawy</span>
+</form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </header>
+    <!--menu-->
+    <div class="menu">
+        
+        
+        
+    <!--Judge Menu start-->
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid menu-height">
+            <div class="row">
+
+                <div class="navbar-header head-foot-back-color">
+
+                    <!--Menu Button-->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="partialLogin text-left visible-xs col-xs-6">
+                        
+<form action="https://localhost:44337/Account/LogOff" class=" text-center" id="logoutForm" method="post"><input name="__RequestVerificationToken" type="hidden" value="9Blgm0HDfn1Jbw10UPI7dH01JVsph5kmjGG6vBZicQG0C65l_5uvYFphILxkKOgCYXRr2Ecqzj6MUjpE0Gzy3wF5NsO_JqkZOCvb6eAMQ9mMqzbYDp0oyDPVuqqAfcKNj0RI55cKFnw8gf9qf4Kg2g2">        <a href="javascript:document.getElementById(&#39;logoutForm&#39;).submit()" class="logout">
+            <i class="fa fa-sign-out" aria-hidden="true">
+                <span>Log out</span>
+            </i>
+        </a>
+        <span class="welcome">Welcome   melshinawy</span>
+</form>
+                    </div>
+                </div>
+                <!--Menu Items-->
+                <div class="collapse navbar-collapse navbar-ex1-collapse head-foot-back-color">
+
+                    <ul class="nav navbar-nav navbar-left col-sm-8 col-md-8">
+                        <li class="">
+                            <a href="https://localhost:44337/Home">HOME </a>
+                        </li>
+
+                        <li class="">
+                            <a href="https://localhost:44337/judge/tl">TEAM </a>
+                        </li>
+                        
+
+                        <li class="dropdown">
+
+                            <a href="https://localhost:44337/judge/test" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="menuItemText">PROFILE<i class="caret"></i></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+
+                                <li>
+                                    <a href="https://localhost:44337/judge/lupf">
+                                        <i class="fa fa-user-circle-o fa-1x" aria-hidden="true"></i>
+                                        <span class="">Change Profile </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="" href="https://localhost:44337/Account/ForgotPassword?Length=7">
+                                        <i class="fa fa-key fa-1x" aria-hidden="true"></i>
+                                        <span class="">Reset Password </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="">
+                            <a href="https://localhost:44337/judge/fgrm">FINAL GRADES REPORT </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav> 
+
+        
+        
+        
+        
+        
+        
+        
+    </div>
+    <div id="mainContentId" class="container-fluid main-content">
+        <div id="safariMessageDiv" class="row hidden text-center">
+            <h2 class="apple-device-alert">Use the Chrome or Firefox browser for optimal use.  </h2>
+            <br>
+            
+
+            <a id="otherChrome" href="https://www.google.com/chrome/" class="">Download Google Chrome</a>
+            <br>
+            <a id="otherFirefox" href="https://www.mozilla.org/en-US/firefox/" class="">Download Firefox</a>
+
+        </div>
+        <div class="row">
+            
+
+
+<link href="./fgrm_files/jquery-ui.min.css" rel="stylesheet">
+
+
+<div class="col-xs-12">
+    
+
+<link href="./fgrm_files/grading.css" rel="stylesheet">
+<h2>Final Grades Report</h2>
+
+<div>
+    <hr>
+    
+
+<div class="col-xs-8 grade-report-border">
+
+    <h3>Task 6</h3>
+    <table class="table table-condensed table-bordered table-striped grade-report-table">
+        <tbody><tr>
+            <th>Team</th>
+
+                <th>AVG. BENCH SCALE</th>
+                <th>AVG. ORAL PRESENTATION</th>
+                <th>AVG. POSTER PRESENTATION</th>
+                <th>AVG. WRITTEN REPORT</th>
+            <td>Total</td>
+
+        </tr>
+
+            <tr>
+                <td>01UNH-6</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>07UCR-6</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>09CPSUSLO-6</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>12NMSU-6</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>20LSUaAaMC-6</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>23UTP-6</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+    </tbody></table>
+
+</div>
+<div class="col-xs-8 grade-report-border">
+
+    <h3>Task 1</h3>
+    <table class="table table-condensed table-bordered table-striped grade-report-table">
+        <tbody><tr>
+            <th>Team</th>
+
+                <th>AVG. BENCH SCALE</th>
+                <th>AVG. ORAL PRESENTATION</th>
+                <th>AVG. POSTER PRESENTATION</th>
+                <th>AVG. WRITTEN REPORT</th>
+            <td>Total</td>
+
+        </tr>
+
+            <tr>
+                <td>03UI-1</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>04UAF-1</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>16LSUaAaMC-1</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+    </tbody></table>
+
+</div>
+<div class="col-xs-8 grade-report-border">
+
+    <h3>Task 4</h3>
+    <table class="table table-condensed table-bordered table-striped grade-report-table">
+        <tbody><tr>
+            <th>Team</th>
+
+                <th>AVG. BENCH SCALE</th>
+                <th>AVG. ORAL PRESENTATION</th>
+                <th>AVG. POSTER PRESENTATION</th>
+                <th>AVG. WRITTEN REPORT</th>
+            <td>Total</td>
+
+        </tr>
+
+            <tr>
+                <td>05UAF-4</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>08CPSUSLO-4</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+    </tbody></table>
+
+</div>
+<div class="col-xs-8 grade-report-border">
+
+    <h3>Task 5</h3>
+    <table class="table table-condensed table-bordered table-striped grade-report-table">
+        <tbody><tr>
+            <th>Team</th>
+
+                <th>AVG. BENCH SCALE</th>
+                <th>AVG. ORAL PRESENTATION</th>
+                <th>AVG. POSTER PRESENTATION</th>
+                <th>AVG. WRITTEN REPORT</th>
+            <td>Total</td>
+
+        </tr>
+
+            <tr>
+                <td>06UAF-5</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>80</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>9</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>89</td>
+
+            </tr>
+            <tr>
+                <td>10OU-5</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>24</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>5</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>12</span>
+                    </td>
+
+                <td>41</td>
+
+            </tr>
+            <tr>
+                <td>14WSU-5</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>19LSUaAaMC-5</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>21NMSU-5</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+    </tbody></table>
+
+</div>
+<div class="col-xs-8 grade-report-border">
+
+    <h3>Task 3</h3>
+    <table class="table table-condensed table-bordered table-striped grade-report-table">
+        <tbody><tr>
+            <th>Team</th>
+
+                <th>AVG. BENCH SCALE</th>
+                <th>AVG. ORAL PRESENTATION</th>
+                <th>AVG. POSTER PRESENTATION</th>
+                <th>AVG. WRITTEN REPORT</th>
+            <td>Total</td>
+
+        </tr>
+
+            <tr>
+                <td>11NMSU-3</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>13MT-3</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>18LSUaAaMC-3</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+    </tbody></table>
+
+</div>
+<div class="col-xs-8 grade-report-border">
+
+    <h3>Task 2</h3>
+    <table class="table table-condensed table-bordered table-striped grade-report-table">
+        <tbody><tr>
+            <th>Team</th>
+
+                <th>AVG. BENCH SCALE</th>
+                <th>AVG. ORAL PRESENTATION</th>
+                <th>AVG. POSTER PRESENTATION</th>
+                <th>AVG. WRITTEN REPORT</th>
+            <td>Total</td>
+
+        </tr>
+
+            <tr>
+                <td>15NMSU-2</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+            <tr>
+                <td>17LSUaAaMC-2</td>
+
+
+
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+                    <td class="grade-cell-hover">
+                        <span>0</span>
+                    </td>
+
+                <td>0</td>
+
+            </tr>
+    </tbody></table>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+        </div>
+        <div class="row">
+            <!--footer starts  here-->
+            <hr>
+
+            <footer id="footerId" class="footer-back-color">
+                <p id="demo" style="position: fixed; top: 50%; left: 10%; font-size: 3em; background-color: #ffffff; color: #f00"></p>
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <div class="col-xs-4 footer-col">
+                            <div id="footerFirstColId" class="footer-col-header col-xs-12">
+                                
+                            </div>
+
+                            <div class="col-xs-12 footer-col">
+
+                                <div id="FooterNews"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-8">
+                            <div class="col-xs-12 footer-content-col">
+                                <div id="FooterContent"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row copyright">
+                        <p>© 2018 - All Rights Reserved</p>
+                    </div>
+                </div>
+
+            </footer>
+
+            <!--footer ends here-->
+        </div>
+    </div>
+
+    <!--Modals start-->
+    <!--Contact us Modal start-->
+    <div class="modal modal-fullscreen fade" id="contactUsModal" tabindex="-1" role="dialog" aria-labelledby="contact-title-font" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--review for image quality-->
+
+                <div class="modal-header ">
+                    <button type="button" class="close contact-close" data-dismiss="modal" aria-label="Close">
+                        <span class="close-contact" aria-hidden="true">×</span>
+                    </button>
+                    
+                </div>
+                <div class="contact-header-image">
+                    <p id="contact-title-font">Contact Us</p>
+                </div>
+
+                <div class="modal-body">
+                    <!--Contact Description -->
+                    <div class="row contact-us-meet-us">
+
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="row">
+
+                                <img src="./fgrm_files/home.jpg" class="responsive-width-height">
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-8 col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-12 contact-titles">
+                                    <h2> <b>Meet Us Here</b></h2>
+                                    Lorem ipsum carrots until they need hydrwill always need a lot of nibh eu or at least get some protein oxygen therapy region.
+                                    <details class="visible-xs visible-sm">
+                                        <summary>Lorem ipsum sitame an ullance visaue velitesse.</summary>
+                                        <p> Perscatis aperiam invntore vertais betae eplicmo voluptas asperntur.</p>
+                                        <p>All content and graphics on this web site are the property of the company Refsnes Data.</p>
+                                    </details>
+
+                                    <details open="" class="hidden-sm hidden-xs">
+                                        <summary>Lorem ipsum sitame an ullance visaue velitesse.</summary>
+                                        <p> Perscatis aperiam invntore vertais betae eplicmo voluptas asperntur.</p>
+                                        <p>All content and graphics on this web site are the property of the company Refsnes Data.</p>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Contact Info and Events for XS and SM screens-->
+                    <div class="row contact-info">
+                        <div class="col-xs-6 visible-xs col-sm-6 visible-sm">
+                            <i class="fa fa-map-marker fa-2x" aria-hidden="true"></i>
+                            <p>
+                                Address:
+                                <span>
+                                    8901 Marmora Road, Glasgow,
+                                    Glasgow 89GR
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="col-xs-6 visible-xs col-sm-6 visible-sm">
+                            <i class="fa fa-phone fa-2x" aria-hidden="true"></i>
+                            <p>
+                                (800) 0123 - 456 - 7890
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row contact-info">
+                        <div class="col-xs-6 visible-xs col-sm-6 visible-sm">
+                            <i class="fa fa-envelope-o fa-2x" aria-hidden="true"></i>
+                            <p>
+                                <a href="mailto:info@example.com">info@example1.com</a>
+                            </p>
+                        </div>
+
+                        <div class="col-xs-6 visible-xs col-sm-6 visible-sm">
+                            <i class="fa fa-meetup fa-2x" aria-hidden="true"></i>
+                            <p>  <b> Network Meetings</b> </p>
+                            <details close="" class="visible-xs visible-sm">
+                                <summary>Monday - Friday</summary>
+                                <p> 8:00AM - 10:00PM</p>
+                            </details>
+                            <details close="" class="visible-xs visible-sm">
+                                <summary>Saturday</summary>
+                                <p> 8:00AM - 12:00PM</p>
+                            </details>
+                            <details close="" class="visible-xs visible-sm">
+                                <summary>Sunday</summary>
+                                <p> 8:00AM - 12:00PM</p>
+                            </details>
+                        </div>
+
+                    </div>
+
+                    <!--Contact Info and Events for MD and LG screens-->
+
+                    <div class="row contact-info">
+
+                        <div class="col-md-3 col-lg-3 visible-md visible-lg">
+                            <i class="fa fa-map-marker fa-2x" aria-hidden="true"></i>
+                            <p>
+                                Address:
+                                <span>
+                                    8901 Marmora Road, Glasgow,
+                                    Glasgow 89GR
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-3 col-lg-3 visible-md visible-lg">
+                            <i class="fa fa-phone fa-2x" aria-hidden="true"></i>
+                            <p>
+                                (800) 0123 - 456 - 7890
+                            </p>
+                        </div>
+
+                        <div class="col-md-3 col-lg-3 visible-md visible-lg">
+                            <i class="fa fa-envelope-o fa-2x" aria-hidden="true"></i>
+                            <p>
+                                <a href="mailto:info@example.com">info@example1.com</a>
+                            </p>
+                        </div>
+
+                        <div class="col-md-3 col-lg-3 visible-md visible-lg">
+                            <i class="fa fa-meetup fa-2x" aria-hidden="true"></i>
+                            <p>  <b> Network Meetings</b> </p>
+                            <p><span>Monday - Friday 8:00AM - 10:00PM</span></p>
+                            <p><span>Saturday  8:00AM - 12:00PM</span></p>
+                            <p><span>Sunday 8:00AM - 12:00PM</span></p>
+
+                        </div>
+
+                    </div>
+
+                    <!--Email-->
+                    <div class="row">
+                        <div class="col-xs-12 ">
+                            <form action="https://localhost:44337/judge/fgrm#" method="post" class="contact-us-form">
+                                <p class="email-title-font">Sign Up To WERC Today</p>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" name="Name" required="" class="form-control">
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>E-Mail</label>
+                                            <input type="email" name="Email" required="" class="form-control">
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Subject</label>
+                                            <input type="text" name="Subject" required="" class="form-control">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label>Message</label>
+                                            <textarea name="Message" required="" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="submit" class="contact-submit-btn" value=" Send">
+                            </form>
+                        </div>
+                    </div>
+
+                    <!----------Map-------->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <iframe id="googleMapFrame" frameborder="0" width="100%" height="300" allowfullscreen="" src="./fgrm_files/embed.html" __idm_frm__="1069"></iframe>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+        </div>
+    </div>
+    <!--Contact us Modal end-->
+    <!--About us Modal start-->
+    <div class="modal modal-fullscreen fade" id="aboutUsModal" tabindex="-1" role="dialog" aria-labelledby="About-title-font" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--review for image quality-->
+                <div class="modal-header About-header-image">
+                    <button type="button" class="close about-close" data-dismiss="modal" aria-label="Close">
+                        <span class="close-about" aria-hidden="true">×</span>
+                    </button>
+                    
+                </div>
+
+                <div class="modal-body">
+                    <!--About Us Banner Start-->
+                    <div class="row cliped-height-banner">
+
+                    </div>
+                    <!--About Us Banner End-->
+                    <!---------Main Content Starts Here----------->
+                    <!--Welcome to Club Starts Here-->
+                    <div class="row about-us-welcome">
+                        <div class="col-xs-12 col-sm-12 col-md-6 hidden-xs about-us-welcome-img">
+                            <img src="./fgrm_files/AboutUsSideImage.jpg" class="img-responsive">
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 about-us-text-format">
+                            <h2> Welcome To The ASU</h2>
+                            <p>
+                                Lorem ipsum dolor the sitame constetur adpscing eltanrsw tempors incduns labore enims veniam nstrue erction ullamc laboris aliquwas consquae rephns voluptes pariatur.
+                            </p>
+                            <details class="visible-xs">
+                                <summary>Summery of column one.</summary>
+                                <p> Perscatis asperntur ratione nesciun quesuaw ipsuerm vertais nuqam aliquam vlupatem betae voluptas.</p>
+                            </details>
+
+                            <details open="" class="hidden-xs">
+                                <summary>Summery of column one.</summary>
+                                <p> Perscatis voluptas asperntur ratione nesciun quesuaw ipsuerm vertais nuqam aliquam vlupatem betae voluptas.</p>
+                            </details>
+
+                        </div>
+                    </div>
+                    <!--Welcome to Club Ends Here-->
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+        </div>
+    </div>
+    <!--About us Modal end-->
+    <!--Modals end-->
+    <!--//////////////////////////// Scripts //////////////////////////////////-->
+    <script src="./fgrm_files/bootstrap.min.js.download"></script>
+<script src="./fgrm_files/search.js.download"></script>
+<script src="./fgrm_files/header-footer.js.download"></script>
+<script src="./fgrm_files/respond.js.download"></script>
+<script src="./fgrm_files/menu.js.download"></script>
+<script src="./fgrm_files/offcanvas.js.download"></script>
+<script src="./fgrm_files/mousestop.js.download"></script>
+<script src="./fgrm_files/jstree.min.js.download"></script>
+<script src="./fgrm_files/jsgrid.min.js.download"></script>
+<script src="./fgrm_files/tooltip.js.download"></script>
+<script src="./fgrm_files/testimonial.js.download"></script>
+<script src="./fgrm_files/collapse-expand.js.download"></script>
+<script src="./fgrm_files/jquery.easing.min.js.download"></script>
+<script src="./fgrm_files/slick.min.js.download"></script>
+<script src="./fgrm_files/portfolio.js.download"></script>
+<script src="./fgrm_files/dragable-items.js.download"></script>
+<script src="./fgrm_files/moveable-fixed-panel.js.download"></script>
+<script src="./fgrm_files/editor.js.download"></script>
+<script src="./fgrm_files/bootstrap-select.min.js.download"></script>
+<script src="./fgrm_files/jquery.lettering.js.download"></script>
+<script src="./fgrm_files/HoldOn.min.js.download"></script>
+
+    <script src="./fgrm_files/jquery-ui.min.js.download"></script>
+<script src="./fgrm_files/jquery.form.js.download"></script>
+
+    <script src="./fgrm_files/jquery.validate.js.download"></script>
+<script src="./fgrm_files/jquery.validate.unobtrusive.js.download"></script>
+
+    
+
+    <div class="hidden">
+        <div id="confirmDialogContainer" title="Delete...">
+            <span id="confirmDialogMessage"> Are you sure?</span>
+        </div>
+        <script>
+
+            function openConfirmDialog(confirmDialogObjec) {
+
+                if (confirmDialogObjec.width == "") {
+                    screenWidth = $(window).width();
+                    if (screenWidth < 400) {
+                        confirmDialogObjec.width = "100%";
+                    }
+                    else
+                        if (screenWidth >= 400 && screenWidth < 768) {
+                            confirmDialogObjec.width = "50%";
+                        }
+                        else
+                            if (screenWidth >= 768 && screenWidth < 992) {
+                                confirmDialogObjec.width = "40%";
+                            }
+                            else if (screenWidth >= 992 && screenWidth < 1200) {
+                                confirmDialogObjec.width = "30%";
+                            }
+                            else {
+                                confirmDialogObjec.width = "20%";
+                            }
+                }
+
+                $("#" + confirmDialogObjec.dialogConfirmId).dialog({
+                    title: confirmDialogObjec.title,
+                    resizable: false,
+                    height: confirmDialogObjec.height,
+                    width: confirmDialogObjec.width,
+                    modal: true,
+                    dialogClass: "no-close", //removes X from dialog
+                    buttons: {
+                        'YesButton': {
+                            click: function () {
+                                $(this).dialog("close");
+                                confirmDialogObjec.acceptCallbak(confirmDialogObjec.sender);
+                            },
+                            text: confirmDialogObjec.yesButton,
+                            class: "btn btn-primary"
+                        },
+                        'NoButton': {
+                            click: function () {
+                                confirmDialogObjec.rejectCallbak(confirmDialogObjec.sender);
+                                $(this).dialog("close");
+                            },
+                            text: confirmDialogObjec.noButton,
+                            class: "btn btn-primary"
+                        }
+                    },
+                    open: function () {
+
+                        if (confirmDialogObjec.message == '' || confirmDialogObjec.message == undefined) {
+                            confirmDialogObjec.message = "Are you sure ?";
+                        }
+
+                        $("#confirmDialogMessage").text(confirmDialogObjec.message);
+
+                        $('.ui-widget-overlay').addClass('custom-overlay');
+                    }
+                });
+            }
+
+            if (is_chrome == false && is_firefox == false) {
+                $("#safariMessageDiv").removeClass("hidden");
+            }
+        </script>
+
+    </div>
+    <script type="text/javascript">
+        //Maps an event to the window closing event
+        window.onbeforeunload = function (e) {
+             
+
+            $.ajax({
+                url: "/home/tabClosed", //you can get also action attribute from form using form.attr('action')
+                type: 'POST',
+            });
+        };
+    </script>
+
+    <script type="text/javascript">
+        //interval = setInterval('change()', 1000 * 1);
+
+        //function change() {
+        //    $.ajax({
+        //        url: "/home/GetActiveUsers", //you can get also action attribute from form using form.attr('action')
+        //        type: 'POST',
+        //        dataType: 'json',
+        //    }).done(function (response) {
+        //        console.log(response.activeUserCount);
+
+        //    });
+        //}
+        function resetFileInput(id) {
+            var oldInput = document.getElementById(id);
+
+            var newInput = document.createElement("input");
+
+            newInput.type = "file";
+            newInput.id = oldInput.id;
+            newInput.name = oldInput.name;
+            newInput.className = oldInput.className;
+            newInput.style.cssText = oldInput.style.cssText;
+            
+
+            oldInput.parentNode.replaceChild(newInput, oldInput);
+        }
+
+    </script>
+
+
+
+
+<div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div></body></html>

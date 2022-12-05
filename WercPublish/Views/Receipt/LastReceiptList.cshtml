@@ -1,0 +1,42 @@
+﻿
+@using Model.ViewModels.Invoice
+@model VmInvoiceIds
+@{
+    ViewBag.Title = "Last Receipt Form";
+Layout = "~/Views/Shared/_LayoutAdvisor.cshtml";
+}
+
+
+
+<div class="form-horizontal">
+
+    <div class="row text-center">
+        <h2>Payment List</h2>
+    </div>
+
+    <hr />
+        You can click on the invoice number in order to see the details of the payment.
+    <hr />
+
+    <div class="col-xs-12">
+        <table class="table table-condensed table-bordered">
+            @foreach (var item in Model.Ids)
+            {
+
+                var receiptDetailLink = "/receipt/receiptDetail/" + item;
+
+                <tr class="invoice-tr invoice-row">
+                    <td>
+
+                        <a href="@receiptDetailLink">Invoice No: @item</a>
+                    </td>
+
+                </tr>
+            }
+
+        </table>
+
+    </div>
+
+</div>
+

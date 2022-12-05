@@ -1,0 +1,39 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Team;
+
+@model VmTeamFullInfoManagement
+
+@{
+    ViewBag.Title = "Safety Team Full Info Management";
+    Layout = "~/Views/Shared/_LayoutSafetyAdmin.cshtml";
+    Model.ReadOnly = false;
+}
+
+<h4> @Model["ESP Submission Status and ESP Access"] </h4>
+<h5> @Model["Click on a row to access that team’s ESP Report"] </h5>
+
+<hr />
+
+<div class="col-xs-12 col-sm-12">
+    @Html.Partial("_SafetyAdminTeamFullInfoGrid", new VmJsGrid()
+{
+    DataAction = "gtfibf",
+    DataController = "team",
+
+    EditAction = "etps",
+    EditController = "team",
+
+    ReadOnly = false,
+    HtmlElementId = "TeamFullInfo_TeamFullInfoJsGrid",
+    CurrentUserRoles = Model.CurrentUserRoles
+})
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+

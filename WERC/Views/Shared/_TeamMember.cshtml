@@ -1,0 +1,135 @@
+﻿
+@using Model.ApplicationDomainModels;
+
+@model IEnumerable<Model.ViewModels.Team.VmTeamMember>
+@{
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+}
+
+<table class="table table-responsive table-bordered table-hover">
+    <tr>
+
+        <th>
+            @Html.DisplayName("First Name")
+        </th>
+        <th>
+            @Html.DisplayName("Last Name")
+        </th>
+         <th>
+            @Html.DisplayName("Phone (work)")
+        </th>
+        <th>
+            @Html.DisplayName("Phone (at contest)")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+
+        <th>
+            @Html.DisplayName("Role Name")
+        </th>
+        <th>
+            @Html.DisplayName("Registration Status")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Survey)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        var showProfileValue = "";
+        showProfileValue = "onclick = \"showProfile('" + @item.MemberUserId + "','" + @item.FirstName + " " + @item.LastName + "')\"";
+
+        <tr id="@item.Id" @Html.Raw(@showProfileValue)>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkPhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleName)
+            </td>
+            <td>
+                @if (item.RegistrationStatus == true)
+                {
+                    <img src='/Resources/Images/Stylish_ok.png' class="status-img" />
+                }
+                else
+                {
+                    <img src='/Resources/Images/Stylish_not_ok.png' class="status-img" />
+                }
+            </td>
+            <td>
+                @if (item.Survey == true)
+                {
+                    <img src='/Resources/Images/Stylish_ok.png' class="status-img" />
+                }
+                else
+                {
+                    <img src='/Resources/Images/Stylish_not_ok.png' class="status-img" />
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+<link href="~/Resources/CSS/modal-fixed.css" rel="stylesheet" />
+
+<div class="modal-fixed">
+    <div class="modal fade" id="profileInfoModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn btn-default profile-info-modal-close-button text-left"><i class='fa fa-arrow-left'></i> Preview</button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="modal-title"><span id="profileNameSpan"></span> Profile Info</h4>
+
+                    <div id="profileDiv" class="row text-left"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default profile-info-modal-close-button text-left"><i class='fa fa-arrow-left'></i> Preview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".profile-info-modal-close-button").click(function () {
+        $("#profileInfoModal").modal("toggle");
+    });
+
+    function showProfile(userId, name) {
+
+        $.ajax({
+            type: "POST",
+            url: "/person/gpi",
+            data: { userId },
+            dataType: "html",
+        }).done(function (response) {
+            if (response == '') {
+                response = 'Profile not completed';
+            }
+            $("#profileDiv").html(response);
+            $("#profileNameSpan").text(name);
+            $("#profileInfoModal").modal();
+        }).fail(function (data, textStatus, XMLHttpRequest) {
+
+        });
+
+    }
+
+</script>

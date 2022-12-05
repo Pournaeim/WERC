@@ -1,0 +1,76 @@
+﻿
+@using Model.ToolsModels.DropDownList
+
+@model  VmDropDownList
+
+@{
+    var loadDataUrl = "";
+    if (!string.IsNullOrWhiteSpace(Model.QueryStringParameters))
+    {
+        loadDataUrl = Url.Action(Model.DataAction, Model.DataController) + "/?" + Model.QueryStringParameters + "&updateProfile=true";
+    }
+    else
+    {
+        loadDataUrl = Url.Action(Model.DataAction, Model.DataController) + "/?updateProfile=true";
+    }
+
+}
+
+<select class="selectpicker form-control" 
+        data-live-search="true"
+        data-hide-disabled="false"
+        data-actions-box="false"
+        multiple
+        id="@Model.HtmlElementId"
+        name="@Model.HtmlElementId">
+    <option value="-1">@Model.OptionLabel</option>
+</select>
+
+<script>
+    $(document).ready(function () {
+
+        $.getJSON('@Html.Raw(loadDataUrl)', function (response) {
+
+            $("#@Model.HtmlElementId").empty();
+
+            @if(Model.SelectedItems.ToLower() == "selectfromjson")
+            {
+                @Html.Raw("var slectedValues = 'selectfromjson';");
+            }
+            else
+            {
+                @Html.Raw("var slectedValues = '" + Model.SelectedItems + "'.split(',');");
+            }
+
+
+            $.each(response, function (index, item) {
+                
+                if (slectedValues == "selectfromjson" && item.Selected == true) {
+
+                    $("#@Model.HtmlElementId").append($('<option disabled selected></option>').text(item.Text).val(item.Value));
+
+                }
+                else
+                if (slectedValues.indexOf(item.Value) != -1) {
+
+                    $("#@Model.HtmlElementId").append($('<option disabled selected></option>').text(item.Text).val(item.Value));
+
+                }
+                else {
+
+                    $("#@Model.HtmlElementId").append($('<option disabled></option>').text(item.Text).val(item.Value));
+
+                }
+            });
+
+            $('#@Model.HtmlElementId').selectpicker('refresh');
+
+            $("#@Model.HtmlElementId").change(function () {
+
+                
+            });
+             
+        });
+    });
+
+</script>

@@ -1,0 +1,397 @@
+﻿
+@model Model.ViewModels.Grade.Grading.VmSingleTeamGradingManagement
+@using Model.ToolsModels.DropDownList
+
+@{
+    /**/
+
+    ViewBag.Title = "Grading Teams";
+    Layout = "~/Views/Shared/_LayoutJudge.cshtml";
+}
+
+
+@*<script src="~/Resources/Controls/summernote-0.8.11-dist/dist/summer_note.js"></script>
+    <link href="~/Resources/Controls/summernote-0.8.11-dist/dist/summernote.css" rel="stylesheet" />*@
+
+<script src="~/Resources/Controls/Signature/jSignature.min.js"></script>
+<!-- optional plugins -->
+<script src="~/Resources/Controls/Signature/jSignature.CompressorBase30.js"></script>
+<script src="~/Resources/Controls/Signature/jSignature.CompressorSVG.js"></script>
+<script src="~/Resources/Controls/Signature/jSignature.UndoButton.js"></script>
+<script src="~/Resources/Controls/Signature/jSignature.SignHere.js"></script>
+<style>
+    .dropdown-menu > li > a {
+        white-space: normal !important;
+    }
+</style>
+<link href="~/Resources/CSS/_grading.css" rel="stylesheet" />
+
+<h3 id="teamNameSpan"><strong>  @Model.TeamName</strong></h3>
+
+<h3>
+    @*@DateTime.Now.Year Environmental Design Contest*@
+    @Model.Task - @Model.University
+
+</h3>
+
+<script>
+    var pointRadioButtonGroupNameArray = [];
+    var descriptionIdArray = [];
+    var signatureDataContainerIdArray = [];
+    var gradingDetailIdArray = [];
+    var gradingSaved = true;
+    var totalScore = 0;
+</script>
+
+<hr />
+
+<div class="col-xs-12">
+    <h3 class="row">Lab Results</h3>
+    <div id="_TestTable"></div>
+    <hr />
+</div>
+
+<div class="row">
+
+    <h4>  @Html.Label(@Model["Grade"], htmlAttributes: new { @class = "control-label col-xs-12" })</h4>
+    <div class="col-xs-6 grade-type-list">
+
+        <div class="col-xs-12">
+            @Html.Partial("_DropDownList", new VmDropDownList
+           {
+               HtmlElementId = "gradeDropDownList",
+               DataController = "grade",
+               DataAction = "ggddlbtf",
+               OptionLabel = Model["Select score sheet ..."],
+               OnItemSelected = "GradeDropDownList_OnClientSelectedItem",
+               QueryStringParameters ="taskId=" + Model.TaskId + "&teamId=" + Model.TeamId
+           })
+        </div>
+        <a name="commentAnchor"></a>
+        <div style="margin-top:10px; float:right">
+            <input type="button" value="Comment"
+                   class="btn btn-description btn-lg"
+                   onclick="$('#descrioptionButton').click()" />
+        </div>
+        <input type="hidden" id="gradeIdsHidden" />
+
+        <script>
+            function GradeDropDownList_OnClientSelectedItem(id) {
+
+                if (gradingSaved == false) {
+
+                    var confirmDeleteDroppedDialogObjec =
+                    {
+                        title: "Warning...",
+                        message: '@Model["Are you sure you want to exit without saving your scores?"]',
+                        sender: null,
+                        width: "",
+                        height: "auto",
+                        dialogConfirmId: "confirmDialogContainer",
+                        yesButton: '@Model["Yes"]',
+                        noButton: '@Model["No"]',
+
+                        acceptCallbak: function (sender) {
+                            loadGradeForm(@Model.TeamId, id);
+                            $("#gradeIdsHidden").val(id);
+                        },
+
+                        rejectCallbak: function (sender) {
+
+                            setDropdownListActiveItemByValue('gradeDropDownList', $("#gradeIdsHidden").val());
+                        }
+                    };
+
+                    openConfirmDialog(confirmDeleteDroppedDialogObjec);
+
+                }
+                else {
+                    loadGradeForm(@Model.TeamId, id);
+                    $("#gradeIdsHidden").val(id);
+                }
+            }
+        </script>
+
+    </div>
+    <div id="ABETDiv" class="hidden">
+
+        <h4>
+            @Html.Label(@Model["ABET Student Outcomes–Please address in your comments"],
+           htmlAttributes: new { @class = "control-label col-xs-12" })
+        </h4>
+        <div class="col-xs-6 grade-type-list">
+
+            <div class="col-xs-12">
+                @Html.Partial("_DropDownList", new VmDropDownList
+               {
+                   HtmlElementId = "ABETDropDownList",
+                   DataController = "grade",
+                   DataAction = "gABETddl",
+                   OptionLabel = Model["ABET items ..."],
+                   OnItemSelected = "ABETDropDownList_OnClientSelectedItem",
+                   ActiveItemValue = "-1",
+                   ReadOnly = true,
+
+               })
+            </div>
+
+            <input type="hidden" id="ABETIdHidden" name="ABETId" />
+
+            <script>
+                function ABETDropDownList_OnClientSelectedItem(id) {
+
+                    $("#ABETIdHidden").val(id);
+                }
+            </script>
+
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div id="_GradingTable"></div>
+    </div>
+
+</div>
+
+ 
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <div class="row">
+            <br>
+            <div class="col-xs-offset-4 col-xs-2 text-right">
+
+                <input type="button" value="@Model["Save"]" class="btn btn-primary"
+                       onclick="submitData('Reminder: Please add detailed comments for the team.');" />
+            </div>
+            <div class="col-xs-2 text-left">
+
+
+                <input type="button" value="@Model["Submit"]" class="btn btn-primary"
+                       onclick="submitData('Reminder: Please add detailed comments for the team.');" />
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+@*<div class="col-xs-3">
+        <button class="btn btn-primary" onclick="printDiv()">Print</button>
+    </div>*@
+
+<script>
+
+    var gradingTableId = 'gradingTable' + $("#gradeIdsHidden").val();
+
+    function submitData(message) {
+
+        if ($("#teamDescriptionArea").summernote('code') == '' || $("#teamDescriptionArea").summernote('code') == '<p><br></p>') {
+            alert(message);
+            window.location = '#commentAnchor';
+        }
+
+          HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        var gradingObject =
+            {
+                TeamId: 0,
+                GradeDetailId: 0,
+                Point: 0,
+                Description: "",
+                Signature: "",
+                ABETId: "",
+            };
+
+        var gradingObjectArray = [];
+
+        for (i = 0; i < pointRadioButtonGroupNameArray.length; i++) {
+
+            gradingObject = new Object();
+
+            var radioValue = $("input[name='" + pointRadioButtonGroupNameArray[i] + "']:checked").val();
+
+            gradingObject.TeamId = @Model.TeamId;
+            gradingObject.GradeDetailId = gradingDetailIdArray[i];
+            gradingObject.Description = $("#" + descriptionIdArray[i]).val();
+            gradingObject.Signature = $("#" + signatureDataContainerIdArray[i]).val();
+            gradingObject.ABETId = $("#ABETDropDownList").val();
+
+            if (radioValue && radioValue != 'null') {
+                gradingObject.Point = parseFloat(radioValue);
+            }
+            else {
+                gradingObject.Point = "null";
+            }
+
+            gradingObjectArray.push(gradingObject);
+        }
+
+        jsonData = JSON.stringify(
+            {
+                "clientGrading": gradingObjectArray,
+            });
+
+        $.ajax(
+            {
+                type: 'POST',
+                contentType: 'application/json',
+                url: '/grade/sg',
+                data: jsonData,
+
+            }).done(function (data, textStatus, jqXHR) {
+                if (data.success == true) {
+                    calculateTotal();
+                    alert("Grade has been saved.");
+                    HoldOn.close();
+                    gradingSaved = true;
+
+                }
+                else {
+                    //alert("Error in operation...");
+                    HoldOn.close();
+                }
+            }).fail(function (xhr, status) {
+            var jsonObject = JSON.parse(xhr.responseText);
+            if (jsonObject.hasError === true) {
+                //alert(jsonObject.message);
+                }
+                HoldOn.close();
+
+        });
+    }
+
+    function loadGradeForm(teamId, gradeId) {
+
+          HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax(
+            {
+                type: 'POST',
+                url: '/grade/l_s_gtf',
+                data: {
+                    "teamId": teamId,
+                    "gradeId": gradeId,
+                },
+                dataType: "html",
+
+            }).done(function (data, textStatus, jqXHR) {
+
+                pointRadioButtonGroupNameArray = [];
+                descModeliptionIdArray = [];
+                signatureDataContainerIdArray = [];
+                gradingDetailIdArray = [];
+
+                $("#_GradingTable").html(data);
+
+                var scoresheet = $('#gradeDropDownList');
+                var value = scoresheet[0].options[scoresheet[0].options.selectedIndex].text;
+
+                $("#gradeTypeSpan").text("Your " + value + " Total: ");
+
+                $("#gradeTypeSpanTotalAvegrage").text("Average of Judges' " + value + " Scores: ");
+
+                @*$("#teamNameSpan").text('Team: @Model.TeamName');*@
+
+                gradingSaved = true;
+                calculateTotal();
+                processABETList(gradeId);
+                HoldOn.close();
+
+
+            }).fail(function (xhr, status) {
+                //alert("Error in operation...");
+                HoldOn.close();
+
+        });
+    }
+
+    function processABETList(gradeId) {
+
+        $.ajax(
+            {
+                type: 'POST',
+                url: '/grade/pal',
+                data: {
+                    "gradeId": gradeId,
+                },
+                dataType: "json",
+
+            }).done(function (data, textStatus, jqXHR) {
+                debugger
+                if (data == true) {
+                    $("#ABETDiv").removeClass('hidden');
+                }
+                else {
+                    $("#ABETDiv").addClass('hidden');
+                }
+
+            }).fail(function (xhr, status) {
+                //alert("Error in operation...");
+        });
+    }
+</script>
+<script>
+
+        $.ajax(
+            {
+                type: 'POST',
+                url: '/judge/lttf',
+                data: {
+                    "teamId": @Model.TeamId,
+                },
+                dataType: "html",
+
+            }).done(function (data, textStatus, jqXHR) {
+
+                $("#_TestTable").html(data);
+
+            }).fail(function (xhr, status) {
+                //alert("Error in operation...");
+
+
+        });
+
+    $(document).ready(function () {
+    });
+    function printDiv() {
+
+        Popup($('#_GradingTable').html());
+        return;
+        $("#gradingEvaluationDetailModalContainer").hide();
+        var divToPrint = document.getElementById('DivIdToPrint');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+        $("#gradingEvaluationDetailModalContainer").show();
+
+    }
+
+    function Popup(data) {
+        var mywindow = window.open('', 'my div', 'height=400,width=600');
+
+        mywindow.document.head.innerHTML = '<title>PressReleases</title><link rel="stylesheet" href="css/main.css" type="text/css" />';
+        mywindow.document.body.innerHTML = '<body>' + data + '</body>';
+
+        mywindow.document.close();
+        mywindow.focus(); // necessary for IE >= 10
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+</script>

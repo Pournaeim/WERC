@@ -1,0 +1,77 @@
+﻿.logout {
+    text-align: left;
+    vertical-align: middle;
+    text-decoration: none !important;
+}
+
+a[class=logout] {
+    color: #fff;
+}
+
+    a[class=logout]:hover i, a[class=logout]:hover i > span {
+        color: #ffc627 !important;
+    }
+
+
+a[class=logout] {
+    color: #fff !important;
+}
+
+.logout > i {
+    font-size: 2em;
+    display: block !important;
+    color: #fff !important;
+}
+
+.logout i > span {
+    font-size: .6em;
+    font-weight: 400;
+    color: #fff !important;
+}
+
+.welcome {
+    text-align: left;
+    /*padding-top: 15px;*/
+    font-size: 1.1em;
+    display: block !important;
+    font-weight: 400;
+    color: #fff !important;
+}
+
+@media (max-width:767px) {
+    .logout {
+        text-align: left;
+        vertical-align: middle;
+        text-decoration: none !important;
+    }
+
+    a[class=logout] {
+        color: #fff;
+    }
+
+        a[class=logout]:hover i, a[class=logout]:hover i > span {
+            color: #ffe6c2 !important;
+        }
+
+    a[class=logout] {
+        color: #fff !important;
+    }
+
+    .logout > i {
+        font-size: 1.5em !important;
+        color: #882345 !important;
+    }
+
+    .logout i > span {
+        font-size: .6em !important;
+        font-weight: 400 !important;
+        color: #882345 !important;
+    }
+
+    .welcome {
+        text-align: left !important;
+        font-size: 1em !important;
+        font-weight: 400 !important;
+        color: #882345 !important;
+    }
+}

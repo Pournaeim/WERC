@@ -1,0 +1,14 @@
+﻿@model Model.ViewModels.Task.VmTask
+
+@{
+    ViewBag.Title = "Update Task";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@Html.Partial("_TaskEdit", Model)
+
+<script>
+    function loadTaskList() {
+        location.href = '/admin/tl';
+    }
+</script>

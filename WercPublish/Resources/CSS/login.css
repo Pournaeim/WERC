@@ -1,0 +1,141 @@
+﻿.login {
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none !important;
+}
+
+.partialLogin {
+    padding-top: 30px !important;
+}
+
+.remember-me {
+    margin-left: 0 !important;
+}
+
+#registerLink[class=login] {
+    margin-right: 10px;
+    margin-top: 10px !important;
+    display: inline-block;
+    font-size: 1.1em;
+}
+
+#loginLink[class=login] {
+    margin-left: 10px;
+    margin-top: 0 !important;
+    display: inline-block;
+    font-size: 1.1em;
+}
+
+a[class=login] {
+    color: #fff !important;
+}
+
+    a[class=login]:hover, .login span:hover {
+        color: #ffc627 !important;
+        /*background-color: #005488 !important;*/
+    }
+
+.login span {
+    display: block;
+    font-size: 1em;
+}
+
+.login-button {
+    margin-bottom: 2px !important;
+    border-radius: 0 !important;
+}
+
+i.login {
+    font-size: 2em;
+}
+
+
+@media screen and (min-width:992px) and (max-width:1199px) {
+    #registerLink[class=login] {
+        margin-right: 5px;
+        margin-top: 0 !important;
+        display: inline-block;
+        font-size: 1.2em;
+    }
+
+    #loginLink[class=login] {
+        margin-left: 5px;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (min-width:1200px) {
+    #registerLink[class=login] {
+        margin-right: 5px;
+        margin-top: 10px !important;
+        display: inline-block;
+        font-size: 1.2em;
+    }
+
+    #loginLink[class=login] {
+        margin-left: 5px;
+        margin-top: 0 !important;
+        display: inline-block;
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .partialLogin {
+        margin-right: -30px !important;
+        padding-top: 0 !important;
+    }
+
+    .login span {
+        display: block;
+        font-size: 0.9em !important;
+    }
+
+    #registerLink[class=login] {
+        margin-right: 5px;
+        margin-top: 10px !important;
+        display: inline-block;
+        font-size: 1.2em;
+    }
+
+    #loginLink[class=login] {
+        margin-left: 5px;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-size: 1.2em;
+    }
+
+    i.login {
+        font-size: 1.2em;
+    }
+
+    a[class=login] {
+        color: #882345 !important;
+    }
+}
+
+.facebook-login img {
+    width: 70px;
+    padding: 5px;
+}
+
+.google-login img {
+    width: 70px;
+    padding: 5px;
+}
+
+button.login > i {
+    margin-left: -5px;
+    margin-right: 5px;
+}
+
+.social-button {
+    margin-top: 30px !important;
+    margin-left: -15px !important;
+}
+
+.back-arrow {
+    color: #882345;
+}

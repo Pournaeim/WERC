@@ -1,0 +1,103 @@
+﻿
+
+@model IEnumerable<Model.ViewModels.Grade.Report.VmTaskBaseGrade>
+
+
+
+@foreach (var task in Model)
+{
+    <div class="col-xs-12 col-sm-12 col-md-12  col-lg-12">
+
+        <h3>@task.TaskName</h3>
+        <table class="table table-condensed table-bordered table-striped grade-report-table" border="1" cellpadding="0" cellspacing="0">
+            <tr class="grade-report-border">
+                <th>Team</th>
+
+                @foreach (var grade in task.GradeList)
+                {
+                    <th>@grade.Name</th>
+                }
+
+                 @if (task.GradeList.Count> 1)
+                {
+                    <td><strong>Total</strong></td>
+                }
+            </tr>
+
+            @foreach (var team in task.TeamGradeList)
+            {
+                <tr>
+                    <td>@team.TeamName</td>
+
+                    @{ var total = 0d;}
+
+                    @foreach (var grade in team.GradeReportList)
+                    {
+                        <td class="grade-cell-hover" onclick="loadGradingEvaluationDetail(@task.TaskId,@team.TeamId,@grade.GradeId, '@team.TeamName')">
+                            <span>@grade.Average</span>
+                        </td>
+                        if (grade.Average.Value.ToString().ToLower() != "nan")
+                        {
+                            total += grade.Average.Value;
+                        }
+                    }
+
+                    @if (task.GradeList.Count> 1)
+                    {
+                        <td><strong>@total</strong></td>
+                    }
+
+                </tr>
+            }
+        </table>
+
+    </div>
+}
+<link href="~/Resources/CSS/modal-fixed-full-screen.css" rel="stylesheet" />
+<div id="gradingEvaluationDetailModalContainer" class="modal-fixed-full-screen">
+    <div class="modal fade" id="gradingEvaluationDetailModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">
+                        <span id="teamNameSpan"></span> Team Grades Report
+                    </h4>
+                    <h4 class="modal-title">
+                        <span>Maximum score = 5</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div id="gradingEvaluationDetailDiv" class="row text-left"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function loadGradingEvaluationDetail(taskId, teamId, gradeId, teamName) {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>Please wait...</h4>"
+        });
+        debugger
+        $.ajax({
+            url: "/judge/lged", //you can get also action attribute from form using form.attr('action')
+            type: 'POST',
+            data: { taskId, teamId, gradeId },
+        }).done(
+            function (result) {
+
+                $("#gradingEvaluationDetailDiv").html(result);
+
+                $("#teamNameSpan").text(teamName);
+                $("#gradingEvaluationDetailModal").modal("show");
+
+                HoldOn.close();
+            });
+
+    }
+</script>

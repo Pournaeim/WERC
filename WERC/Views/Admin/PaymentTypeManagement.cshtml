@@ -1,0 +1,47 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Admin;
+@using Model.ViewModels.PaymentType;
+
+@model VmPaymentTypesManagement
+@{
+    ViewBag.Title = "Payment Type Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Payment Type Management</h2>
+<hr />
+
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+<h5>Double-click on the grid row to update 'Description' and 'Name'. </h5>
+
+<div class="col-xs-8">
+
+    @Html.Partial("PartialViewPaymentTypeGrid", new VmJsGrid()
+{
+    DataAction = "gpbf",
+    DataController = "PaymentType",
+
+    CreateAction = "cpr",
+    CreateController = "PaymentType",
+
+    EditAction = "upr",
+    EditController = "PaymentType",
+
+    DeleteAction = "dpr",
+    DeleteController = "PaymentType",
+
+    ReadOnly = false,
+
+    HtmlElementId = "PaymentType_PaymentTypeJsGrid",
+    CurrentUserRoles = Model.CurrentUserRoles,
+    LanguageDictionary = Model.LanguageDictionary
+
+})
+</div>

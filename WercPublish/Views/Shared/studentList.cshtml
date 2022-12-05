@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "studentList";
+    Layout = "";
+}
+<script src="~/Resources/Scripts/jquery-3.3.1.js"></script>
+<h2>studentList</h2>
+<button type="button" onclick="getData()">get datat</button>
+Id:
+<input id="id" type="text" value="10" />
+<br />
+city:
+<input id="city" type="text" value="tehran" />
+<br />
+name:
+<input id="name" type="text" value="zohreh" />
+<br />
+
+<div id="dataDiv">
+
+</div>
+<script>
+    function getData() {
+
+        $.ajax(
+            {
+                url: "/home/gbi",
+                type: 'post',
+                data: {
+                    id: $("#id").val(),
+                    city: $("#city").val(),
+                    name: $("#name").val(),
+                },
+                datatype: 'json',
+            }
+        ).done(
+            function (result) {
+                debugger
+                $("#dataDiv").text(result.FirstName + '/' + result.Id);
+            });
+    }
+</script>

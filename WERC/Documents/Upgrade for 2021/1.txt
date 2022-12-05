@@ -1,0 +1,21 @@
+
+0-Change the price calculation for two types
+
+1-Filter Greading criteria in the Judge page
+	https://werc.nmsu.edu/grade/lmsgtf/3113
+
+----------------------------------------------------------------------------------------------------
+2-Define Payment type form like as Submission Deadlines For 2 Constant Types
+   2-1: Bench-scale => In advanced participation
+   2-2: Desktop ==> Virtual participation
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+3-Show Payment type Dropdwon List in the Create Task and Edit Task and Payment Rule Forms Form
+----------------------------------------------------------------------------------------------------
+
+4-Create Inputbox for Project name on Create Team Form just For Task 6
+
+5-Show Project Name in the Team Status grid next to Task 6
+
+6-Empty Database

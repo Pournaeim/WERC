@@ -1,0 +1,37 @@
+﻿
+@model Model.ViewModels.Test.VmTeamTestCollection
+@if (Model.TeamTestList != null && Model.TeamTestList.Count() > 0)
+{
+
+    var lab = "Lab ";
+    int labIndex = 1;
+
+    <table>
+        <tr>
+            <td>
+                @for (int i = 1; i < Model.UserIds.Count + 1; i++)
+                {
+                    var testList = Model.TeamTestList.First().TestList.Where(s => s.UserId == Model.UserIds[i-1]).ToList();
+                    
+                    <table class="table-bordered">
+                        <caption><h3> Lab @i</h3></caption>
+                        @foreach(var testItem in testList)
+                        {
+                        if (!string.IsNullOrWhiteSpace(testItem.Score))
+                        {
+                            <tr>
+
+                                <td><strong>@testItem.Name: </strong> </td>
+                                <td> @testItem.Score</td>
+
+                            </tr>
+                        }
+                        }
+                    </table>
+                }
+            </td>
+        </tr>
+
+
+    </table>
+}

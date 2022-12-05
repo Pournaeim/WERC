@@ -1,0 +1,778 @@
+﻿.top .char1 {
+  transform: rotate(6deg); }
+
+.bottom .char1 {
+  transform: rotate(36deg); }
+
+.top .char2 {
+  transform: rotate(12deg); }
+
+.bottom .char2 {
+  transform: rotate(24deg); }
+
+.top .char3 {
+  transform: rotate(18deg); }
+
+.bottom .char3 {
+  transform: rotate(12deg); }
+
+.top .char4 {
+  transform: rotate(24deg); }
+
+.bottom .char4 {
+  transform: rotate(0deg); }
+
+.top .char5 {
+  transform: rotate(30deg); }
+
+.bottom .char5 {
+  transform: rotate(-12deg); }
+
+.top .char6 {
+  transform: rotate(36deg); }
+
+.bottom .char6 {
+  transform: rotate(-24deg); }
+
+.top .char7 {
+  transform: rotate(42deg); }
+
+.bottom .char7 {
+  transform: rotate(-36deg); }
+
+.top .char8 {
+  transform: rotate(48deg); }
+
+.bottom .char8 {
+  transform: rotate(-48deg); }
+
+.top .char9 {
+  transform: rotate(54deg); }
+
+.bottom .char9 {
+  transform: rotate(-60deg); }
+
+.top .char10 {
+  transform: rotate(60deg); }
+
+.bottom .char10 {
+  transform: rotate(-72deg); }
+
+.top .char11 {
+  transform: rotate(66deg); }
+
+.bottom .char11 {
+  transform: rotate(-84deg); }
+
+.top .char12 {
+  transform: rotate(72deg); }
+
+.bottom .char12 {
+  transform: rotate(-96deg); }
+
+.top .char13 {
+  transform: rotate(78deg); }
+
+.bottom .char13 {
+  transform: rotate(-108deg); }
+
+.top .char14 {
+  transform: rotate(84deg); }
+
+.bottom .char14 {
+  transform: rotate(-120deg); }
+
+.top .char15 {
+  transform: rotate(90deg); }
+
+.bottom .char15 {
+  transform: rotate(-132deg); }
+
+.top .char16 {
+  transform: rotate(96deg); }
+
+.bottom .char16 {
+  transform: rotate(-144deg); }
+
+.top .char17 {
+  transform: rotate(102deg); }
+
+.bottom .char17 {
+  transform: rotate(-156deg); }
+
+.top .char18 {
+  transform: rotate(108deg); }
+
+.bottom .char18 {
+  transform: rotate(-168deg); }
+
+.top .char19 {
+  transform: rotate(114deg); }
+
+.bottom .char19 {
+  transform: rotate(-180deg); }
+
+.top .char20 {
+  transform: rotate(120deg); }
+
+.bottom .char20 {
+  transform: rotate(-192deg); }
+
+.top .char21 {
+  transform: rotate(126deg); }
+
+.bottom .char21 {
+  transform: rotate(-204deg); }
+
+.top .char22 {
+  transform: rotate(132deg); }
+
+.bottom .char22 {
+  transform: rotate(-216deg); }
+
+.top .char23 {
+  transform: rotate(138deg); }
+
+.bottom .char23 {
+  transform: rotate(-228deg); }
+
+.top .char24 {
+  transform: rotate(144deg); }
+
+.bottom .char24 {
+  transform: rotate(-240deg); }
+
+.top .char25 {
+  transform: rotate(150deg); }
+
+.bottom .char25 {
+  transform: rotate(-252deg); }
+
+.top .char26 {
+  transform: rotate(156deg); }
+
+.bottom .char26 {
+  transform: rotate(-264deg); }
+
+.top .char27 {
+  transform: rotate(162deg); }
+
+.bottom .char27 {
+  transform: rotate(-276deg); }
+
+.top .char28 {
+  transform: rotate(168deg); }
+
+.bottom .char28 {
+  transform: rotate(-288deg); }
+
+.top .char29 {
+  transform: rotate(174deg); }
+
+.bottom .char29 {
+  transform: rotate(-300deg); }
+
+.top .char30 {
+  transform: rotate(180deg); }
+
+.bottom .char30 {
+  transform: rotate(-312deg); }
+
+.top .char31 {
+  transform: rotate(186deg); }
+
+.bottom .char31 {
+  transform: rotate(-324deg); }
+
+.top .char32 {
+  transform: rotate(192deg); }
+
+.bottom .char32 {
+  transform: rotate(-336deg); }
+
+.top .char33 {
+  transform: rotate(198deg); }
+
+.bottom .char33 {
+  transform: rotate(-348deg); }
+
+.top .char34 {
+  transform: rotate(204deg); }
+
+.bottom .char34 {
+  transform: rotate(-360deg); }
+
+.top .char35 {
+  transform: rotate(210deg); }
+
+.bottom .char35 {
+  transform: rotate(-372deg); }
+
+.top .char36 {
+  transform: rotate(216deg); }
+
+.bottom .char36 {
+  transform: rotate(-384deg); }
+
+.top .char37 {
+  transform: rotate(222deg); }
+
+.bottom .char37 {
+  transform: rotate(-396deg); }
+
+.top .char38 {
+  transform: rotate(228deg); }
+
+.bottom .char38 {
+  transform: rotate(-408deg); }
+
+.top .char39 {
+  transform: rotate(234deg); }
+
+.bottom .char39 {
+  transform: rotate(-420deg); }
+
+.top .char40 {
+  transform: rotate(240deg); }
+
+.bottom .char40 {
+  transform: rotate(-432deg); }
+
+.top .char41 {
+  transform: rotate(246deg); }
+
+.bottom .char41 {
+  transform: rotate(-444deg); }
+
+.top .char42 {
+  transform: rotate(252deg); }
+
+.bottom .char42 {
+  transform: rotate(-456deg); }
+
+.top .char43 {
+  transform: rotate(258deg); }
+
+.bottom .char43 {
+  transform: rotate(-468deg); }
+
+.top .char44 {
+  transform: rotate(264deg); }
+
+.bottom .char44 {
+  transform: rotate(-480deg); }
+
+.top .char45 {
+  transform: rotate(270deg); }
+
+.bottom .char45 {
+  transform: rotate(-492deg); }
+
+.top .char46 {
+  transform: rotate(276deg); }
+
+.bottom .char46 {
+  transform: rotate(-504deg); }
+
+.top .char47 {
+  transform: rotate(282deg); }
+
+.bottom .char47 {
+  transform: rotate(-516deg); }
+
+.top .char48 {
+  transform: rotate(288deg); }
+
+.bottom .char48 {
+  transform: rotate(-528deg); }
+
+.top .char49 {
+  transform: rotate(294deg); }
+
+.bottom .char49 {
+  transform: rotate(-540deg); }
+
+.top .char50 {
+  transform: rotate(300deg); }
+
+.bottom .char50 {
+  transform: rotate(-552deg); }
+
+.top .char51 {
+  transform: rotate(306deg); }
+
+.bottom .char51 {
+  transform: rotate(-564deg); }
+
+.top .char52 {
+  transform: rotate(312deg); }
+
+.bottom .char52 {
+  transform: rotate(-576deg); }
+
+.top .char53 {
+  transform: rotate(318deg); }
+
+.bottom .char53 {
+  transform: rotate(-588deg); }
+
+.top .char54 {
+  transform: rotate(324deg); }
+
+.bottom .char54 {
+  transform: rotate(-600deg); }
+
+.top .char55 {
+  transform: rotate(330deg); }
+
+.bottom .char55 {
+  transform: rotate(-612deg); }
+
+.top .char56 {
+  transform: rotate(336deg); }
+
+.bottom .char56 {
+  transform: rotate(-624deg); }
+
+.top .char57 {
+  transform: rotate(342deg); }
+
+.bottom .char57 {
+  transform: rotate(-636deg); }
+
+.top .char58 {
+  transform: rotate(348deg); }
+
+.bottom .char58 {
+  transform: rotate(-648deg); }
+
+.top .char59 {
+  transform: rotate(354deg); }
+
+.bottom .char59 {
+  transform: rotate(-660deg); }
+
+.top .char60 {
+  transform: rotate(360deg); }
+
+.bottom .char60 {
+  transform: rotate(-672deg); }
+
+.top .char61 {
+  transform: rotate(366deg); }
+
+.bottom .char61 {
+  transform: rotate(-684deg); }
+
+.top .char62 {
+  transform: rotate(372deg); }
+
+.bottom .char62 {
+  transform: rotate(-696deg); }
+
+.top .char63 {
+  transform: rotate(378deg); }
+
+.bottom .char63 {
+  transform: rotate(-708deg); }
+
+.top .char64 {
+  transform: rotate(384deg); }
+
+.bottom .char64 {
+  transform: rotate(-720deg); }
+
+.top .char65 {
+  transform: rotate(390deg); }
+
+.bottom .char65 {
+  transform: rotate(-732deg); }
+
+.top .char66 {
+  transform: rotate(396deg); }
+
+.bottom .char66 {
+  transform: rotate(-744deg); }
+
+.top .char67 {
+  transform: rotate(402deg); }
+
+.bottom .char67 {
+  transform: rotate(-756deg); }
+
+.top .char68 {
+  transform: rotate(408deg); }
+
+.bottom .char68 {
+  transform: rotate(-768deg); }
+
+.top .char69 {
+  transform: rotate(414deg); }
+
+.bottom .char69 {
+  transform: rotate(-780deg); }
+
+.top .char70 {
+  transform: rotate(420deg); }
+
+.bottom .char70 {
+  transform: rotate(-792deg); }
+
+.top .char71 {
+  transform: rotate(426deg); }
+
+.bottom .char71 {
+  transform: rotate(-804deg); }
+
+.top .char72 {
+  transform: rotate(432deg); }
+
+.bottom .char72 {
+  transform: rotate(-816deg); }
+
+.top .char73 {
+  transform: rotate(438deg); }
+
+.bottom .char73 {
+  transform: rotate(-828deg); }
+
+.top .char74 {
+  transform: rotate(444deg); }
+
+.bottom .char74 {
+  transform: rotate(-840deg); }
+
+.top .char75 {
+  transform: rotate(450deg); }
+
+.bottom .char75 {
+  transform: rotate(-852deg); }
+
+.top .char76 {
+  transform: rotate(456deg); }
+
+.bottom .char76 {
+  transform: rotate(-864deg); }
+
+.top .char77 {
+  transform: rotate(462deg); }
+
+.bottom .char77 {
+  transform: rotate(-876deg); }
+
+.top .char78 {
+  transform: rotate(468deg); }
+
+.bottom .char78 {
+  transform: rotate(-888deg); }
+
+.top .char79 {
+  transform: rotate(474deg); }
+
+.bottom .char79 {
+  transform: rotate(-900deg); }
+
+.top .char80 {
+  transform: rotate(480deg); }
+
+.bottom .char80 {
+  transform: rotate(-912deg); }
+
+.top .char81 {
+  transform: rotate(486deg); }
+
+.bottom .char81 {
+  transform: rotate(-924deg); }
+
+.top .char82 {
+  transform: rotate(492deg); }
+
+.bottom .char82 {
+  transform: rotate(-936deg); }
+
+.top .char83 {
+  transform: rotate(498deg); }
+
+.bottom .char83 {
+  transform: rotate(-948deg); }
+
+.top .char84 {
+  transform: rotate(504deg); }
+
+.bottom .char84 {
+  transform: rotate(-960deg); }
+
+.top .char85 {
+  transform: rotate(510deg); }
+
+.bottom .char85 {
+  transform: rotate(-972deg); }
+
+.top .char86 {
+  transform: rotate(516deg); }
+
+.bottom .char86 {
+  transform: rotate(-984deg); }
+
+.top .char87 {
+  transform: rotate(522deg); }
+
+.bottom .char87 {
+  transform: rotate(-996deg); }
+
+.top .char88 {
+  transform: rotate(528deg); }
+
+.bottom .char88 {
+  transform: rotate(-1008deg); }
+
+.top .char89 {
+  transform: rotate(534deg); }
+
+.bottom .char89 {
+  transform: rotate(-1020deg); }
+
+.top .char90 {
+  transform: rotate(540deg); }
+
+.bottom .char90 {
+  transform: rotate(-1032deg); }
+
+.top .char91 {
+  transform: rotate(546deg); }
+
+.bottom .char91 {
+  transform: rotate(-1044deg); }
+
+.top .char92 {
+  transform: rotate(552deg); }
+
+.bottom .char92 {
+  transform: rotate(-1056deg); }
+
+.top .char93 {
+  transform: rotate(558deg); }
+
+.bottom .char93 {
+  transform: rotate(-1068deg); }
+
+.top .char94 {
+  transform: rotate(564deg); }
+
+.bottom .char94 {
+  transform: rotate(-1080deg); }
+
+.top .char95 {
+  transform: rotate(570deg); }
+
+.bottom .char95 {
+  transform: rotate(-1092deg); }
+
+.top .char96 {
+  transform: rotate(576deg); }
+
+.bottom .char96 {
+  transform: rotate(-1104deg); }
+
+.top .char97 {
+  transform: rotate(582deg); }
+
+.bottom .char97 {
+  transform: rotate(-1116deg); }
+
+.top .char98 {
+  transform: rotate(588deg); }
+
+.bottom .char98 {
+  transform: rotate(-1128deg); }
+
+.top .char99 {
+  transform: rotate(594deg); }
+
+.bottom .char99 {
+  transform: rotate(-1140deg); }
+
+.top .char100 {
+  transform: rotate(600deg); }
+
+.bottom .char100 {
+  transform: rotate(-1152deg); }
+
+.logo-image {
+  position: relative;
+  width: 60px;
+  top: 40px;
+  left: 55px; }
+
+.logo {
+  position: relative;
+  top: 20px;
+  margin: 0 auto;
+  width: 90%;
+  height: 100%;
+  border-radius: 0px;
+  z-index: 3; }
+  .logo span {
+    position: absolute;
+    width: 15%;
+    height: 51%;
+    text-align: center;
+    transform-origin: bottom center;
+    z-index: 100;
+    font-size: 15px;
+    color: #cfc7bd;
+    font-weight: 500; }
+  .logo div {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0; }
+  .logo .title {
+    position: relative;
+    z-index: 1;
+    text-transform: uppercase;
+    font: bold 26px/230px 'Open Sans Condensed', sans-serif; }
+
+* {
+  box-sizing: border-box; }
+
+@media (max-width: 450px) {
+  .logo-image {
+    position: relative;
+    width: 36px;
+    top: 22px;
+    left: 32px; }
+  .logo {
+    position: relative;
+    top: 20px;
+    margin: 0 auto;
+    width: 87%;
+    height: 100%;
+    border-radius: 0px;
+    z-index: 3; }
+    .logo .title {
+      position: relative;
+      z-index: 1;
+      text-transform: uppercase;
+      font: bold 26px/230px 'Open Sans Condensed', sans-serif; } }
+
+@media (min-width: 451px) and (max-width: 600px) {
+  .logo-image {
+    position: relative;
+    width: 36px;
+    top: 22px;
+    left: 32px; }
+  .logo {
+    position: relative;
+    top: 20px;
+    margin: 0 auto;
+    width: 70%;
+    height: 100%;
+    border-radius: 0px;
+    z-index: 3; }
+    .logo .title {
+      position: relative;
+      z-index: 1;
+      text-transform: uppercase;
+      font: bold 26px/230px 'Open Sans Condensed', sans-serif; } }
+
+@media (min-width: 601px) and (max-width: 700px) {
+  .logo-image {
+    position: relative;
+    width: 36px;
+    top: 22px;
+    left: 32px; }
+  .logo {
+    position: relative;
+    top: 20px;
+    margin: 0 auto;
+    width: 60%;
+    height: 100%;
+    border-radius: 0px;
+    z-index: 3; }
+    .logo .title {
+      position: relative;
+      z-index: 1;
+      text-transform: uppercase;
+      font: bold 26px/230px 'Open Sans Condensed', sans-serif; } }
+
+@media (min-width: 701px) and (max-width: 767px) {
+  .logo-image {
+    position: relative;
+    width: 36px;
+    top: 22px;
+    left: 32px; }
+  .logo {
+    position: relative;
+    top: 20px;
+    margin: 0 auto;
+    width: 50%;
+    height: 100%;
+    border-radius: 0px;
+    z-index: 3; }
+    .logo .title {
+      position: relative;
+      z-index: 1;
+      text-transform: uppercase;
+      font: bold 26px/230px 'Open Sans Condensed', sans-serif; } }
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .logo-image {
+    position: relative;
+    width: 60px;
+    top: 40px;
+    left: 55px; }
+  .logo {
+    position: relative;
+    top: 20px;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    border-radius: 0px;
+    z-index: 3; }
+    .logo .title {
+      position: relative;
+      z-index: 1;
+      text-transform: uppercase;
+      font: bold 26px/230px 'Open Sans Condensed', sans-serif; } }
+
+@media (min-width: 993px) and (max-width: 1600px) {
+  .logo-image {
+    position: relative;
+    width: 60px;
+    top: 40px;
+    left: 55px; }
+  .logo {
+    position: relative;
+    top: 20px;
+    margin: 0 auto;
+    width: 95%;
+    height: 100%;
+    border-radius: 0px;
+    z-index: 3; }
+    .logo .title {
+      position: relative;
+      z-index: 1;
+      text-transform: uppercase;
+      font: bold 26px/230px 'Open Sans Condensed', sans-serif; } }
+
+@media (min-width: 1601px) and (max-width: 3200px) {
+  .logo-image {
+    position: relative;
+    width: 60px;
+    top: 40px;
+    left: 55px; }
+  .logo {
+    position: relative;
+    top: 20px;
+    margin: 0 auto;
+    width: 90%;
+    height: 100%;
+    border-radius: 0px;
+    z-index: 3; }
+    .logo .title {
+      position: relative;
+      z-index: 1;
+      text-transform: uppercase;
+      font: bold 26px/230px 'Open Sans Condensed', sans-serif; } }

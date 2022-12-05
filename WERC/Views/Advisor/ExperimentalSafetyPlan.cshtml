@@ -1,0 +1,14 @@
+﻿
+@model Model.ViewModels.TeamSafetyItem.VmTeamSafetyItemManagement
+
+@{
+    ViewBag.Title = "Experimental Safety Plan";
+    Layout = "~/Views/Shared/_LayoutAdvisor.cshtml";
+    var firstTime = true;
+    var firstAccordionLinkId = "";
+}
+<link href="~/Resources/CSS/_accordion.css" rel="stylesheet" />
+
+@Html.Partial("_ExperimentalSafetyPlan", Model.TeamSafetyItemCollection)
+
+ 

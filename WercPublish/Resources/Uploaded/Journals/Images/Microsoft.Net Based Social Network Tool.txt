@@ -1,0 +1,18 @@
+ StackOverflow Project Specifications
+
+https://meta.stackexchange.com/questions/10369/which-tools-and-technologies-are-used-to-build-the-stack-exchange-network
+
+
+https://en.wikipedia.org/wiki/Comparison_of_social_networking_software
+
+https://getstream.io/build/social-networks/net/
+
+https://www.microsoft.com/web/gallery/monox.aspx
+
+http://monox.mono-software.com/
+
+https://axerosolutions.com/blogs/timeisenhauer/pulse/53/asp-net-social-networking-software
+
+https://stackoverflow.com/questions/26880663/c-qt-vs-c-sharp-net-for-windows-development
+
+https://docs.microsoft.com/en-us/aspnet/web-pages/overview/getting-started/13-adding-social-networking-to-your-web-site

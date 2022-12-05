@@ -1,0 +1,41 @@
+﻿
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
+
+.panel-heading {
+    cursor: pointer;
+}
+
+.panel-group .panel {
+    margin-bottom: 0;
+    border-radius: 10px !important;
+}
+.panel-title > a:before {
+    float: left !important;
+    font-family: FontAwesome;
+    content: "\f068";
+    padding-right: 5px;
+    color: #f8f8f8 !important;
+}
+.panel-title > a {
+    color: #f8f8f8 !important;
+    font-size: 1.3em;
+}
+    .panel-title > a.collapsed:before {
+        float: left !important;
+        content: "\f067";
+        color: #f8f8f8 !important;
+    }
+
+.panel-title > a:hover,
+.panel-title > a:active,
+.panel-title > a:focus {
+    text-decoration: none;
+}
+
+.accordion-bkackgound-light {
+    background-color: #002060 !important;
+}
+
+.accordion-bkackgound-dark {
+    background-color: #5b9bd5 !important;
+}

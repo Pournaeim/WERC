@@ -1,0 +1,11 @@
+﻿
+
+@using Model.ViewModels.Invoice;
+
+@model VmInvoice
+@{
+    ViewBag.Title = "Last Receipt Form";
+    Layout = "~/Views/Shared/_LayoutAdvisor.cshtml";
+}
+
+@Html.Partial("_Receipt", Model);

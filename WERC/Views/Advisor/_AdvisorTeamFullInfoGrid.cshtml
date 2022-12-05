@@ -1,0 +1,155 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+}
+
+<div class="row">
+
+    <div id="externalPager"></div><div id="@jsGridHtmlElementId"></div>
+    <link href="~/Resources/CSS/modal-fixed-full-screen.css" rel="stylesheet" />
+    <div class="modal-fixed-full-screen">
+        <div class="modal fade" id="teamMemberModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><span id="teamNameSpan"></span> Team Members</h4>
+                         
+                    </div>
+                    <div class="modal-body">
+                        <a href="" class="" id="writtenReportId">Written Report</a>
+                        <hr />
+                        <div id="teamMemberDiv" class="row text-left"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+
+
+    var judgeRowIndex = 0;
+    var labResultUrlRowIndex = 0;
+    var gridRowIndex = 0;
+
+    $(document).ready(function () {
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            height: "auto",
+            filtering: false,
+            editing: true,
+            inserting: false,
+            autoload: true,
+            paging: true,
+            pageSize: 1500,
+            pageIndex: 1,
+            pageButtonCount: 5,
+            datatype: "json",
+            updateOnResize: false,
+            rowClick: function (args) {
+                debugger
+                $.ajax({
+                    type: "POST",
+                    url: "/teammember/shtm",
+                    data: { teamId: args.item.Id },
+                    dataType: "html",
+                }).done(function (response) {
+                    debugger
+                    $("#teamMemberDiv").html(response);
+                    $("#teamNameSpan").text(args.item.Name);
+
+                    $("#writtenReportId").attr("href", args.item.WrittenReportUrlForMember);
+                    $("#teamMemberModal").modal();
+                }).fail(function (data, textStatus, XMLHttpRequest) {});
+
+            },
+            onDataLoading: function (args) { 
+
+
+            },
+            onDataLoaded: function (args) {
+
+
+            },
+            controller: {
+                loadData: function (filter) { gridRowIndex = 0;
+
+                    return $.ajax({
+                        type: "GET",
+                        url: "@jsGridLoadDataUrl",
+                        data: { filter }
+                    });
+                }
+            },
+
+            onRefreshing: function (args) {gridRowIndex = 0;}, fields:
+                [
+                   {
+                        name: "Id", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div class='text-center'>" + (gridRowIndex + 1) + "</div>");
+                            gridRowIndex++
+                            return result.add(customDiv);
+                        }
+                    },
+                    { name: "WrittenReportUrlForMember", type: "text", visible: false },
+                    { name: "PayStatus", type: "bool", visible: false },
+                    { name: "SafetyStatus", type: "bool", visible: false },
+                    { name: "Name", title: "@Model["Team Name"]", type: "text", width: 120 },
+                    { name: "TaskName", title: "@Model["Task"]", type: "text", width: 100 },
+                    {
+                        name: "RegistrationStatus", title: "@Model["Registration Status"]", width: 80,
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+                    {
+                        name: "PayStatus", title: "@Model["Pay Status"]", width: 50,
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+
+            ]
+        });
+    });
+
+</script>

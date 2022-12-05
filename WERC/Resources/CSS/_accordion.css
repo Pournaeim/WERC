@@ -1,0 +1,114 @@
+﻿
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
+
+.panel-heading {
+    cursor: pointer;
+}
+
+.panel-group .panel {
+    margin-bottom: 0;
+    border-radius: 10px !important;
+}
+
+.panel-title > a:before {
+    float: left !important;
+    font-family: FontAwesome;
+    content: "\f068";
+    padding-right: 5px;
+    color: #f8f8f8 !important;
+}
+
+.panel-title > a {
+    color: #fff !important;
+    font-size: 1.3em;
+}
+
+    .panel-title > a.collapsed:before {
+        float: left !important;
+        content: "\f067";
+        color: #f8f8f8 !important;
+    }
+
+    .panel-title > a:hover,
+    .panel-title > a:active,
+    .panel-title > a:focus {
+        text-decoration: none;
+    }
+
+.accordion-bkackgound-light {
+    background-color: #5b9bd5 !important;
+}
+
+.accordion-bkackgound-dark {
+    background-color: #002060 !important;
+}
+
+.null-color-accordion-bkackgound {
+    background-color: #6d6e71 !important;
+}
+
+.green-color-accordion-bkackgound {
+    background-color: #5cb85c !important;
+}
+
+.tree-color-light {
+    color: #5b9bd5 !important;
+    background-color: #fff !important;
+}
+
+.tree-color-dark {
+    color: #002060 !important;
+    background-color: #fff !important;
+}
+
+.null-tree-color {
+    color: #aaaaaa !important;
+    background-color: #fff !important;
+}
+
+.green-tree-color {
+    color: #5cb85c !important;
+    background-color: #fff !important;
+    width: 250px;
+    height: 30px;
+}
+
+.bk-tree-color-light {
+    background-color: #5b9bd5 !important;
+    color: #fff !important;
+    width: 250px;
+    height: 30px;
+    margin-bottom:5px;
+}
+
+.bk-tree-color-dark {
+    background-color: #002060 !important;
+    color: #fff !important;
+    width: 250px;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+.bk-null-tree-color {
+    background-color: #aaaaaa !important;
+    color: #fff !important;
+    width: 250px;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+.bk-green-tree-color {
+    background-color: #5cb85c !important;
+    color: #fff !important;
+    width: 250px;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+.bk-tree-color-red {
+    width: 250px;
+    height: 30px;
+    background-color: #ff0000 !important;
+    color: #fff !important;
+    margin-bottom: 5px;
+}

@@ -1,0 +1,30 @@
+﻿
+@model WERC.Models.LoginPartialViewModel
+@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = " text-center" }))
+
+    {
+        @Html.AntiForgeryToken()
+
+        <a href="javascript:document.getElementById('logoutForm').submit()" class="logout">
+            <i class="fa fa-sign-out" aria-hidden="true">
+                <span>@Model["Log out"]</span>
+            </i>
+        </a>
+        <span class="welcome">@Model.WelcomeMessage  @Model.CurrentUserName</span>
+
+    }
+}
+else
+{
+   
+        <a class="login" href="/Account/Login" id="loginLink">
+            <i class="fa fa-user login fa-2x" aria-hidden="true"></i>
+            <span>@Model["Sign In"] / @Model["Sign Up"]</span>
+        </a>
+    if (Request.Url.Query.Contains("TestProcess"))
+    {
+    }
+}

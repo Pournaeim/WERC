@@ -1,0 +1,146 @@
+﻿
+footer {
+    min-height: 250px !important;
+    position: absolute !important;
+    padding-top: 20px !important;
+    top: 100% !important;
+    bottom: 0 !important;
+    width: 100%;
+}
+
+    footer details summary::-webkit-details-marker {
+        color: #fff;
+        cursor: pointer;
+    }
+
+    footer details summary {
+        color: #fff;
+        cursor: pointer;
+    }
+
+
+    footer ul, footer li {
+        padding: 0;
+        margin: 0;
+    }
+
+    footer li {
+        list-style-type: none;
+    }
+
+
+.footer-col {
+    padding: 5px 20px;
+}
+
+    .footer-col p {
+        color: #fff;
+    }
+
+        .footer-col p a {
+            color: #fff;
+        }
+
+
+.footer-ul li {
+    line-height: 29px;
+    font-size: 12px;
+}
+
+    .footer-ul li a {
+        color: #a0a3a4;
+    }
+
+        .footer-ul li a:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+
+
+.copyright {
+    position: relative;
+    top: 25px;
+    text-align: center;
+    color: #ffff00;
+    margin-bottom: 0;
+}
+
+.footer-col-header {
+    font-size: 26px;
+    font-weight: 400;
+    color: #d9d6d6;
+    margin-bottom: 22px;
+    min-width: 10px;
+    min-height: 10px;
+}
+
+.social-icon {
+    background: none repeat scroll 0 0 #B5B5B5;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    float: left;
+    color: #fff;
+    font-size: 15px;
+    height: 30px;
+    line-height: 30px;
+    margin: 5px 20px 0 0;
+    padding: 0;
+    text-align: center;
+    width: 30px;
+    transition: all 0.5s ease 0s;
+    -moz-transition: all 0.5s ease 0s;
+    -webkit-transition: all 0.5s ease 0s;
+    -ms-transition: all 0.5s ease 0s;
+    -o-transition: all 0.5s ease 0s;
+}
+
+    .social-icon:hover {
+        transform: scale(1.15) rotate(360deg);
+        -webkit-transform: scale(1.1) rotate(360deg);
+        -moz-transform: scale(1.1) rotate(360deg);
+        -ms-transform: scale(1.1) rotate(360deg);
+        -o-transform: scale(1.1) rotate(360deg);
+        height: 32px;
+        width: 32px;
+        font-size: 18px;
+        box-shadow: 0px 0px 2px 2px #808080;
+        margin: 3px 18px 0 0;
+    }
+
+.social-icon-div {
+    height: 45px;
+}
+
+.linked-in {
+    background-color: #007bb6;
+}
+
+.facebook {
+    background-color: #3b5998;
+}
+
+.twitter {
+    background-color: #1da1f2;
+}
+
+.google {
+    background-color: #f63e28;
+}
+
+
+.footerDescription {
+    font-size: 15px !important;
+    line-height: 25px;
+    text-align: justify;
+}
+
+    .footerDescription spam {
+        font-size: 22px !important;
+        font-style: italic;
+        line-height: 30px;
+        margin-bottom: 10px;
+        display: block;
+    }

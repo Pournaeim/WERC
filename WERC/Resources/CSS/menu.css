@@ -1,0 +1,86 @@
+﻿.menu {
+    position: relative;
+    /*top: -53px;*/
+    width: 100%;
+}
+
+.active-menuItem {
+    font-family: 'Segoe UI' !important;
+    text-decoration: none;
+    color: #cfc7bd !important;
+    background-color: #f8f8f8 !important;
+}
+
+
+.menu-height {
+    min-height: 52px !important;
+}
+
+.bring-to-front-top-nav {
+    z-index: 11 !important;
+}
+
+#bsTopHeadNavbar {
+    margin-bottom: 0;
+    z-index: 1;
+    min-height: 53px;
+}
+
+.navbar-inverse {
+    background-image: -webkit-linear-gradient(top,#f8f8f8 0,#f8f8f8 100%);
+    background-image: -o-linear-gradient(top,#f8f8f8 0,#222 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#f8f8f8),to(#f8f8f8));
+    background-image: linear-gradient(to bottom,#f8f8f8 0,#f8f8f8 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f8f8f8', endColorstr='#f8f8f8', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    background-repeat: repeat-x;
+    border-radius: 0px;
+    z-index: 3;
+}
+
+    .navbar-inverse .navbar-nav > li > a {
+        font-family: 'Segoe UI' !important;
+        color: #8c0b42;
+        font-size: 1.1em;
+    }
+
+.nav > li > a:hover, .nav > li > a:focus {
+    font-family: 'Segoe UI' !important;
+    text-decoration: none;
+    color: #000 !important;
+    background-color: #f5c19d !important;
+}
+
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    color: #cfc7bd !important;
+    background-color: #f5c19d !important;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .open > a {
+    background-image: -webkit-linear-gradient(top,#f8f8f8 0,#f8f8f8 100%);
+    background-image: -o-linear-gradient(top,#f8f8f8 0,#f8f8f8 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#f8f8f8),to(#f8f8f8));
+    background-image: linear-gradient(to bottom,#f8f8f8 0,#f8f8f8 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f8f8f8', endColorstr='#f8f8f8', GradientType=0);
+    background-repeat: repeat-x;
+    -webkit-box-shadow: inset 0 3px 9px rgba(0,0,0,.25);
+    box-shadow: inset 0 3px 9px rgba(0,0,0,.25);
+}
+
+.nav > li > a {
+    position: relative;
+    display: block;
+    padding: 16px 8px !important;
+}
+
+@media (max-width: 767px) {
+    .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+        color: #8c1d40 !important;
+    }
+
+    .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+        color: #8c1d40 !important;
+        background-color: #f5c19d !important;
+    }
+}

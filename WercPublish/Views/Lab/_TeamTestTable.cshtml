@@ -1,0 +1,51 @@
+﻿
+@model Model.ViewModels.Test.VmTeamTestCollection
+
+@if (Model.TeamTestList.Count() > 0)
+{
+    var scoreTextBoxIdArrayIndex = 0;
+
+    <div class="col-xs-12">
+        <table class="table table-responsive table-alternative">
+            <tr>
+                <th>
+                    <strong>Team Name</strong>
+                </th>
+
+                @foreach (var testItem in Model.TeamTestList.First().TestList)
+                {
+                    <th><strong>@testItem.Name</strong></th>
+                }
+            </tr>
+
+            @foreach (var teamItem in Model.TeamTestList)
+            {
+                <tr>
+                    <td>@teamItem.TeamName</td>
+
+                    @{var scoreTextBoxId = "";}
+
+                    @foreach (var testItem in teamItem.TestList)
+                    {
+                        scoreTextBoxId = "scoreTextBox_" + teamItem.TeamId + "_" + scoreTextBoxIdArrayIndex;
+                        @Html.Raw("<script>scoreTextBoxIdArray[" + scoreTextBoxIdArrayIndex++ + "] = '" + scoreTextBoxId + "'\n</script>")
+
+                        <td>
+
+                            <input type="text"
+                                   onkeyup="debugger; testSaved = false;"
+                                   value="@testItem.Score" id="@scoreTextBoxId"
+                                   data-teamid="@teamItem.TeamId"
+                                   data-taskid="@Model.TaskId"
+                                   data-testid="@testItem.Id" 
+                                   class="test-number-value"/>
+
+                        </td>
+
+                    }
+                   
+                </tr>
+            }
+        </table>
+    </div>
+}

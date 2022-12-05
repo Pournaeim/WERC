@@ -1,0 +1,295 @@
+﻿
+@model Model.ViewModels.Task.VmTask
+@using Model.ToolsModels.DropDownList
+
+
+<h2 id="actionMessageHandlerMessage"></h2>
+
+@using (Html.BeginForm("et", "task", FormMethod.Post, new { id = "_TaskEdit_Form" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal text-left">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.Label(@Model["Score Sheet"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+            @Html.Partial("_DropDownListMultipleSelect", new VmDropDownList
+            {
+                HtmlElementId = "EditGradeIds",
+                DataController = "grade",
+                DataAction = "ggddl",
+                OptionLabel = Model["Select Score Sheet/s ..."],
+                SelectedItems = string.Join(",", Model.GradeIds),
+                OnItemSelected = "GradeDropDownList_OnClientSelectedItem",
+
+            })
+
+            @Html.ValidationMessage(@Model["GradeIds"], "", new { @class = "text-danger" })
+
+            <script>
+                function GradeDropDownList_OnClientSelectedItem(ids) {
+
+                    $("#gradeIdsHidden").val(ids);
+                }
+
+            </script>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label(@Model["Test"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+            @Html.Partial("_DropDownListMultipleSelect", new VmDropDownList
+           {
+               HtmlElementId = "EditTestIds",
+               DataController = "Test",
+               DataAction = "gtddl",
+               OptionLabel = Model["Select Test/s ..."],
+               SelectedItems = string.Join(",", Model.TestIds),
+               OnItemSelected = "TestDropDownList_OnClientSelectedItem",
+
+           })
+
+            @Html.ValidationMessage(@Model["TestIds"], "", new { @class = "text-danger" })
+
+            <script>
+                function TestDropDownList_OnClientSelectedItem(ids) {
+
+                    $("#testIdsHidden").val(ids);
+                }
+
+            </script>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label(@Model["Name"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessage(@Model["Name"], "", new { @class = "text-danger" })
+        </div>
+        <span class="text-danger fa-2x">*</span>
+    </div>
+    <div class="form-group">
+        @Html.Label(@Model["Payment Type"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+            @Html.Partial("_DropDownList",
+
+                    new VmDropDownList
+                    {
+                        HtmlElementId = "PaymentTypeDdl",
+                        DataController = "PaymentType",
+                        DataAction = "gptddl",
+                        OptionLabel = Model["Select Payment Type..."],
+                        OnItemSelected = "paymentTypeDropDownList_OnClientSelectedItem",
+                        ActiveItemValue = Model.PaymentTypeId.ToString(),
+
+                    })
+
+            @Html.ValidationMessage(@Model["PaymentTypeIdHidden"], "", new { @class = "text-danger" })
+
+            <script>
+                function paymentTypeDropDownList_OnClientSelectedItem(id) {
+                    debugger
+                    $("#PaymentTypeIdHidden").val(id);
+                }
+            </script>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-offset-1 col-xs-1 text-right">
+            @Html.CheckBoxFor(model => model.Preliminary, new { @class = "" })
+
+        </div>
+        <div class="col-xs-6 text-left">
+            <label class="" for="Preliminary">When advisores create a team to compete in this task, they should define a project title</label>
+        </div>
+    </div>
+
+    <div class="form-group hidden">
+        <div class="col-xs-offset-1 col-xs-1 text-right">
+            @Html.CheckBoxFor(model => model.RegisterForFlashTalk, new { @class = "" })
+
+        </div>
+        <div class="col-xs-6 text-left">
+            <label class="" for="RegisterForFlashTalk">A team that select this task can register for Flash Talk</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-xs-offset-1 col-xs-1 text-right">
+            @Html.CheckBoxFor(model => model.OpenTaskTestPlan, new { @class = "" })
+
+        </div>
+        <div class="col-xs-6 text-left">
+            <label class="" for="OpenTaskTestPlan">Show this task in the judges' Preference List</label>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label(@Model["Task Logo"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12 col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+            <div class="input-group input-file" name="uploadedDocument">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary btn-xs  submit-btn-choose-file" type="button"></button>
+                </span>
+                <input type="text" class="form-control path-container" placeholder='Choose a file...' />
+                <span class="input-group-btn">
+                    <button class="btn btn-danger btn-reset" type="button">Reset</button>
+                </span>
+            </div>
+
+            @Html.ValidationMessage(@Model["TaskImageUrl"], "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12 col-md-2" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+            @Html.TextAreaFor(model => model.Description, new { @class = "form-control short-bio" })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+        <span class="text-danger fa-2x">*</span>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-sm-10 col-xs-12 col-md-6 col-lg-4">
+            <input id="_TaskEdit_Submit" type="submit" value="@Model["Update"]" class="btn btn-primary" />
+        </div>
+    </div>
+
+    @Html.HiddenFor(model => model.ImageUrl, htmlAttributes: new { @id = "TaskImageUrlHidden" })
+    @Html.HiddenFor(model => model.Id, htmlAttributes: new { @id = "IdHidden" })
+    @Html.HiddenFor(model => model.Grades, htmlAttributes: new { @id = "gradeHidden", @name = @Model.Grades, @value = @Model.Grades })
+    @Html.HiddenFor(model => model.ClientGradeIds, htmlAttributes: new { @id = "gradeIdsHidden", @value = string.Join(",", Model.GradeIds) })
+    @Html.HiddenFor(model => model.Tests, htmlAttributes: new { @id = "testHidden", @name = @Model.Tests, @value = @Model.Tests })
+    @Html.HiddenFor(model => model.ClientTestIds, htmlAttributes: new { @id = "testIdsHidden", @value = string.Join(",", Model.TestIds) })
+    @Html.HiddenFor(model => model.PaymentTypeId, htmlAttributes: new { @id = "PaymentTypeIdHidden", @value = Model.PaymentTypeId })
+
+</div>
+}
+
+<script>
+    $('#_TaskEdit_Form').submit(function (e) {
+        e.preventDefault();
+
+        var form = $('#_TaskEdit_Form');
+        if (form.valid() == false) return;
+
+        if (validateCustomElements() == false) { return false;}
+
+            var formData = new FormData($('#_TaskEdit_Form').get(0));
+            var file = document.getElementById("inputGhost").files[0];
+
+            formData.append("UploadedDocument", file);
+
+            HoldOn.open({
+                    theme: 'sk-cube-grid',
+                    message: "<h4>@Model["Please wait..."]</h4>"
+            });
+
+            $.ajax({
+                url: "/task/et", //you can get also action attribute from form using form.attr('action')
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function (result) {
+
+
+                if (result.success == false) {
+
+                    $("#actionMessageHandlerMessage").text(result.message);
+                }
+
+                @if(!string.IsNullOrEmpty(@Model.OnActionSuccess))
+                {
+                    @Html.Raw("if(result.success == true){"+@Model.OnActionSuccess+"(result);}")
+                }
+
+                @if(!string.IsNullOrEmpty(@Model.OnActionFailed))
+                {
+                    @Html.Raw("if(result.success == false){"+@Model.OnActionFailed + "();}")
+                }
+
+                HoldOn.close();
+
+                }).fail(function () { HoldOn.close(); });
+
+        return false;
+    });
+</script>
+
+@*validate*@
+
+<script>
+
+    function validateTask() {
+
+        if ($("#gradeIdsHidden").val() == '')
+        {
+            var message = '@Model["Please select Score Sheet/s"]';
+            alert(message);
+            return false;
+        }
+       if ($("#testIdsHidden").val() == '')
+        {
+            var message = '@Model["Please select Test/s"]';
+            alert(message);
+            return false;
+        }
+
+
+            return true;
+
+    }
+
+    function validateCustomElements() {
+
+        @*if ($(".input-ghost").val() == '') {
+            alert("@Model["please select task logo..."]");
+            return false;
+        }*@
+        return validateTask();
+
+    }
+</script>
+
+@*Initialize*@
+<script type="text/javascript">
+    function bs_input_file() {
+        $(".input-file").before(
+            function () {
+                if (!$(this).prev().hasClass('input-ghost')) {
+                    var element = $("<input type='file' id='inputGhost' class='input-ghost' style='visibility:hidden; height:0'>");
+                    element.attr("name", $(this).attr("name"));
+                    element.change(function () {
+                        element.next(element).find('input').val((element.val()).split('\\').pop());
+                    })
+                    $(this).find("button.submit-btn-choose-file").click(function () {
+                        element.click();
+                    })
+                    $(this).find("button.btn-reset").click(function () {
+                        element.val(null);
+                        $(this).parents(".input-file").find('input').val('');
+                    })
+                    $(this).find('input').css("cursor", "pointer");
+                    $(this).find('input').mousedown(function () {
+                        $(this).parents('.input-file').prev().click();
+                        return false;
+                    })
+                    return element;
+                }
+            }
+        );
+    }
+
+
+    $(document).ready(function () {
+
+        bs_input_file();
+    })
+
+</script>
+

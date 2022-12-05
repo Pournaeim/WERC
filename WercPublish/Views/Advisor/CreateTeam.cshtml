@@ -1,0 +1,167 @@
+﻿@model Model.ViewModels.Team.VmTeam
+@using Model.ToolsModels.DropDownList
+
+@{
+    ViewBag.Title = "Create Team";
+    Layout = "~/Views/Shared/_LayoutAdvisor.cshtml";
+}
+
+@if (!string.IsNullOrEmpty(Model.ActionMessageHandler.Message))
+{
+    <h2>@Model.ActionMessageHandler.Message</h2>
+}
+<h4>Create New Team</h4>
+
+@using (Html.BeginForm("ct", "team", FormMethod.Post, new { enctype = "multipart/form-data", @class = "col-xs-12", id = "teamForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal text-left">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.Label(@Model["Task"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-1" })
+        <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+            @Html.Partial("_DropDownList", new VmDropDownList
+            {
+                HtmlElementId = "TaskId",
+                DataController = "task",
+                DataAction = "gtddlwd",
+                OptionLabel = Model["Select Task..."],
+                ActiveItemValue = Model.TaskId.ToString(),
+                OnItemSelected = "TaskDropDownList_OnClientSelectedItem",
+
+            })
+
+            @Html.ValidationMessage(@Model["TaskId"], "", new { @class = "text-danger" })
+
+            <script>
+                function TaskDropDownList_OnClientSelectedItem(id) {
+                    $("#taskHidden").val(id);
+                    
+                    $.ajax(
+                        {
+                            type: 'get',
+                            url: '/task/cpn/' + id,
+                            dataType: 'json',
+
+                        }
+                    ).done(function (result) {
+                        if (result === true) {
+                            $("#projectNameDiv").removeClass('hidden');
+                        }
+                        else {
+                            $("#projectNameDiv").addClass('hidden');
+
+                        }
+                    }); 
+                    
+                    var task = $('#TaskId option:selected')[0].innerText;
+
+                    $("#TaskHidden").val(task);
+                }
+
+            </script>
+        </div>
+        <div id="projectNameDiv" class="form-group  hidden">
+            @Html.Label(@Model["Project Title"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12  col-md-2" })
+            <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+                @Html.EditorFor(model => model.ProjectName, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+
+        <div class="form-group hidden">
+            @Html.Label(@Model["Team Logo"], htmlAttributes: new { @class = "control-label col-sm-2 col-xs-12 col-md-1" })
+            <div class="col-sm-10 col-xs-12 col-md-6 col-lg-4">
+
+                <div class="input-group input-file" name="uploadedDocument">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary btn-xs  submit-btn-choose-file" type="button"></button>
+                    </span>
+                    <input type="text" class="form-control path-container" placeholder='Choose a file...' />
+                    <span class="input-group-btn">
+                        <button class="btn btn-danger btn-reset" type="button">Reset</button>
+                    </span>
+                </div>
+
+                @Html.ValidationMessage(@Model["TeamImageUrl"], "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-sm-10 col-xs-12 col-md-6 col-lg-4">
+                <input type="submit" value="@Model["Add"]" class="btn btn-primary" onclick="return validateCustomElements();" />
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.Task, htmlAttributes: new { @id = "TaskHidden", @name = @Model.Task })
+        @Html.HiddenFor(model => model.University, htmlAttributes: new { @id = "UniversityHidden", @name = @Model.University, @value = @Model.University })
+    </div>
+}
+
+
+@*validate*@
+<script>
+     function validateTask() {
+
+         if ($("#TaskId").val() == null)
+        {
+            var message = '@Model["Please select task"]';
+             alert(message);
+            return false;
+        }
+        else {
+           
+            return true;
+        }
+    }
+
+    function validateCustomElements() {
+        @*if ($(".input-ghost").val() == '') {
+            alert("@Model["please select team logo..."]");
+            return false;
+        }*@
+        return true;
+
+    }
+
+</script>
+@*Initialize*@
+<script type="text/javascript">
+    function bs_input_file() {
+        $(".input-file").before(
+            function () {
+                if (!$(this).prev().hasClass('input-ghost')) {
+                    var element = $("<input type='file' class='input-ghost' style='visibility:visible; height:0'>");
+                    element.attr("name", $(this).attr("name"));
+                    element.change(function () {
+                        element.next(element).find('input').val((element.val()).split('\\').pop());
+                    })
+                    $(this).find("button.submit-btn-choose-file").click(function () {
+                        element.click();
+                    })
+                    $(this).find("button.btn-reset").click(function () {
+                        element.val(null);
+                        $(this).parents(".input-file").find('input').val('');
+                    })
+                    $(this).find('input').css("cursor", "pointer");
+                    $(this).find('input').mousedown(function () {
+                        $(this).parents('.input-file').prev().click();
+                        return false;
+                    })
+                    return element;
+                }
+            }
+        );
+    }
+
+    $(document).ready(function () {
+        bs_input_file();
+    });
+
+
+
+</script>

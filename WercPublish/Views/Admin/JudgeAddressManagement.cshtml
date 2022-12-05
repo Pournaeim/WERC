@@ -1,0 +1,226 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Person;
+
+@model VmRoleBaseUserEmailManagement
+
+@{
+    ViewBag.Title = "User Email Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Model.ReadOnly = false;
+}
+
+<h4><span class=""> @Model["User List"] </span></h4>
+
+<hr />
+
+@*<div>
+        <button type="button" id="sendEmailToSelectedUsers" class="btn btn-primary">Send email</button>
+        <button type="button" id="clearSelectedUsers" class="btn btn-danger">Clear selections</button>
+    </div>*@
+
+<div class="hidden">
+    <div id="sendEmailDialogDialog" class="">
+
+        <div class="col-xs-12">
+
+            <div class="form-group">
+
+                <label for="" class="control-label">@Model["Add other email(s)"]</label>
+
+                <div id="generateAdditionalEmailButton" class="btn btn-primary btn-xs btn-add-user" onclick="generateAdditionalEmailTextBox()"> </div>
+                <div id="additionalEmailTextBoxContainer" class="row">
+                    <!--Textboxes will be added here -->
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                <label for="emailSubject" class="control-label">@Model["Subject"]</label>
+
+                <input type="text" id="emailSubject" name="emailSubject" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="emailBody" class="control-label">@Model["Message"]</label>
+                <div id="emailBody" name="emailBody"></div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-12">
+    @Html.Partial("PartialViewJudgeAddressGrid", new VmJsGrid()
+{
+    DataAction = "gjal",
+    DataController = "person",
+
+    //EditAction = "etps",
+    //EditController = "user",
+
+    ReadOnly = false,
+    HtmlElementId = "RoleBaseUser_RoleBaseUserJsGrid",
+    CurrentUserRoles = Model.CurrentUserRoles,
+    LanguageDictionary = Model.LanguageDictionary
+
+})
+</div>
+<input type="hidden" id="additionalEmailHidden" />
+
+<script>
+
+    $(document).ready(function () {
+        $("#emailBody").summernote({
+            height: 300, minHeight: null, maxHeight: null, focus: false,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']], ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'hr']],
+                ['view', ['fullscreen', 'codeview']],
+                ['help', ['help']]
+            ],
+        });
+
+    });
+
+    $("#sendEmailToSelectedUsers").click(function () {
+        showsendEmailDialogDialog();
+    });
+
+    $("#clearSelectedUsers").click(function () {
+        $("#selectAllCheckbox").prop('checked', true);
+        $("#selectAllCheckbox").click();
+        selectedItems = [];
+
+    });
+
+    function showsendEmailDialogDialog() {
+
+            var showsendEmailDialogDialogObject =
+            {
+                sender: '',
+                width: "50%",
+                height: "auto",
+                dialogConfirmId: "sendEmailDialogDialog",
+                yesButton:'@Html.Raw(Model["Send Message"])',
+                noButton:'@Model["Cancel"]',
+                acceptCallbak: function () {
+                     HoldOn.open({
+                         theme: 'sk-cube-grid',
+                         message: "<h4>@Model["Please wait..."]</h4>"
+                    });
+
+                    collectAdditionalEmails();
+                    debugger
+                    var additionalEmail = $("#additionalEmailHidden").val() != '' ? $("#additionalEmailHidden").val().split(",") : null;
+
+                    allFinalSelected = [];
+                    $('.singleCheckbox').each(function () {
+                        debugger
+                        if ($(this).prop('checked') == true) {
+                            allFinalSelected.push($(this).data('value'));
+                        }
+
+                    });
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/admin/se",
+                        data:
+                        {
+                            userIds: allFinalSelected,
+                            additionalEmails: additionalEmail,
+                            emailSubject: $("#emailSubject").val(),
+                            emailBody: $("#emailBody").summernote('code')
+                        },
+                        dataType: "json",
+                        success: function (response) {
+
+                            alert(response.message);
+                            HoldOn.close();
+                        },
+                        error: function (data, textStatus, XMLHttpRequest) {
+
+                            alert(data.message);
+                            HoldOn.close();
+                        },
+                    });
+
+                },
+
+                rejectCallbak: function () {
+
+
+                }
+            }
+
+            openConfirmDialog(showsendEmailDialogDialogObject);
+    }
+
+</script>
+
+@*Email TextBoxs*@
+<script type="text/javascript">
+
+    function getCommaSeparateElementsValue(elementName) {
+
+        var values = "";
+        $("input[name='" + elementName + "']")
+            .map(function () {
+                if ($(this).val() != '') {
+                    values += $(this).val() + ",";
+                }
+
+            }).get();
+
+        if (values.length > 0) {
+            values = values.substring(0, values.length - 1);
+        }
+        debugger
+        return values;
+
+    }
+
+    function collectAdditionalEmails()
+    {
+        $("#additionalEmailHidden").val(getCommaSeparateElementsValue('DynamicAdditionalEmailTextBox'));
+    }
+
+
+    function GetDynamicEmailElements(additionalEmail) {
+        var element =
+
+            "<div class='col-xs-12 col-sm-4'>" +
+                "<div class='input-group row'>" +
+                    "<input class='form-control' name = 'DynamicAdditionalEmailTextBox' type='email' placeholder='@Model["Email"]' value = '" + additionalEmail + "' autocomplete='off' />" +
+                    "<span class='input-group-btn'>" +
+                    "<button type='button' class='btn btn-danger btn-xs submit-btn-delete' onclick = 'RemoveEmailElements(this)'></button>" +
+                    "</span>" +
+                "</div>" +
+            "</div>";
+
+        return element;
+    }
+
+    function generateAdditionalEmailTextBox() {
+        var div = document.createElement('DIV');
+        $(div).addClass("form-group element-group");
+        div.innerHTML = GetDynamicEmailElements("", "");
+        document.getElementById("additionalEmailTextBoxContainer").appendChild(div);
+    }
+
+    function RemoveEmailElements(div) {
+        document.getElementById("additionalEmailTextBoxContainer").removeChild(div.parentNode.parentNode.parentNode.parentNode);
+    }
+
+
+
+</script>

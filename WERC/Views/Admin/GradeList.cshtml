@@ -1,0 +1,25 @@
+﻿
+@using Model.ViewModels.Grade
+
+@model VmGradeCollection
+
+@{
+    ViewBag.Title = "Score Sheet Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2>Score Sheet Management</h2>
+
+<div class="col-xs-12">
+    <a href="/grade/lcgf" class="btn btn-primary btn-lg">@Model["Define Evaluation Criteria"]</a>
+    <hr />
+
+</div>
+<div id="GradeList_ParentHtmlControlId" class="col-xs-12 scroll-article-list">
+    @Html.Partial("_GradeList", Model)
+</div>
+
+<script>
+    function GradeManagement_OnClientSelectedItem(selectedId) {
+
+    }
+</script>

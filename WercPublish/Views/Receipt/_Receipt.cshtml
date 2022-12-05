@@ -1,0 +1,153 @@
+﻿
+@model Model.ViewModels.Invoice.VmInvoice
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="row text-center">
+            <img src="~/Resources/Images/Receipt2019WERCheader.jpg" />
+        </div>
+        <div class="row text-center">
+            <h4>RECEIPT# @Model.TransactionNo</h4>
+        </div>
+        <div class="col-xs-12 text-left">
+            <h4>Date: @Model.Received</h4>
+        </div>
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.UserId)
+
+        <div class="row text-center"><h4>@Model.Title</h4></div>
+        <div class="row text-left">
+            <div class="col-xs-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AccountOwner, htmlAttributes: new { @class = "col-xs-12" })
+                    <div class="col-xs-12">
+                        @{
+                            var toName = "Dr. " + @Model.AccountOwner + ", " + @Model.University;
+                        }
+                        <span>@toName</span>
+                        @*@Html.DisplayName(@Model.Address)*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 col-offset-xs-8">
+                <div class="form-group">
+                    @Html.Label("From ", htmlAttributes: new { @class = "col-xs-12" })
+                    <div class="col-xs-12">
+                        <p>
+                            Engineering New Mexico Resource Network
+                            Attn: WERC Environmental Design Contest
+                            P.O. Box 30001
+                            New Mexico State University
+                            MSC Eng NM
+                            Las Cruces, New Mexico 88003
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12">
+
+                <table class="table table-condensed table-bordered">
+
+                    <tr>
+
+                        <th>
+                            Team List
+                        </th>
+
+                        <th>
+                            Task
+                        </th>
+                        <th>
+                            First Team or Extra Team
+                        </th>
+
+                        <th>
+                            Number of Extra Participants
+                        </th>
+
+                        <th>
+                            Origin Cost For Every Team Base on Type of Registration
+                        </th>
+
+                        <th>
+                            Cost For Extra Participant
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Transaction Fee (2.5%)
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model.InvoiceDetails)
+                    {
+
+
+                        <tr class="invoice-tr invoice-row">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TeamName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Task)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstTeamOrExtraTeam)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExtraParticipantCount)
+                            </td>
+                            <td>
+                                $@Html.DisplayFor(modelItem => item.TeamUnitCost)
+                            </td>
+                            <td>
+                                $@Html.DisplayFor(modelItem => item.ExtraParticipantAmount)
+                            </td>
+                            <td>
+                                <b>$@Html.DisplayFor(modelItem => item.Amount)</b>
+                            </td>
+                            <td>
+                                <b>$@Html.DisplayFor(modelItem => item.ConventionalFee)</b>
+
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="7">
+                            <b class="pull-right">Total Transaction Fee</b>
+                        </td>
+                        <td>
+                            <b>$@Html.DisplayFor(model => model.TotalConventionalFee)</b>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="7">
+                            <b class="pull-right">Total Payment</b>
+                        </td>
+                        <td>
+                            <b>$@Html.DisplayFor(model => model.Total)</b>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+<script>
+
+</script>

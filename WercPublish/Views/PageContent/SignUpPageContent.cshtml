@@ -1,0 +1,66 @@
+﻿
+@model Model.ViewModels.PageContent.VmPageContent
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+@using (Html.BeginForm("sfpc", "PageContent", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>@Model.FormTitle.</h4>
+
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <div class="col-xs-12 text-center">
+        <button type="button" class="saveButton btn btn-primary">
+            <i class="fa fa-save icon-size-1-3"></i>
+            <span class="">@Model["Save"]</span>
+        </button>
+        <a href="/Admin/Index" class="btn btn-primary">
+            <span class="">@Model["Cancel"]</span>
+        </a>
+    </div>
+
+    <textarea id="HTMLContent" name="Content"></textarea>
+
+    <input type="hidden" id="idHidden" name="Id" value="@Model.Id" />
+
+    <div class="col-xs-12 text-center">
+        <button type="button" class="saveButton btn btn-primary">
+            <i class="fa fa-save icon-size-1-3"></i>
+            <span class="">@Model["Save"]</span>
+        </button>
+        <a href="/Admin/Index" class="btn btn-primary">
+            <span class="">@Model["Cancel"]</span>
+        </a>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $(".saveButton").click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: "/PageContent/sspc",
+                data: { Id: $("#idHidden").val(), Content: $("#HTMLContent").Editor('getText') },
+
+            }).done(function (response) {
+                window.location.href = '/home';
+            }).fail(function (data, textStatus, XMLHttpRequest) { });
+        });
+
+        $("#HTMLContent").Editor();
+
+        $.ajax({
+            type: "POST",
+            url: "/PageContent/gsphc",
+        }).done(function (response) {
+            $("#HTMLContent").Editor("setText", response);
+        }).fail(function (data, textStatus, XMLHttpRequest) { });
+    });
+</script>
+
+

@@ -1,0 +1,12 @@
+﻿
+@model Model.ViewModels.Invoice.VmInvoice
+
+@{
+    ViewBag.Title = "Invoice Form";
+    Layout = "~/Views/Shared/_LayoutAdvisor.cshtml";
+}
+
+<div id="invoiceDetailContainer" class="row">
+    @Html.Partial("_ReviewOrder", @Model)
+</div>
+

@@ -1,0 +1,289 @@
+﻿@model Model.ViewModels.Survey.VmSurveyManagement
+@using Model.ApplicationDomainModels;
+
+@{
+    /**/
+
+    ViewBag.Title = "Survey";
+    Layout = Model.ViewLayout;
+
+    var questionNumber = 1;
+
+    var textBoxAnswerId = "textBox_";
+    var radioButtonAnswerId = "radioButton_";
+    var checkBoxAnswerId = "checkBox_";
+    var descriptionAnswerId = "description_";
+    var commentId = "comment_";
+    var singleSelectListAnswerId = "singleSelectList_";
+    var multySelectListAnswerId = "multySelectList_";
+}
+<link href="~/Resources/CSS/survey.css" rel="stylesheet" />
+<h2>Survey</h2>
+
+<div class="col-xs-12">
+    @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && (Model.CurrentUserRoles.Contains("Student") || Model.CurrentUserRoles.Contains("Leader")))
+    {
+        <h3>2019 WERC - Student Survey</h3>
+        <p>
+            
+            Staff members at New Mexico State University (NMSU) want to know more about your experience in
+            the 2019 WERC Design Contest. 
+             
+
+        </p>
+    }
+    @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && (Model.CurrentUserRoles.Contains("Advisor") || Model.CurrentUserRoles.Contains("CoAdvisor")))
+    {
+        <h3>2019 WERC - Faculty Survey</h3>
+        <p>
+            
+            Staff members at New Mexico State University (NMSU) want to know more about your experience in
+            the 2019 WERC Design Contest. 
+             
+        </p>
+    }
+    @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Judge"))
+    {
+        <h3>2019 WERC - Judges Survey</h3>
+        <p>
+            
+            Quality of judges and their relevant experience is paramount to the student participation in the
+            WERC Design Contests. Staff members at New Mexico State University (NMSU) want to know more
+            about your experience in the 2019 WERC Design Contest. 
+            
+        </p>
+    }
+</div>
+
+<div class="col-xs-12 text-center">
+    <button type="button" id="saveButton" class="btn btn-primary" onclick="SaveSurveyResult()">Save</button>
+</div>
+<div class="col-xs-12">
+
+    @foreach (var question in Model.SurveyList)
+    {
+
+        <fieldset>
+            <legend>
+                @if (!string.IsNullOrWhiteSpace(question.QuestionComment) == true)
+                {
+                    <span class="display-block">@question.QuestionComment</span>
+                }
+                <strong>@questionNumber. </strong> @question.Question
+                @{questionNumber++;}
+            </legend>
+            <div class="col-xs-12">
+
+
+                @foreach (var answer in question.SurveyDetailList)
+                {
+                    textBoxAnswerId = "textBox_" + answer.QuestionAnswerId;
+                    radioButtonAnswerId = "radioButton_" + answer.QuestionAnswerId;
+                    checkBoxAnswerId = "checkBox_" + answer.QuestionAnswerId;
+                    descriptionAnswerId = "description_" + answer.QuestionAnswerId;
+                    commentId = "comment_" + answer.QuestionAnswerId;
+
+                    switch (answer.AnswerType)
+                    {
+
+                        case (int)ConstantObjects.AnswerType.TextBox:
+                            if (answer.TitleVisible == true)
+                            {
+                                <div class="col-xs-12 col-sm-3 col-md-2">
+                                    @answer.Answer
+                                </div>
+                            }
+                            <div class="col-xs-12 col-sm-9 col-md-10">
+                                <input type="text" class="survey-textbox" id="@textBoxAnswerId" value="@answer.Value" data-answertype="@answer.AnswerType" data-questionanswerid="@answer.QuestionAnswerId" data-questionid="@question.Id" />
+                            </div>
+
+                            break;
+
+                        case (int)ConstantObjects.AnswerType.RadioButton:
+
+                            <span>
+                                @if (answer.Value.ToLower() == "true")
+                                {
+                                    <input type="radio" id="@radioButtonAnswerId" checked class="survey-radio" name="radio-group-@question.Id" data-answertype="@answer.AnswerType" data-questionanswerid="@answer.QuestionAnswerId" data-questionid="@question.Id" />
+                                }
+                                else
+                                {
+                                    <input type="radio" id="@radioButtonAnswerId" class="survey-radio" name="radio-group-@question.Id" data-answertype="@answer.AnswerType" data-questionanswerid="@answer.QuestionAnswerId" data-questionid="@question.Id" />
+
+                                }
+                            </span>
+
+                            <span class="survey-radio-label">
+                                @answer.Answer
+                            </span>
+
+                            break;
+
+                        case (int)ConstantObjects.AnswerType.CheckBox:
+                            <div>
+                                <span>
+                                    @if (answer.Value.ToLower() == "true")
+                                    {
+                                        <input type="checkbox" id="@checkBoxAnswerId" checked class="survey-checkbox" data-answertype="@answer.AnswerType" data-questionanswerid="@answer.QuestionAnswerId" data-questionid="@question.Id" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" id="@checkBoxAnswerId" class="survey-checkbox" data-answertype="@answer.AnswerType" data-questionanswerid="@answer.QuestionAnswerId" data-questionid="@question.Id" />
+
+                                    }
+                                </span>
+                                <span class="survey-checkbox-label">
+                                    @answer.Answer
+                                </span>
+                            </div>
+
+                            break;
+
+                        case (int)ConstantObjects.AnswerType.Description:
+
+                            if (answer.TitleVisible == true)
+                            {
+                                <div class="col-xs-12 col-sm-2 col-md-1 text-justify">
+                                    @answer.Answer
+                                </div>
+                            }
+                            <div class="col-xs-12 col-sm-10 col-md-11">
+
+                                <textarea id="@descriptionAnswerId" class="survey-description" rows="5" cols="60" data-answertype="@answer.AnswerType" data-questionanswerid="@answer.QuestionAnswerId" data-questionid="@question.Id">@answer.Value</textarea>
+                            </div>
+
+                            break;
+                    }
+                    if (answer.ShowComment == true)
+                    {
+                        <div class="col-xs-12">
+
+                            <textarea id="@commentId" class="survey-comment" rows="2" cols="60">@answer.Comment</textarea>
+
+                        </div>
+                    }
+
+
+
+                }
+
+                <hr />
+
+            </div>
+        </fieldset>
+
+    }
+</div>
+
+<div class="col-xs-12 text-center">
+    <button type="button" id="saveButton" class="btn btn-primary" onclick="SaveSurveyResult()">Save</button>
+
+</div>
+
+<script>
+    function SaveSurveyResult() {
+
+          HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        var clientSurveyResult = [];
+         
+        $("input[type=text].survey-textbox").each(function () {
+
+            var comment = "";
+            if ($("#comment_" + $(this).data("questionanswerid")).val() != undefined) {
+                comment = '' + $("#comment_" + $(this).data("questionanswerid")).val() + '';
+            }
+
+            clientSurveyResult.push(
+                {
+                    QuestionId: $(this).data("questionid"),
+                    QuestionAnswerId: $(this).data("questionanswerid"),
+                    Value: '' + $(this).val() + '',
+                    Type: $(this).data("answertype"),
+                    Comment: comment
+                })
+        });
+
+        $("input[type=radio].survey-radio").each(function () {
+
+            var comment = "";
+            if ($("#comment_" + $(this).data("questionanswerid")).val() != undefined) {
+                comment = '' + $("#comment_" + $(this).data("questionanswerid")).val() + '';
+            }
+
+            clientSurveyResult.push(
+                {
+                    QuestionId: $(this).data("questionid"),
+                    QuestionAnswerId: $(this).data("questionanswerid"),
+                    Value: '' + $(this).prop("checked") + '',
+                    Type: $(this).data("answertype"),
+                    Comment: comment
+                })
+        });
+
+        $("input[type=checkbox].survey-checkbox").each(function () {
+
+            var comment = "";
+            if ($("#comment_" + $(this).data("questionanswerid")).val() != undefined) {
+                comment = '' + $("#comment_" + $(this).data("questionanswerid")).val() + '';
+            }
+
+            clientSurveyResult.push(
+                {
+                    QuestionId: $(this).data("questionid"),
+                    QuestionAnswerId: $(this).data("questionanswerid"),
+                    Value: '' + $(this).prop("checked") + '',
+                    Type: $(this).data("answertype"),
+                    Comment: comment
+                })
+        });
+
+
+        $("textarea.survey-description").each(function () {
+
+            var comment = "";
+            if ($("#comment_" + $(this).data("questionanswerid")).val() != undefined) {
+                comment = '' + $("#comment_" + $(this).data("questionanswerid")).val() + '';
+            }
+
+            clientSurveyResult.push(
+                {
+                    QuestionId: $(this).data("questionid"),
+                    QuestionAnswerId: $(this).data("questionanswerid"),
+                    Value: '' + $(this).val() + '',
+                    Type: $(this).data("answertype"),
+                    Comment: comment
+                })
+        });
+        debugger
+        jsonData = JSON.stringify(
+            {
+                "clientSurveyResult": clientSurveyResult,
+            });
+
+
+        $.ajax(
+            {
+                type: 'POST',
+                contentType: 'application/json',
+                url: '/survey/ss',
+                dataType: "html",
+                data: jsonData,
+
+            }).done(function (data, textStatus, jqXHR) {
+                debugger
+                alert('Survey has been saved successfuly');
+                HoldOn.close();
+
+            }).fail(function (xhr, status) {
+                var jsonObject = JSON.parse(xhr.responseText);
+                if (jsonObject.hasError === true) {
+                    alert(jsonObject.message);
+                }
+                HoldOn.close();
+            });
+    }
+</script>

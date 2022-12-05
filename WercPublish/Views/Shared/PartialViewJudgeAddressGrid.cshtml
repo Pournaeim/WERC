@@ -1,0 +1,292 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+    /**/
+
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+}
+<script>
+    var lastFilter = "";
+
+</script>
+
+@*<button id='excelButton' type='button' onclick='LoadExelData(lastFilter);'>
+        <img src='/Resources/Images/excel.png' width='50px' title='Export To Excel' />
+    </button>*@
+
+<div class="row">
+
+    <div id="externalPager"></div><div id="@jsGridHtmlElementId"></div>
+    <link href="~/Resources/CSS/modal-fixed-full-screen.css" rel="stylesheet" />
+    <div class="modal-fixed-full-screen">
+        <div class="modal fade" id="profileInfoModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn btn-default profile-info-modal-close-button text-left"> Close</button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="modal-title"><span id="profileNameSpan"></span> Profile Info</h4>
+
+                        <div id="profileDiv" class=""></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default profile-info-modal-close-button text-left">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden">
+    <div class="config-panel">
+        <label><input id="heading" type="checkbox" checked /> Heading</label>
+        <label><input id="filtering" type="checkbox" /> Filtering</label>
+        <label><input id="inserting" type="checkbox" /> Inserting</label>
+        <label><input id="editing" type="checkbox" checked /> Editing</label>
+        <label><input id="paging" type="checkbox" checked /> Paging</label>
+        <label><input id="sorting" type="checkbox" /> Sorting</label>
+        <label><input id="selecting" type="checkbox" checked /> Selecting</label>
+    </div>
+
+</div>
+<script>
+
+    var userMemberFirstTimeLoad = [];
+    var judgeRowIndex = 0;
+    var labResultUrlRowIndex = 0;
+    var ActiveRowIndex = 0;
+    var firstTime = true;
+
+    function LoadExelData(lastFilter) {
+
+        return $.ajax({
+            type: "POST",
+            url: "@jsGridLoadDataUrl",
+            data: { lastFilter }
+        });
+    }
+    var gridRowIndex = 0;
+
+    $(document).ready(function () {
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            height: "auto",
+            editing: true,
+            inserting: false,
+            autoload: true,
+            paging: true,
+            pageSize: 1500,
+            pageIndex: 1,
+            pageButtonCount: 5,
+            datatype: "json",
+            updateOnResize: false,
+            rowClick: function (args) {
+
+                showProfile(args.item.UserId, args.item.FirstName + " " + args.item.LastName );
+
+            },
+            onDataLoading: function (args) { 
+
+
+            },
+            onDataLoaded: function (args) {
+                //for (i = taskRowIndex - 1; i >= 0; i--) {
+                //    $("#taskDiv" + i).on('shown.bs.collapse', function () {
+
+                //        $(this).prev().addClass("glyphicon-chevron-up");
+                //        $(this).prev().removeClass("glyphicon-chevron-down");
+                //    });
+
+                //    $("#taskDiv" + i).on('hide.bs.collapse', function () {
+
+                //        $(this).prev().addClass("glyphicon-chevron-down");
+                //        $(this).prev().removeClass("glyphicon-chevron-up");
+                //    });
+
+                //}
+            },
+            controller: {
+                loadData: function (filter) { gridRowIndex = 0;
+
+                    if (firstTime == false) {
+                        lastFilter = filter;
+                        return $.ajax({
+                            type: "POST",
+                            url: "@jsGridLoadDataUrl",
+                            data: { filter }
+                        });
+                    }
+                    firstTime = false;
+
+                }
+            },
+
+            onRefreshing: function (args) {gridRowIndex = 0;}, fields:
+                [
+
+                    {
+                        type: "control",
+                        modeSwitchButton: false,
+                        editButton: false,
+                        deleteButton: false,
+                        clearFilterButton: false,
+                        visible: true,
+                        width:65,
+                        headerTemplate: function () {
+
+                            return $("<a id='excelFileUrl' href=''><img src ='/Resources/Images/excel.png' width='50px' title='Export To Excel'/></a>");
+                        },
+                        itemTemplate: function (value, item) {
+
+                            //var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+                            excelFileUrl = item.ExcelFileUrl;
+
+                            $("#excelFileUrl").attr("href", excelFileUrl);
+                        }
+                    },
+
+                   {
+                        name: "Id", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div class='text-center'>" + (gridRowIndex + 1) + "</div>");
+                            gridRowIndex++;
+                            $("#externalPager").html('Total rows: ' + gridRowIndex);
+
+                            return result.add(customDiv);
+                        }
+                    },
+                    { name: "FirstName", title: "@Model["First Name"]", type: "text", width: 120 },
+                    { name: "LastName", title: "@Model["Last Name"]", type: "text", width: 120 },
+                    { name: "Email", title: "@Model["Email"]", type: "text", width: 170 },
+                    { name: "WorkPhoneNumber", title: "@Model["Phone (work)"]", type: "text", width: 120 },
+                    { name: "PhoneNumber", title: "@Model["Phone (at contest)"]", type: "text", width: 120 },
+                    { name: "StreetLine1", title: "@Model["Address"]", type: "text", width: 150 },
+                    {
+                        name: "Sex", title: "@Model["Gender"]", width: 80, type: "checkbox",
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/female.png';
+                            }
+                            else {
+                                val = '/Resources/Images/male.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({ width: "48px" })
+                        }
+                    }
+
+                ]
+        });
+
+        $(".config-panel input[type=checkbox]").on("click", function () {
+            var $cb = $(this);
+            $("#@jsGridHtmlElementId").jsGrid("option", $cb.attr("id"), $cb.is(":checked"));
+        });
+
+        $("#filtering").click();
+        $("#sorting").click();
+    });
+
+    function reversUserActivationStatus(userId, activeImageUrl) {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/user/uta",
+            data: { userId: userId },
+        }).done(function (response) {
+
+
+            if (response.lastStatus == false) {
+                $("#" + activeImageUrl).attr('src', '/Resources/Images/Stylish_ok.png');
+            }
+            else {
+                $("#" + activeImageUrl).attr('src', '/Resources/Images/Stylish_not_ok.png');
+            }
+
+            HoldOn.close();
+
+        });
+
+    }
+
+    var selectedItems = [];
+
+    var selectItem = function (item) {
+
+        selectedItems.push(item);
+        if ($(".singleCheckbox").length == $(".singleCheckbox:checked").length) {
+            $("#selectAllCheckbox").prop("checked", true);
+        } else {
+            $("#selectAllCheckbox").prop("checked", false);
+        }
+    };
+
+    var unselectItem = function (item) {
+        selectedItems = $.grep(selectedItems, function (i) {
+            return i !== item;
+        });
+        if (selectedItems.length == 0) {
+            $('#selectAllCheckbox').prop('checked', false);
+        }
+        if ($(".singleCheckbox").length == $(".singleCheckbox:checked").length) {
+            $("#selectAllCheckbox").prop("checked", true);
+        } else {
+            $("#selectAllCheckbox").prop("checked", false);
+        }
+    };
+
+</script>
+
+<script>
+    $(".profile-info-modal-close-button").click(function () {
+        $("#profileInfoModal").modal("toggle");
+
+    });
+
+    function showProfile(userId, name) {
+        event.stopPropagation(); event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/person/gpi",
+            data: { userId },
+            dataType: "html",
+        }).done(function (response) {
+            if (response == '') {
+                response = 'Profile not completed';
+            }
+            $("#profileDiv").html(response);
+            $("#profileNameSpan").text(name);
+            $("#profileInfoModal").modal();
+        }).fail(function (data, textStatus, XMLHttpRequest) {
+
+        });
+
+    }
+    window.onload = function () {
+
+        var d = $(".jsgrid-button.jsgrid-search-button");
+        d.first().hide();
+    }
+</script>
+
+
+

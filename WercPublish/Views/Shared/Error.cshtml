@@ -1,0 +1,14 @@
+﻿@model WERC.Models.VMHandleErrorInfo
+
+@{
+    ViewBag.Title = "";
+    Layout = Model.ViewLayout?? "_Layout.cshtml";
+}
+
+@*<h1 class="text-danger"> @Model["Error"] </h1>
+<h2 class="text-danger"> @Model["An Error Occurred While Processing Your Request"] </h2>
+<hr />*@
+
+<h3> @ViewBag.errorMessage</h3>
+<h1>  @MvcHtmlString.Create(@Model.ErrorMessage)</h1>
+

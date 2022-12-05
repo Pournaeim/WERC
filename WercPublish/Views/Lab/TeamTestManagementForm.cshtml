@@ -1,0 +1,204 @@
+﻿
+@model Model.ViewModels.Test.VmTeamTestManagement
+@using Model.ToolsModels.DropDownList
+
+@{
+    ViewBag.Title = "Test Team Management";
+    Layout = "~/Views/Shared/_LayoutLab.cshtml";
+}
+
+<h2>
+    @DateTime.Now.Year Environmental Design Contest
+</h2>
+
+<script>
+    var scoreTextBoxIdArray = [];
+    var testSaved = true;
+</script>
+
+<div class="row">
+
+    <h4>  @Html.Label(@Model["Task"], htmlAttributes: new { @class = "control-label col-xs-1" })</h4>
+    <div class="col-xs-6 grade-type-list">
+
+        @Html.Partial("_DropDownList", new VmDropDownList
+        {
+            HtmlElementId = "taskDropDownList",
+            DataController = "task",
+            DataAction = "g_lu_tddl",
+            OptionLabel = Model["Select task ..."],
+            OnItemSelected = "TaskDropDownList_OnClientSelectedItem",
+        })
+
+        <input type="hidden" id="taskIdsHidden" />
+
+        <script>
+            function TaskDropDownList_OnClientSelectedItem(id) {
+                scoreTextBoxIdArray = [];
+
+                if (testSaved == false) {
+
+                    var confirmDeleteDroppedDialogObjec =
+                    {
+                        title: "Warning...",
+                        message: '@Model["Test did not save are you sure to change the task?"]',
+                        sender: null,
+                        width: "",
+                        height: "auto",
+                        dialogConfirmId: "confirmDialogContainer",
+                        yesButton: '@Model["Yes"]',
+                        noButton: '@Model["No"]',
+
+                        acceptCallbak: function (sender) {
+                            submitData();
+                            loadTestForm(id);
+                            $("#taskIdsHidden").val(id);
+                        },
+
+                        rejectCallbak: function (sender) {
+
+
+                            setDropdownListActiveItemByValue('taskDropDownList', id);
+                            $("#taskIdsHidden").val(id);
+                            loadTestForm(id);
+
+                        }
+                    };
+
+                    openConfirmDialog(confirmDeleteDroppedDialogObjec);
+
+                }
+                else {
+                    loadTestForm(id);
+                    $("#taskIdsHidden").val(id);
+                }
+            }
+        </script>
+
+    </div>
+    <div class="col-xs-12">
+        <div id="_TestTable"></div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-xs-12 text-center">
+        <br />
+        <input type="button" value="@Model["Save"]" class="btn btn-primary" onclick="submitData();" />
+
+    </div>
+</div>
+<script>
+
+    function submitData() {
+
+          HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        var testObject =
+        {
+            TaskId: 0,
+            TeamId: 0,
+            TestId: 0,
+            Score: 0,
+        };
+
+        var testObjectArray = [];
+        debugger
+        if (scoreTextBoxIdArray.length == 0) {
+            $('.test-number-value').each(function (index, element)
+            {
+                scoreTextBoxIdArray.push($(element).attr('id'));
+            });
+        }
+        debugger
+        for (i = 0; i < scoreTextBoxIdArray.length; i++) {
+
+
+            testObject = new Object();
+
+            var scoreTextBox = $("#" + scoreTextBoxIdArray[i]);
+
+            testObject.TaskId = $("#taskIdsHidden").val();
+            testObject.TeamId = scoreTextBox.data('teamid');
+            testObject.TestId = scoreTextBox.data('testid');
+            testObject.Score = scoreTextBox.val();
+
+            testObjectArray.push(testObject);
+        }
+
+        jsonData = JSON.stringify(
+            {
+                "clientTest": testObjectArray,
+            });
+
+        $.ajax(
+            {
+                type: 'POST',
+                contentType: 'application/json',
+                url: '/lab/st',
+                data: jsonData,
+                asyn:false,
+
+            }).done(function (data, textStatus, jqXHR) {
+                if (data.success == true) {
+                    alert("Test result has been saved.");
+                    HoldOn.close();
+                    testSaved = true;
+
+                }
+                else {
+                    alert("Error in operation...");
+                    HoldOn.close();
+                }
+            }).fail(function (xhr, status) {
+            var jsonObject = JSON.parse(xhr.responseText);
+            if (jsonObject.hasError === true) {
+                alert(jsonObject.message);
+                }
+                HoldOn.close();
+
+        });
+    }
+
+    function loadTestForm(taskId) {
+
+          HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax(
+            {
+                type: 'POST',
+                url: '/lab/lttf',
+                data: {
+                    "taskId": taskId,
+                },
+                dataType: "html",
+
+            }).done(function (data, textStatus, jqXHR) {
+
+                $("#_TestTable").html(data);
+
+                var task = $('#taskDropDownList');
+                var value = task[0].options[task[0].options.selectedIndex].text;
+
+                testSaved = true;
+
+                HoldOn.close();
+
+
+            }).fail(function (xhr, status) {
+                alert("There is no task in your list");
+                HoldOn.close();
+
+        });
+    }
+
+
+</script>

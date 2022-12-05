@@ -1,0 +1,36 @@
+﻿
+@model Model.ViewModels.Test.VmTeamTestCollection
+
+@if (Model.TeamTestList.Count() > 0)
+{
+    <div class="col-xs-12">
+        <table class="table table-responsive table-alternative">
+            <tr>
+                <th>
+                    <strong>Team Name</strong>
+                </th>
+
+                @foreach (var testItem in Model.TeamTestList.First().TestList)
+                {
+                    <th><strong>@testItem.Name</strong></th>
+                }
+            </tr>
+
+            @foreach (var teamItem in Model.TeamTestList)
+            {
+                <tr>
+                    <td>@teamItem.TeamName</td>
+
+                    @foreach (var testItem in teamItem.TestList)
+                    {
+                    <td>
+                        @testItem.Score
+                    </td>
+
+                    }
+                   
+                </tr>
+            }
+        </table>
+    </div>
+}

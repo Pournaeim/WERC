@@ -1,0 +1,264 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+    </div>
+    <hr />
+    <div id="externalPager"></div>
+    <div id="@jsGridHtmlElementId"></div>
+
+</div>
+
+<div class="hidden">
+
+    <div class="config-panel">
+        <label><input id="heading1" type="checkbox" checked /> Heading</label>
+        <label><input id="filtering1" type="checkbox" /> Filtering</label>
+        <label><input id="inserting1" type="checkbox" /> Inserting</label>
+        <label><input id="editing1" type="checkbox" checked /> Editing</label>
+        <label><input id="paging1" type="checkbox" checked /> Paging</label>
+        <label><input id="sorting1" type="checkbox" /> Sorting</label>
+        <label><input id="selecting1" type="checkbox" checked /> Selecting</label>
+    </div>
+
+</div>
+<script>
+
+
+    var judgesPreferredRowIndex = 0;
+    var judgeRowIndex = 0;
+    var gradeRowIndex = 0;
+
+    $(document).ready(function () {
+        var gridRowIndex = 0;
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            height: "auto",
+            editing: true,
+            inserting: false,
+            autoload: true,
+            paging: true,
+            pageSize: 1500,
+            pageIndex: 1,
+            pageButtonCount: 5,
+            datatype: "json",
+            updateOnResize: false,
+            rowClick: function (args) {
+
+
+            },
+            onDataLoading: function (args) {  gridRowIndex = 0
+
+
+            },
+            onDataLoaded: function (args) {
+
+                for (i = judgeRowIndex - 1; i >= 0; i--) {
+                    $("#judgeDiv" + i).on('shown.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-up");
+                        $(this).prev().removeClass("glyphicon-chevron-down");
+                    });
+
+                    $("#judgeDiv" + i).on('hide.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-down");
+                        $(this).prev().removeClass("glyphicon-chevron-up");
+                    });
+
+                }
+                for (i = judgesPreferredRowIndex - 1; i >= 0; i--) {
+                    $("#judgesPreferredDiv" + i).on('shown.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-up");
+                        $(this).prev().removeClass("glyphicon-chevron-down");
+                    });
+
+                    $("#judgesPreferredDiv" + i).on('hide.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-down");
+                        $(this).prev().removeClass("glyphicon-chevron-up");
+                    });
+
+                }
+
+                for (i = gradeRowIndex - 1; i >= 0; i--) {
+                    $("#gradeDiv" + i).on('shown.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-up");
+                        $(this).prev().removeClass("glyphicon-chevron-down");
+                    });
+
+                    $("#gradeDiv" + i).on('hide.bs.collapse', function () {
+
+                        $(this).prev().addClass("glyphicon-chevron-down");
+                        $(this).prev().removeClass("glyphicon-chevron-up");
+                    });
+
+                }
+
+            },
+            controller: {
+                loadData: function (filter) { gridRowIndex = 0;
+
+                    return $.ajax({
+                        type: "GET",
+                        url: "@jsGridLoadDataUrl",
+                        data: { filter }
+                    });
+                }
+            },
+
+            onRefreshing: function (args) {gridRowIndex = 0;}, fields:
+                [
+                   {
+                        name: "Id", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div class='text-center'>" + (gridRowIndex + 1) + "</div>");
+                            gridRowIndex++;
+                            $("#externalPager").html('Total rows: ' + gridRowIndex);
+
+                            return result.add(customDiv);
+                        }
+                    },
+                    { name: "Name", title: "@Model["Task Name"]", type: "text", width: 70 },
+                    @*{ name: "Grade", title: "@Model["Score Sheet"]", type: "text", width: 120 },*@
+                    {
+                        name: "Grades", title: "@Model["Grades"]", width: 180, type: "text",
+                        itemTemplate: function (item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+                            var gradeList = [''];
+                            if (item != null) {
+                                gradeList = item.split('■');
+                            }
+                            var gradeHtmlList = '';
+
+                            for (i = 0; i < gradeList.length; i++) {
+                                gradeHtmlList += '<li>' + gradeList[i] + '</li>';
+                            }
+
+                            var collapsElement = $(
+                                '<div id="gradeDiv' + gradeRowIndex + '" class="collapse">' +
+                                '<ul>' + gradeHtmlList + '</ul>' +
+                                '</div>');
+
+                            var customButton = $("<button>")
+                                .attr({
+                                    "data-toggle": "collapse",
+                                    "class": "btn btn-success glyphicon glyphicon-chevron-down",
+                                    "data-target": "#gradeDiv" + gradeRowIndex,
+                                })
+                                .on("click", function () {
+                                    $(this).next().collapse("toggle");
+                                    return false;
+                                });
+
+                            gradeRowIndex++;
+                            return result.add(customButton).add(collapsElement);
+                        }
+                    },
+                    {
+                        name: "Judges", title: "@Model["Assigned Judges"]", width: 150, type: "text",
+                        itemTemplate: function (item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+                            var judgeList = [''];
+                            if (item != null) {
+                                judgeList = item.split(',');
+                            }
+                            var judgeHtmlList = '';
+
+                            for (i = 0; i < judgeList.length; i++) {
+                                judgeHtmlList += '<li>' + judgeList[i] + '</li>';
+                            }
+
+                            var collapsElement = $(
+                                '<div id="judgeDiv' + judgeRowIndex + '" class="collapse in">' +
+                                '<ul>' + judgeHtmlList + '</ul>' +
+                                '</div>');
+
+                            var customButton = $("<button>")
+                                .attr({
+                                    "data-toggle": "collapse",
+                                    "class": "btn btn-success glyphicon glyphicon-chevron-down",
+                                    "data-target": "#judgeDiv" + judgeRowIndex,
+                                })
+                                .on("click", function () {
+                                    $(this).next().collapse("toggle");
+                                    return false;
+                                });
+
+                            judgeRowIndex++;
+
+                            return result.add(customButton).add(collapsElement);
+                        }
+                    },
+                    {
+                        name: "JudgesPreferred", title: "@Model["Which Judge/s Preferred this TASK"]", width: 100, type: "text", visible: true,
+                        itemTemplate: function (item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+                            var judgesPreferredList = [''];
+                            if (item != null) {
+                                judgesPreferredList = item.split(',');
+                            }
+                            var judgesPreferredHtmlList = '';
+
+                            for (i = 0; i < judgesPreferredList.length; i++) {
+                                judgesPreferredHtmlList += '<li>' + judgesPreferredList[i] + '</li>';
+                            }
+
+                            var collapsElement = $(
+                                '<div id="judgesPreferredDiv' + judgesPreferredRowIndex + '" class="collapse in">' +
+                                '<ul>' + judgesPreferredHtmlList + '</ul>' +
+                                '</div>');
+
+                            var customButton = $("<button>")
+                                .attr({
+                                    "data-toggle": "collapse",
+                                    "class": "btn btn-success glyphicon glyphicon-chevron-up",
+                                    "data-target": "#judgesPreferredDiv" + judgesPreferredRowIndex,
+                                })
+                                .on("click", function () {
+                                    $(this).next().collapse("toggle");
+                                    return false;
+                                });
+
+                            judgesPreferredRowIndex++;
+                            return result.add(customButton).add(collapsElement);
+                        }
+                    },
+
+                    { name: "Description", title: "@Model["Description"]", type: "text", width: 120, visible:false },
+
+
+            ]
+        });
+
+        $(".config-panel input[type=checkbox]").on("click", function () {
+            var $cb = $(this);
+            $("#@jsGridHtmlElementId").jsGrid("option", $cb.attr("id"), $cb.is(":checked"));
+        });
+
+        //$("#filtering").click();
+        $("#sorting1").click();
+    });
+
+</script>

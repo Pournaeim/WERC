@@ -1,0 +1,264 @@
+﻿@using Model.ViewModels.Test
+@using Model.ApplicationDomainModels
+
+@model  VmTestCollection
+
+
+@{
+    var draggable = Model.Draggable ? "card orginalCard" : "margin-div-container";
+    var callInitialDragable = Model.Draggable ? "initialDragable(" + @Html.Raw(@Model.OnItemDragged) + ");" : "";
+    var cardDetail = Model.Draggable ? "card-detail" : "";
+    var clickEvent = Model.Draggable ? "_dragableTestList_OnClick" : "_testList_OnClick";
+    var newTestStyle = "";
+
+}
+
+@if (Model.ShowSearchBox)
+{
+    <div class="form-group">
+        <input type="text" id="testSearch" class="form-control" placeholder="Search test here..." />
+    </div>
+}
+
+@if (Model.Draggable)
+{
+    @Html.Raw("<div id='launchPad' class='row'>");
+}
+@foreach (var item in Model.TestList)
+{
+    <div class="col-xs-12 col-sm-6 col-md-4 @draggable" id="@item.Id">
+        <div class="margin-div itemList-div-content" onclick="@clickEvent@Html.Raw("(this,")@item.Id)">
+            <div class="@newTestStyle"></div>
+
+            <div class="@cardDetail col-xs-12 col-sm-12 col-md-7">
+                <div class="card-item-detail">
+
+                    <span for="Name" class="card-item-detail-label">@Model["Name"]</span>
+
+                    <span id="Name" name="Name" class="card-item-detail-value" title=@Model["Test Name"]>
+                        @item.Name
+                    </span>
+
+                </div>
+                <div class="card-item-detail">
+                    <details>
+                        <summary><span class="card-item-detail-label">Description</span></summary>
+                        <div class="scrollable-description">
+                            @item.Description
+                        </div>
+                    </details>
+
+                </div>
+               
+
+            </div>
+            @if (Model.Draggable)
+            {
+                <p id="removeSection" class="col-xs-12 text-left hidden dropped-remove-item-position">
+                    <button type='button' id="@item.Id" class='btn btn-danger btn-sm btn-delete remove-draged-item-img'
+                            title="@Model["Delete"]" onclick='showDroppedDeleteItemConfirmDialog(this)'></button>
+                </p>
+            }
+            <div class="col-xs-offset-6 col-xs-6 text-right operation-key-bottom">
+
+                @if (Model.AllowEdit == true)
+                {
+                    <div class="col-xs-3 text-right">
+                        <a href='/@Model.DataController/ltestf/@item.Id' title="@Model["Edit"]" class='btn btn-success btn-sm btn-edit'></a>
+                    </div>
+                }
+
+                @if (Model.ReadOnlyForm == true)
+                {
+                    <div class="col-xs-3 text-right">
+                        <a href='/@Model.DataController/ltestf/@item.Id' title="@Model["Show"]" class='btn btn-success btn-sm btn-detail'></a>
+                    </div>
+                }
+
+                @if (Model.AllowDelete == true)
+                {
+                    <div class="col-xs-3 text-right">
+                        <button type='button' class='btn btn-danger btn-sm btn-delete'
+                                data-id="@item.Id" title="@Model["Delete"]"
+                                onclick='showDeleteTestConfirmDialog(this)'></button>
+                    </div>
+
+                }
+
+            </div>
+
+        </div>
+    </div>
+}
+@if (Model.Draggable)
+{
+    @Html.Raw("</div>");
+}
+
+@if (Model.ShowSearchBox)
+{
+    <script>
+        $(document).ready(function () {
+
+            if (deviceIsTouchable == false) {
+                $("#testSearch").focus();
+            }
+
+            $("#testSearch").val('@Model.SearchText');
+
+            $("#testSearch").keyup(function (e) {
+
+                if (e.keyCode != 13) {
+                    return;
+                }
+
+                var text = $("#testSearch").val();
+                loadTestData(text);
+
+            });
+
+            @callInitialDragable
+
+        });
+
+
+    </script>
+}
+
+<script>
+    var @Model.HtmlControlId = {
+      refresh : loadTestData,
+    }
+
+    function loadTestData(searchText) {
+        $.ajax({
+            type: "POST",
+            url: "/@Model.DataController/@Model.DataAction",
+            data:
+                {
+                    dataAction: '@Model.DataAction',
+                    dataController: '@Model.DataController',
+                    allowEdit: '@Model.AllowEdit.ToString().ToLower()',
+                    showSearchBox: '@Model.ShowSearchBox.ToString().ToLower()',
+                    allowDelete: '@Model.AllowDelete.ToString().ToLower()',
+                    testName: searchText,
+                    htmlControlId: '@Model.HtmlControlId',
+                    ParentHtmlControlId: '@Model.ParentHtmlControlId',
+                    onItemDragged: '@Model.OnItemDragged',
+                    OnItemSelected: '@Model.OnItemSelected',
+                    draggable: '@Model.Draggable.ToString().ToLower()',
+                },
+            dataType: "html",
+        }).done(function (response) {
+                $("#@Model.ParentHtmlControlId").html(response);
+            }).fail(function (data, textStatus, XMLHttpRequest) {
+                $("#@Model.ParentHtmlControlId").html(response);
+
+            });
+    }
+
+    function _testList_OnClick(thisDiv, id) {
+
+        $(".itemList-div-content").each(function (index) {
+            $(this).removeClass("select-item-hihghlight");
+
+        });
+
+        $(thisDiv).addClass("select-item-hihghlight");
+
+        @{
+            var callFunction = "";
+            if (Model.OnItemSelected != "")
+            {
+                callFunction = Model.OnItemSelected  + Html.Raw("(id);");
+            }
+            @callFunction
+        }
+    }
+
+
+    function _dragableTestList_OnClick(thisDiv, id) {
+
+        $("#launchPad").children().find(".itemList-div-content").each(function (index) {
+            $(this).removeClass("select-item-hihghlight");
+
+        });
+
+        $(thisDiv).addClass("select-item-hihghlight");
+
+        @{
+            var callFunctionDragable = "";
+            if (Model.OnItemSelected != "")
+            {
+                callFunctionDragable = Model.OnItemSelected  + Html.Raw("(id);");
+            }
+
+            @callFunctionDragable
+        }
+    }
+
+    function showDeleteTestConfirmDialog(sender) {
+
+        var confirmDeleteDialogObjec =
+            {
+                title: "Delete Test",
+                sender: sender,
+                width: "",
+                height: "auto",
+                dialogConfirmId: "confirmDialogContainer",
+                yesButton:'@Model["Yes"]',
+                noButton: '@Model["No"]',
+                acceptCallbak: function (sender) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/test/dt",
+                        data: { id: $(sender).data("id") }
+                    }).done(function (result) {
+                        alert(result.message);
+                            window.location.reload();
+
+                            @Html.Raw(@Model.HtmlControlId +".refresh()");
+                        });
+                },
+                rejectCallbak: function () { }
+            }
+
+        openConfirmDialog(confirmDeleteDialogObjec);
+    }
+
+    function showDroppedDeleteItemConfirmDialog(sender) {
+
+        var confirmDeleteDroppedDialogObjec =
+            {
+                title: "Delete Test",
+                sender: sender,
+                width: "",
+                height: "auto",
+                dialogConfirmId: "confirmDialogContainer",
+                yesButton:'@Model["Yes"]',
+                noButton: '@Model["No"]',
+                acceptCallbak: function (sender) {
+                    $(sender).parent().parent().parent().fadeOut("slow", function () {
+
+                        $(this).remove();
+                        var id = $(this).attr("id");
+
+                        $("#launchPad").children("div[id=" + id + "]").find(".new-sign").removeClass("hidden");
+
+
+                        @if (!string.IsNullOrEmpty(@Model.OnItemDragged))
+                        {
+                            @Html.Raw(@Model.OnItemDragged + "()")
+                        }
+                    });
+                },
+                rejectCallbak: function (sender) { }
+            }
+
+        openConfirmDialog(confirmDeleteDroppedDialogObjec);
+    }
+
+</script>
+
+

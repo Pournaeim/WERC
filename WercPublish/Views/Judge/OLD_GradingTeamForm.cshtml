@@ -1,0 +1,115 @@
+﻿
+@model Model.ViewModels.Grade.Grading.VmGradingManagement
+
+@{
+    ViewBag.Title = "Grading Teams";
+    Layout = "~/Views/Shared/_LayoutJudge.cshtml";
+}
+
+<link href="~/Resources/Controls/google-code-prettify/prettify.css" rel="stylesheet" />
+<script src="~/Resources/Controls/google-code-prettify/prettify.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script src="~/Resources/Scripts/mindmup-editabletable.js"></script>
+<link href="~/Resources/CSS/_grading.css" rel="stylesheet" />
+<h2>
+    @DateTime.Now.Year Environmental Design Contest
+</h2>
+
+<div class="row">
+    @foreach (var grade in Model.GradingTypeList)
+    {
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+            <h3>@grade.GradeType</h3>
+            @Html.Partial("~/Views/Judge/_OLD_GradingTable.cshtml", grade)
+        </div>
+    }
+</div>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-sm-10 col-xs-12 col-md-6 col-lg-4">
+        <input type="button" value="@Model["Save and Submit"]" class="btn btn-primary" onclick="submitData();" />
+    </div>
+</div>
+<script>
+    var gradingTableIds = [];
+    @{
+        int i = 0;
+        foreach (var grade in Model.GradingTypeList)
+        {
+            @Html.Raw("gradingTableIds[" + i++ + "] = " + "'gradingTable" + grade.GradeId + "';\n");
+        }
+    }
+
+    function submitData() {
+
+          HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        var gradingObject =
+            {
+                TeamId: 0,
+                GradeDetailId: 0,
+                Point: 0,
+                Description: "",
+            };
+
+        var gradingObjectArray = [];
+
+        for (i = 0; i < gradingTableIds.length; i++) {
+
+            var dataRows = $("#" + gradingTableIds[i]).find('tbody tr');
+
+            dataRows.each(function () {
+
+                var row = $(this);
+
+                var columns = row.find("td.grading-point");
+
+                for (var j = 0; j < columns.length; j++) {
+
+                    gradingObject = new Object();
+
+                    gradingObject.TeamId = parseInt($(row).data("team_id"));
+                    gradingObject.GradeDetailId = parseInt($(columns[j]).data("grade_detail_id"));
+                    gradingObject.Point = parseFloat($(columns[j]).text());
+                    gradingObject.Description = $(row).find("input[type='hidden']").val();
+
+                    gradingObjectArray.push(gradingObject);
+
+                }
+            });
+        }
+
+        jsonData = JSON.stringify(
+            {
+                "clientGrading": gradingObjectArray,
+            });
+
+        $.ajax(
+            {
+                type: 'POST',
+                contentType: 'application/json',
+                url: '/grade/sg',
+                data: jsonData,
+
+            }).done(function (data, textStatus, jqXHR) {
+                if (data.success == true) {
+                    alert("Grades has been saved.");
+                    HoldOn.close();
+                }
+                else {
+                    alert("Error in operation...");
+                    HoldOn.close();
+                }
+            }).fail(function (xhr, status) {
+            var jsonObject = JSON.parse(xhr.responseText);
+            if (jsonObject.hasError === true) {
+                alert(jsonObject.message);
+                }
+                HoldOn.close();
+
+        });
+    }
+</script>

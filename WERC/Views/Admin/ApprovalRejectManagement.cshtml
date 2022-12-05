@@ -1,0 +1,73 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Admin;
+
+@model VmApprovalRejectManagement
+@{
+    ViewBag.Title = "Approval Reject Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Model.ReadOnly = false;
+}
+
+<h2>@Model["Registration Request List"]</h2>
+<hr />
+
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+
+
+<div id="advisorPanel" class="panel panel-primary">
+    <div class="panel-heading" data-toggle="collapse" data-parent="#advisorPanel" data-target="#advisorPanelListGroup">
+        <div class="panel-title">
+            <span>Faculty Advisor List </span>
+            <b class="pull-right fa fa-id-card libreMenuIcon"> </b>
+        </div>
+    </div>
+    <ul class="list-group collapse out" id="advisorPanelListGroup">
+
+        <li class="list-group-item librePanelListGroupItem">
+            @Html.Partial("PartialViewApprovalRejectAdvisorGrid", new VmJsGrid()
+        {
+            DataAction = "gapbf",
+            DataController = "Person",
+
+            EditAction = "Edit",
+            EditController = "Admin",
+
+            ReadOnly = false,
+            HtmlElementId = "ApprovalRejectAdvisor_ApprovalRejectAdvisorJsGrid",
+            CurrentUserRoles = Model.CurrentUserRoles
+        })
+        </li>
+    </ul>
+</div>
+<div id="judgePanel" class="panel panel-primary">
+
+    <div class="panel-heading" data-toggle="collapse" data-parent="#judgePanel" data-target="#judgePanelListGroup">
+        <div class="panel-title">
+            <span>Judge List </span>
+            <b class="pull-right libreMenuIcon"> </b>
+        </div>
+    </div>
+    <ul class="list-group collapse out" id="judgePanelListGroup">
+        <li class="list-group-item librePanelListGroupItem">
+            @Html.Partial("PartialViewApprovalRejectJudgeGrid", new VmJsGrid()
+        {
+            DataAction = "gjpbf",
+            DataController = "Person",
+
+            EditAction = "Edit",
+            EditController = "Admin",
+
+            ReadOnly = false,
+            HtmlElementId = "ApprovalRejectJudge_ApprovalRejectJudgeJsGrid",
+            CurrentUserRoles = Model.CurrentUserRoles
+        })
+        </li>
+    </ul>
+</div>

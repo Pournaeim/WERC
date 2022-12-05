@@ -1,0 +1,18 @@
+﻿[
+  {
+    "outputFile": "Resources/SCSS/text-cicle.css",
+    "inputFile": "Resources/SCSS/text-cicle.scss"
+  },
+  {
+    "outputFile": "Resources/SCSS/tab.css",
+    "inputFile": "Resources/SCSS/tab.scss"
+  },
+  {
+    "outputFile": "Resources/SCSS/minimal-tab.css",
+    "inputFile": "Resources/SCSS/minimal-tab.scss"
+  },
+  {
+    "outputFile": "Resources/SCSS/text-circle.css",
+    "inputFile": "Resources/SCSS/text-circle.scss"
+  }
+]

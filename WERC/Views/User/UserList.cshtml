@@ -1,0 +1,527 @@
+﻿@model Model.ViewModels.User.VmUserList
+
+@{
+    ViewBag.Title = "UserList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var rowNo = 1;
+}
+<div class="col-xs-12">
+    <h2>User List</h2>
+
+    <div class="form-group">
+        <input type="text" id="userSearch" class="form-control" placeholder="Search user/s ..." />
+    </div>
+    <div id="externalPager">Total rows: @Model.Users.Count</div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayName(@Model["Row No"])
+                </th>
+                <th>
+                    @Html.DisplayName(@Model["User Name/E-Mail"])
+                </th>
+                  @*<th>
+                    @Html.DisplayName(@Model["E-Mail"])
+                </th>*@
+                <th>
+                    @Html.DisplayName(@Model["First/Last Name"])
+                </th>
+                <th>
+                    @Html.DisplayName(@Model["Task/s"])
+                </th>
+
+                <th>
+                    @Html.DisplayName(@Model["Register Date"])
+                </th>
+                <th>
+                    @Html.DisplayName(@Model["Roles"])
+                </th>
+
+                <th>
+                    @Html.DisplayName(@Model["Delete"])
+                </th>
+                <th>
+                    @Html.DisplayName(@Model["Replace"])
+                </th>
+                <th>
+                    @Html.DisplayName(@Model["Email Confirmation"])
+                </th>
+                <th>
+                    @Html.DisplayName(@Model["Sign In"])
+                </th>
+                <th>
+                    @Html.DisplayName(@Model["Set Password & Email"])
+                </th>
+                <th>
+                    @Html.DisplayName(@Model["Show Password"])
+                </th>
+
+            </tr>
+
+            @foreach (var item in Model.Users)
+            {
+                <tr>
+                    <td>
+                        @rowNo
+                        @{rowNo++;}
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                      @*<td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @foreach (var task in item.Tasks.Split(new char[] { ',' }))
+                        {
+                            <div style="width:70px">@task</div>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegisterDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(roleItem => item.RoleName)
+                    </td>
+                    <td>
+                        @if (item.RoleName.Contains("Admin") == false && item.RoleName.Contains("SafetyAdmin") == false)
+                        {
+
+                            <button type='button' onclick="deleteUser(this, '@item.Id')" class='btn btn-danger'>Delete</button>
+
+                        }
+                    </td>
+
+                    <td>
+                        @if (item.RoleName.Contains("Advisor") == true)
+                        {
+                            <button type='button' onclick="showReplaceAdvisorModalDialog('@item.Id')" class='btn btn-warning'>Replace</button>
+                        }
+                    </td>
+
+                    <td>
+                        @if (item.RoleName.Contains("Admin") == false && item.RoleName.Contains("SafetyAdmin") == false)
+                        {
+                            <button type='button' onclick="confirmEmail('@item.Id')" class='btn btn-primary'>Confirm email</button>
+                        }
+                    </td>
+
+                    <td>
+                        @if (item.RoleName.Contains("Admin") == false && item.RoleName.Contains("SafetyAdmin") == false)
+                        {
+                            <a href="/account/sibu/@item.Id" class="btn btn-primary" onclick="">Sign In</a>
+                        }
+                    </td>
+                    <td>
+                        @if (item.RoleName.Contains("Admin") == false && item.RoleName.Contains("SafetyAdmin") == false)
+                        {
+                        <button id="setUserDataButton" class="btn btn-primary"
+                                onclick="setUserData('@item.Id','@item.FullName', '@item.Email')">
+                            Set Password & Email
+                        </button>
+                        }
+                    </td>
+                    <td>
+                        @if (item.RoleName.Contains("Admin") == false && item.RoleName.Contains("SafetyAdmin") == false)
+                        {
+                            <button id="showUserDataButton" class="btn btn-primary" onclick="showUserData('@item.Id')">Show Password</button>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+</div>
+<!--Modal start-->
+<div class="modal modal fade" id="replaceModal" tabindex="-1"
+     role="dialog" aria-labelledby="contact-title-font" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--review for image quality-->
+
+            <div class="modal-header">
+                <button type="button" class="close contact-close" data-dismiss="modal" aria-label="Close">
+                    <span class="close-contact" aria-hidden="true">&times;</span>
+                </button>
+                <h3>
+                    Replace Advisor
+                </h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-xs-6">
+                        <form>
+                            <div class="col-xs-12">
+                                <input id="UserId" type="hidden" />
+                                <div class="form-group">
+                                    <label for="FirstName" class="control-label">@Model["First Name"]:</label>
+                                    <input id="FirstName" name="FirstName" type="text" class="form-control" autoComplete="new-password" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="LastName" class="control-label">@Model["Last Name"]:</label>
+                                    <input id="LastName" name="LastName" type="text" class="form-control" autoComplete="new-password" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="Email" class="control-label">@Model["Email"]:</label>
+                                    <input id="Email" name="Email" type="text" class="form-control" autoComplete="new-password" required />
+                                </div>
+
+                            </div>
+                            <div class="col-xs-12 text-center">
+
+                                <input type="submit" id="replaceButton" class="btn btn-lg btn-primary" value="Save" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+    </div>
+</div>
+
+<div class="modal modal fade" id="setUserDataModal" tabindex="-1"
+     role="dialog" aria-labelledby="contact-title-font" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--review for image quality-->
+
+            <div class="modal-header">
+                <button type="button" class="close contact-close" data-dismiss="modal" aria-label="Close">
+                    <span class="close-contact" aria-hidden="true">&times;</span>
+                </button>
+                <h3>
+                    Set Password & Email
+                </h3>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-xs-6">
+                        <form>
+                            <div class="col-xs-12">
+                                <input id="dataUserId" type="hidden" />
+                                <div class="form-group">
+                                    <label for="userName" class="control-label">@Model["Name"]:</label>
+                                    <label id="userName" class="form-control">@Model["Name"]:</label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="userEmail" class="control-label">@Model["Email"]:</label>                                    
+                                    <input id="userEmail" name="userEmail" type="text" 
+                                           class="form-control" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="userPassword" class="control-label">@Model["Password"]:</label>
+                                    <input id="userPassword" name="LastName" type="text" class="form-control" autoComplete="new-password" required />
+                                </div>
+
+                            </div>
+                            <div class="col-xs-12 text-center">
+
+                                <input type="button" id="setPasswordButton" class="btn btn-lg btn-primary" value="Save" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+    </div>
+</div>
+<!--Modal end-->
+<script>
+    $(document).ready(function () {
+
+        $("#userSearch").keyup(function (e) {
+
+            if (e.keyCode != 13) {
+                return;
+            }
+            if ($("#userSearch").val() == '') {
+                location.href = "/user/ul";
+                return;
+            }
+
+            location.href = "/user/su?searchText=" + $("#userSearch").val();
+
+        });
+
+    });
+
+    function confirmEmail(userId) {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/user/ci",
+            data: { userId: userId },
+        }).done(function (response) {
+
+            if (response.result == true) {
+
+                alert("Email has been confirmed");
+                HoldOn.close();
+            }
+            else
+            {
+                alert("Email has not been confirmed");
+                HoldOn.close();
+            }
+        });
+    }
+
+    function assignStudentRole(userId) {
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/user/asr",
+            data: { userId: userId },
+        }).done(function (response) {
+
+            if (response.result == true) {
+
+                alert("Role has been assigned");
+                location.href = "/user/ul";
+
+                HoldOn.close();
+            }
+            else
+            {
+                alert("Email has not been assigned");
+                HoldOn.close();
+            }
+        });
+    }
+
+
+    function deleteUser(sender, userId) {
+
+        var deleteUserConfirmationDialogObjec =
+           {
+               title: 'Warning...',
+               message: 'Are you sure you want to delete this user?',
+               sender: sender,
+               width: "400",
+               height: "auto",
+               dialogConfirmId: "confirmDialogContainer",
+               yesButton: '@Model["Ok"]',
+               noButton: '@Model["Cancel"]',
+               acceptCallbak: function (sender) {
+
+                   var uid = userId;
+
+                   HoldOn.open({
+                       theme: 'sk-cube-grid',
+                       message: "<h4>@Model["Please wait..."]</h4>"
+                   });
+                    $.ajax({
+                        type: "POST",
+                        url: "/user/du",
+                        data: { userId: userId },
+                    }).done(function (response) {
+                        if (response.result == true) {
+                            alert("Operation has been successful.");
+                            location.href = "/user/ul";
+                        }
+                        else
+                        {
+                            alert(response.message);
+                            HoldOn.close();
+                        }
+
+
+                    });
+                },
+
+                rejectCallbak: function (sender) { }
+            }
+
+            openConfirmDialog(deleteUserConfirmationDialogObjec);
+
+    }
+</script>
+
+<script>
+
+    function showReplaceAdvisorModalDialog(userId){
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/person/gui",
+            type: 'POST',
+            data: {
+                userId: userId,
+            },
+            datatype: "json",
+        }).done(function (result) {
+            $("#UserId").val(userId);
+
+            $("#FirstName").val(result.FirstName);
+            $("#LastName").val(result.LastName);
+            $("#Email").val(result.Email);
+
+            $("#replaceModal").modal();
+
+            HoldOn.close();
+
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            alert("Operation has been failed");
+
+            HoldOn.close();
+        });
+    }
+
+    $("#replaceButton").click(function () {
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/person/ra",
+            type: 'POST',
+            data: {
+                userId: $("#UserId").val(),
+                firstName: $("#FirstName").val(),
+                lastName: $("#LastName").val(),
+                Email: $("#Email").val(),
+
+            },
+            datatype: "json",
+        }).done(function (result) {
+            alert("Advisor has been replaced.");
+            $("#replaceModal").modal("hide");
+            HoldOn.close();
+
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            alert("Operation has been failed");
+            $("#replaceModal").modal('hide');
+
+            HoldOn.close();
+        });
+    });
+
+    function showUserData(userId) {
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/user/gp",
+            type: 'POST',
+            data: { userId: userId },
+            datatype: "json",
+        }).done(function (response) {
+
+            copyToClipboard(response.result)
+            alert("Password is copied to clipboard\nPassword: " + response.result);
+
+            HoldOn.close();
+
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            alert("Operation has been failed");
+
+            HoldOn.close();
+        });
+    }
+
+    function setUserData(userId, fullName, email){
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/user/gp",
+            type: 'POST',
+            data: {
+                userId: userId,
+            },
+            datatype: "json",
+            async:false,
+        }).done(function (response) {
+
+            $("#dataUserId").val(userId);
+            $("#userName").text(fullName);
+
+            $("#userPassword").val(response.result);
+            $("#userEmail").val(email);
+
+            $("#setUserDataModal").modal();
+
+            HoldOn.close();
+
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+            alert("Operation has been failed");
+
+            HoldOn.close();
+        });
+    }
+
+    $("#setPasswordButton").click(function () {
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/user/sd",
+            type: 'POST',
+            data: {
+                userId: $("#dataUserId").val(),
+                password: $("#userPassword").val(),
+                email: $("#userEmail").val(),
+            },
+            datatype: "json",
+        }).done(function (response) {
+
+            alert("Password/Email has been replaced.");
+            window.location.reload();
+            $("#setUserDataModal").modal("hide");
+
+            HoldOn.close();
+
+        }).fail(function (xhr, ajaxOptions, thrownError) {
+
+            alert("Operation has been failed");
+            $("#setUserDataModal").modal('hide');
+
+            HoldOn.close();
+        });
+    });
+
+
+</script>

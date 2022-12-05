@@ -1,0 +1,468 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+    var detailsFormHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridInsertDataUrl = Url.Action(Model.CreateAction, Model.CreateController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var jsGridDeleteDataUrl = Url.Action(Model.DeleteAction, Model.DeleteController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+    var AllowUpdate = (!Model.ReadOnly).ToString().ToLower();
+
+}
+<div class="row">
+
+    <div id="externalPager"></div><div id="@jsGridHtmlElementId"></div>
+
+    @*hidden elements sectio start*@
+
+    <div class="hidden">
+        <div class="config-panel">
+            <label><input id="heading" type="checkbox" checked /> Heading</label>
+            <label><input id="filtering" type="checkbox" /> Filtering</label>
+            <label><input id="inserting" type="checkbox" /> Inserting</label>
+            <label><input id="editing" type="checkbox" checked /> Editing</label>
+            <label><input id="paging" type="checkbox" checked /> Paging</label>
+            <label><input id="sorting" type="checkbox" /> Sorting</label>
+            <label><input id="selecting" type="checkbox" checked /> Selecting</label>
+        </div>
+        <div id="dialogConfirm" title="Delete...">
+            Are you sure?
+        </div>
+    </div>
+
+    <div id="@detailsDialogHtmlElementId" class="row @Display">
+
+        <form id="@detailsFormHtmlElementId" role="form">
+            <input type="hidden" id="Id" name="Id" />
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label for="Name" class="control-label">@Model["University Name"]:</label>
+                    <input id="Name" name="Name" type="text" class="form-control" />
+                </div>
+
+            </div>
+
+            <div class="col-xs-12 text-center">
+                <button type="submit" id="save" class="btn btn-primary btn-group">@Model["Update"]</button>
+                <button type="button" id="cancel" class="btn btn-primary btn-group" onclick='$("#@detailsDialogHtmlElementId").dialog("close");'>@Model["Cancel"]</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script src="~/Resources/Scripts/moment.min.js"></script>
+<script src="~/Resources/Scripts/moment-with-locales.min.js"></script>
+<script src="~/Resources/Scripts/bootstrap-datetimepicker.min.js"></script>
+<link href="~/Resources/CSS/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+
+<script>
+    function validateTeam() {
+        return true;
+    }
+
+    var @jsGridObjectId = {
+
+        FirstLoad: true,
+
+        LoadDataUrl: "@jsGridLoadDataUrl",
+
+        LoadData:function(){
+            $("#@jsGridHtmlElementId").jsGrid("render");
+        }
+    };
+
+    $(function () {
+
+        InitJsGridDateTimeField();
+        var gridRowIndex = 0;
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            editing: @AllowUpdate,
+            autoload: true,
+            paging: true,
+            pageSize: 1500,
+            pageIndex: 1,
+            pageButtonCount: 10,
+            datatype: "json",
+            updateOnResize: false,
+            rowDoubleClick: function (args) {
+
+                showDetailsDialog("Edit", args.item);
+            },
+            rowClick: function (args) {
+            },
+            controller: {
+                loadData: function (filter) { gridRowIndex = 0;
+
+                    if (@jsGridObjectId@Html.Raw(".FirstLoad") == true) {
+                        @jsGridObjectId@Html.Raw(".FirstLoad") = false;
+                        return;
+                    }
+                    debugger
+                    return $.ajax({
+                        type: "POST",
+                        url: @jsGridObjectId@Html.Raw(".LoadDataUrl"),
+                        data: {filterItem: filter }
+                    });
+                }
+            },
+            insertItem: function (item) {
+                debugger
+                var d = $.Deferred();
+                $.ajax({
+                    type: "POST",
+                    url: "@jsGridInsertDataUrl",
+                    data: item
+                }).done(function (response) {
+                    if (response.success === false) {
+                        alert(response.message);
+                    }
+                    d.resolve(response.value);
+
+                    }).fail(function (response) {
+                        alert(response.message);
+                    });
+
+                return d.promise();
+
+            },
+            updateItem: function (item) {
+                debugger
+
+                //var dateString = item.DueDate;
+                //var dateObj = new Date(dateString);
+                //var momentObj = moment(dateObj);
+                //var momentString = momentObj.format('YYYY/MM/DD hh:mm:ss');
+                //item.DueDate = momentString;
+
+                var d = $.Deferred();
+
+                $.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    url: "@jsGridUpdateDataUrl",
+                    cache: false,
+                    data: { model: item }
+                }).done(function (response) {
+                        debugger
+                        alert(response.message);
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    });
+
+                return d.promise();
+
+            },
+            deleteItem: function (item) {
+
+                var d = $.Deferred();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@jsGridDeleteDataUrl",
+                    data: item
+                }).done(function (response) {
+                    if (response.success == false) { alert(response.message); }
+                    }).fail(function (response) {
+                        alert(response.message);
+                    });
+
+                return d.promise();
+            },
+            onRefreshing: function (args) {gridRowIndex = 0;}, fields: [
+               {
+                    name: "Id", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                    itemTemplate: function (value, item) {
+
+                        var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                        var customDiv = $("<div class='text-center'>" + (gridRowIndex + 1) + "</div>");
+                        gridRowIndex++;
+                        $("#externalPager").html('Total rows: ' + gridRowIndex);
+
+                        return result.add(customDiv);
+                    }
+                },
+                { name: "Name", title: "@Model["University Name"]", type: "text", visible: true, width: 100 },
+                    {
+                        type: "control",
+                        modeSwitchButton: false,
+                        editButton: false,
+                        deleteButton: false,
+                        headerTemplate: function () {
+                            return $("<button>").attr("type", "button").attr("title", "Add University").text("Add University")
+                                .on("click", function () {
+                                    showDetailsDialog("Add", {});
+                                });
+                        },
+
+                        itemTemplate: function (value, item) {
+                            var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var $customDeleteButton = $("<button>").attr(
+                                {
+                                    class: "customGridDeletebutton jsgrid-button jsgrid-delete-button"
+                                }).click(function (e) {
+
+
+                                    $("#dialogConfirm").dialog({
+                                        resizable: false,
+                                        height: "auto",
+                                        width: 400,
+                                        modal: true,
+                                        dialogClass: "no-close", //removes X from dialog
+                                        buttons: {
+                                            'YesButton' : {
+                                                click:function() {
+                                                    e.stopPropagation();
+                                                    $("#@jsGridHtmlElementId").jsGrid("deleteItem", item);
+                                                    $("#@jsGridHtmlElementId").jsGrid("render");
+                                                    $(this).dialog("close");
+                                                },
+                                                text: '@Model["Yes"]',
+                                                class: "btn btn-primary"
+                                            },
+                                            'NoButton': {
+                                                click: function () {
+                                                    e.stopPropagation();
+                                                    $(this).dialog("close");
+                                                },
+                                                text: '@Model["No"]',
+                                                class: "btn btn-primary"
+                                            }
+                                        },
+                                        open: function () {
+                                            $('.ui-widget-overlay').addClass('custom-overlay');
+                                        }
+                                    });
+                                });
+
+                            return $result.add($customDeleteButton);
+                        }
+                    }
+            ]
+        });
+
+        $("#@detailsDialogHtmlElementId").dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: true,
+            width: 'auto',
+            height: '650',
+            resize: "auto",
+            dialogClass: "no-close", //removes X from dialog
+            close: function () {
+                $("#@detailsFormHtmlElementId").validate().resetForm();
+                $("#@detailsFormHtmlElementId").find(".error").removeClass("error");
+            },
+            open: function () {
+                $('.ui-widget-overlay').addClass('custom-overlay');
+            }
+        });
+
+        $("#@detailsFormHtmlElementId").validate({
+            rules: {
+                Name: "required",
+
+            },
+            messages: {
+                Name: "Please enter University Name",
+
+            },
+            invalidHandler: function () {
+                validateTeam();
+                },
+            submitHandler: function () {
+
+                formSubmitHandler();
+            }
+        });
+
+        var formSubmitHandler = $.noop;
+
+        var showDetailsDialog = function (dialogType, client) {
+
+            formSubmitHandler = function () {
+                saveClient(client, dialogType === "Add");
+            };
+
+            if (dialogType === "Add") {
+
+                client.Id = "";
+                $("#Id").val('');
+                $("#save").text("Add");
+
+                $("#@detailsDialogHtmlElementId").dialog("option", "title", '@Model["Add New University"]')
+                    .dialog("open");
+            }
+            else {
+
+                $("#Id").val(client.Id);
+                $("#Name").val(client.Name);
+
+                $("#@detailsDialogHtmlElementId").dialog("option", "title", '@Model["Update University"]').dialog("open");
+            }
+        };
+
+        var saveClient = function (client, isNew) {
+
+            if (validateTeam() == false) return;
+
+            $.extend(client, {
+                Id: $("#Id").val(),
+                Name: $("#Name").val(),
+
+            });
+
+            DoOperation(isNew, client);
+
+        };
+
+        $(".config-panel input[type=checkbox]").on("click", function () {
+            var $cb = $(this);
+            $("#@jsGridHtmlElementId").jsGrid("option", $cb.attr("id"), $cb.is(":checked"));
+        });
+
+
+        $("#filtering").click();
+        $("#sorting").click();
+});
+
+    function DoOperation(isNew, client) {
+        $("#@jsGridHtmlElementId").jsGrid(isNew ? "insertItem" : "updateItem", client);
+        $("#@detailsDialogHtmlElementId").dialog("close");
+        $("#@jsGridHtmlElementId").jsGrid("render");
+    }
+
+    function InitJsGridDateTimeField() {
+
+        var jsGridCustomDateTimeField = function (config) {
+            console.log('on init field');
+            jsGrid.Field.call(this, config);
+        };
+
+        jsGridCustomDateTimeField.prototype = new jsGrid.Field({
+            sorter: function (date1, date2) {
+                console.log('on sorting fild ' + date1 + ' ' + date2);
+                return new Date(date1) - new Date(date2);
+            },
+
+            itemTemplate: function (value) {
+                console.log('on init item template');
+                if (value === null) {
+                    return '';
+                } else {
+                    return moment(value).format('L LTS');
+                }
+            },
+
+            insertTemplate: function (value) {
+                console.log('on init insert template ' + moment());
+                this._insertPicker = $('<input>').datetimepicker({
+                    format: 'L LTS',
+                    defaultDate: moment(),
+                    widgetPositioning: {
+                        horizontal: 'auto',
+                        vertical: 'bottom'
+                    }
+                });
+                console.log('insert template created')
+                this._insertPicker.data('DateTimePicker').date(moment());
+                return this._insertPicker;
+            },
+
+            editTemplate: function (value) {
+                console.log('on init edit template');
+                this._editPicker = $('<input>').datetimepicker({
+                    format: 'L LTS',
+                    widgetPositioning: {
+                        horizontal: 'auto',
+                        vertical: 'bottom'
+                    }
+                });
+
+                if (value !== null) {
+                    this._editPicker.data('DateTimePicker').defaultDate(moment(value));
+                    this._editPicker.data('DateTimePicker').date(moment(value));
+                }
+                return this._editPicker;
+            },
+
+            insertValue: function () {
+                console.log('on get insert value');
+                var insertValue = this._insertPicker.data('DateTimePicker').date();
+                console.log('value: ' + insertValue);
+                if (typeof insertDate !== 'undefined' && insertDate !== null) {
+                    return insertDate.format('L LTS');
+                } else {
+                    return null;
+                }
+            },
+
+            editValue: function () {
+                console.log('on get edit value');
+                var editValue = this._editPicker.data('DateTimePicker').date();
+                if (typeof editValue !== 'undefined' && editValue !== null) {
+                    return editValue.format('L LTS');
+                } else {
+                    return null;
+                }
+            },
+            filterTemplate: function () {
+                var now = new Date();
+                var grid = this._grid;
+
+                this._fromPicker = $("<input id='fromDate'>").datetimepicker(
+                    {
+                        format: 'L LTS',
+                        //defaultDate: moment(),
+                        widgetPositioning: { horizontal: 'auto', vertical: 'bottom' }
+                    });
+
+                this._toPicker = $("<input id='toDate'>").datetimepicker({
+                    format: 'L LTS',
+                    //defaultDate: moment(),
+                    widgetPositioning: { horizontal: 'auto', vertical: 'bottom' }
+
+                });
+
+                this._fromPicker.keydown(function (e) {
+                    var keycode = (e.keyCode ? e.keyCode : e.which);
+                    if (keycode == '13') {
+                        grid.search();
+                        e.preventDefault();
+                    }
+                });
+
+                this._toPicker.keydown(function (e) {
+                    var keycode = (e.keyCode ? e.keyCode : e.which);
+                    if (keycode == '13') {
+                        grid.search();
+                        e.preventDefault();
+                    }
+                });
+
+                return $("<div>").append(this._fromPicker).append(this._toPicker);
+            },
+
+
+        });
+
+        jsGrid.fields.customDateTimeField = jsGridCustomDateTimeField;
+    }
+
+</script>
+
+

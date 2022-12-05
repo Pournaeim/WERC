@@ -1,0 +1,241 @@
+﻿@using Model.ViewModels.Grade
+@using Model.ApplicationDomainModels
+
+@model  VmGradeCollection
+
+
+@{
+    var draggable = Model.Draggable ? "card orginalCard" : "margin-div-container-min-height";
+    var callInitialDragable = Model.Draggable ? "initialDragable(" + @Html.Raw(@Model.OnItemDragged) + ");" : "";
+    var cardDetail = Model.Draggable ? "card-detail" : "";
+    var clickEvent = Model.Draggable ? "_dragableGradeList_OnClick" : "_gradeList_OnClick";
+    var newGradeStyle = "";
+
+}
+
+@if (Model.ShowSearchBox)
+{
+    <div class="form-group">
+        <input type="text" id="gradeSearch" class="form-control" placeholder="Search Score Sheet Here..." />
+    </div>
+}
+
+@if (Model.Draggable)
+{
+    @Html.Raw("<div id='launchPad' class='row'>");
+}
+@foreach (var item in Model.GradeList)
+{
+    <div class="col-xs-12 col-sm-6 col-md-3 @draggable" id="@item.Id">
+        <div class="margin-div itemList-div-content-min-height" onclick="@clickEvent@Html.Raw("(this,")@item.Id)">
+            <div class="@newGradeStyle"></div>
+            <div class="@cardDetail col-xs-12 col-sm-12 col-md-12">
+                <div class="card-item-detail">
+                    <span for="Name" class="card-item-detail-label">@Model["Score Sheet Name"]:</span>
+                    <span id="Name" name="Name" class="card-item-detail-value"> @item.Name</span>
+                </div>
+
+            </div>
+            @if (Model.Draggable)
+            {
+                <p id="removeSection" class="col-xs-12 text-left hidden dropped-remove-item-position">
+                    <button type='button' id="@item.Id" class='btn btn-danger btn-sm btn-delete remove-draged-item-img' title="@Model["Delete"]" onclick='showDroppedDeleteItemConfirmDialog(this)'></button>
+                </p>
+            }
+            <div class="col-xs-12 operation-key-bottom">
+
+                @if (Model.AllowEdit == true)
+                {
+                    <div class="col-xs-3">
+                        <a href='/@Model.DataController/lgef/@item.Id' title="@Model["Edit"]" class='btn btn-success btn-sm btn-edit'></a>
+                    </div>
+                }
+
+                @if (Model.ReadOnlyForm == true)
+                {
+                    <div class="col-xs-3">
+                        <a href='/@Model.DataController/lgef/@item.Id' title="@Model["Show"]" class='btn btn-success btn-sm btn-detail'></a>
+                    </div>
+                }
+
+                @if (Model.AllowDelete == true)
+                {
+                    <div class="col-xs-3">
+                        <button type='button' class='btn btn-danger btn-sm btn-delete' data-id="@item.Id" title="@Model["Delete"]" onclick='showDeleteGradeConfirmDialog(this)'></button>
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    </div>
+}
+@if (Model.Draggable)
+{
+    @Html.Raw("</div>");
+}
+
+@if (Model.ShowSearchBox)
+{
+    <script>
+        $(document).ready(function () {
+
+            if (deviceIsTouchable == false) {
+                $("#gradeSearch").focus();
+            }
+
+            $("#gradeSearch").val('@Model.SearchText');
+
+            $("#gradeSearch").keyup(function (e) {
+
+                if (e.keyCode != 13) {
+                    return;
+                }
+
+                var text = $("#gradeSearch").val();
+                loadGradeData(text);
+
+            });
+
+            @callInitialDragable
+
+        });
+
+
+    </script>
+}
+
+<script>
+    var @Model.HtmlControlId = {
+      refresh : loadGradeData,
+    }
+
+    function loadGradeData(searchText) {
+        $.ajax({
+            type: "POST",
+            url: "/@Model.DataController/@Model.DataAction",
+            data:
+                {
+                    dataAction: '@Model.DataAction',
+                    dataController: '@Model.DataController',
+                    allowEdit: '@Model.AllowEdit.ToString().ToLower()',
+                    allowDelete: '@Model.AllowDelete.ToString().ToLower()',
+                    gradeName: searchText,
+                    htmlControlId: '@Model.HtmlControlId',
+                    ParentHtmlControlId: '@Model.ParentHtmlControlId',
+                    onItemDragged: '@Model.OnItemDragged',
+                    OnItemSelected: '@Model.OnItemSelected',
+                    draggable: '@Model.Draggable.ToString().ToLower()',
+                },
+            dataType: "html",
+        }).done(function (response) {
+                $("#@Model.ParentHtmlControlId").html(response);
+            }).fail(function (data, textStatus, XMLHttpRequest)
+                {
+                $("#@Model.ParentHtmlControlId").html(response);
+            });
+    }
+
+    function _gradeList_OnClick(thisDiv, id) {
+
+        $(".itemList-div-content-min-height").each(function (index) {
+            $(this).removeClass("select-item-hihghlight-min-height");
+
+        });
+
+        $(thisDiv).addClass("select-item-hihghlight-min-height");
+
+        @{
+            var callFunction = "";
+            if (Model.OnItemSelected != "")
+            {
+                callFunction = Model.OnItemSelected  + Html.Raw("(id);");
+            }
+            @callFunction
+        }
+    }
+
+
+    function _dragableGradeList_OnClick(thisDiv, id) {
+
+        $("#launchPad").children().find(".itemList-div-content-min-height").each(function (index) {
+            $(this).removeClass("select-item-hihghlight");
+
+        });
+
+        $(thisDiv).addClass("select-item-hihghlight-min-height");
+
+        @{
+            var callFunctionDragable = "";
+            if (Model.OnItemSelected != "")
+            {
+                callFunctionDragable = Model.OnItemSelected  + Html.Raw("(id);");
+            }
+
+            @callFunctionDragable
+        }
+    }
+
+    function showDeleteGradeConfirmDialog(sender) {
+
+        var confirmDeleteDialogObjec =
+            {
+                title: "Delete Grade",
+                sender: sender,
+                width: "",
+                height: "auto",
+                dialogConfirmId: "confirmDialogContainer",
+                yesButton:'@Model["Yes"]',
+                noButton: '@Model["No"]',
+                acceptCallbak: function (sender) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/grade/dg",
+                        data: { id: $(sender).data("id") }
+                    }).done(function (result) {
+                            @Html.Raw(@Model.HtmlControlId +".refresh()");
+                            alert(result.message);
+                    });
+                },
+                rejectCallbak: function () { }
+            }
+
+        openConfirmDialog(confirmDeleteDialogObjec);
+    }
+
+    function showDroppedDeleteItemConfirmDialog(sender) {
+
+        var confirmDeleteDroppedDialogObjec =
+            {
+                title: "Delete Grade",
+                sender: sender,
+                width: "",
+                height: "auto",
+                dialogConfirmId: "confirmDialogContainer",
+                yesButton:'@Model["Yes"]',
+                noButton: '@Model["No"]',
+                acceptCallbak: function (sender) {
+                    $(sender).parent().parent().parent().fadeOut("slow", function () {
+
+                        $(this).remove();
+                        var id = $(this).attr("id");
+
+                        $("#launchPad").children("div[id=" + id + "]").find(".new-sign").removeClass("hidden");
+
+
+                        @if (!string.IsNullOrEmpty(@Model.OnItemDragged))
+                        {
+                            @Html.Raw(@Model.OnItemDragged + "()")
+                        }
+                    });
+                },
+                rejectCallbak: function (sender) { }
+            }
+
+        openConfirmDialog(confirmDeleteDroppedDialogObjec);
+    }
+
+</script>
+
+

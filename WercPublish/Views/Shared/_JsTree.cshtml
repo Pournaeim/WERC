@@ -1,0 +1,236 @@
+﻿
+@using Model.ToolsModels.Tree;
+@model VmJsTree
+@{
+    var doJsTreeOperationUrl = Url.Action(Model.OperationAction, Model.OperationController);
+    var getTreeJsonUrl = Url.Action(Model.DataAction, Model.DataController) + Model.DataActionParameter;
+
+    var searchBox = (@Model.ShowSearchBox == true) ? "search" : "";
+    var contextmenu = (@Model.ReadOnly == false) ? "contextmenu" : "";
+    var state = (@Model.ReadOnly == false) ? "state" : "";
+    //var state = (@Model.ReadOnly == false) ? "state" : "";
+    var jsTreeHtmlElementId = Model.HtmlElementId;
+    var jsTreeSearchHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+}
+<div class="col-xs-12">
+
+    @Html.TextBox(@jsTreeSearchHtmlElementId, "", new
+    {
+        @class = "form-control",
+        @placeholder = Model.SearchText,
+        @Id = jsTreeSearchHtmlElementId
+    })
+    <hr />
+
+</div>
+<div id='@jsTreeHtmlElementId' class="col-xs-12">
+</div>
+@*hidden elements sectio start*@
+<div class="hidden">
+    <div id="dialogConfirm" title="Delete...">
+        Are you sure?
+    </div>
+</div>
+@*hidden elements sectio end*@
+
+<script>
+    var selectedData = null;
+
+    $(document).ready(function () {
+        $("#@jsTreeHtmlElementId").hide();
+        var firstLoad = false;
+        $("#@jsTreeHtmlElementId").jstree({
+            "core": {
+                "multiple": false,
+                "check_callback": true,
+                'data': {
+                    'url': '@getTreeJsonUrl',
+                    "type": "GET",
+                    "dataType": "json",
+                    "contentType": "application/json; charset=utf8",
+                    'data': function (node) {
+                        return { 'id': node.id };
+                    }
+                },
+                'themes': {
+                    'variant': 'large'
+                }
+            },
+            "types": {
+                "default": {
+                    "icon": ''
+                },
+            },
+            "plugins": ["@searchBox","@contextmenu", "dnd", "@state", "types", "wholerow", "sort", "unique"],
+            "contextmenu": {
+                "items": function (o, cb) {
+                    var items = $.jstree.defaults.contextmenu.items();
+                    items["create"].label = '@Model["Add New"]';
+                    items["rename"].label = '@Model["Rename"]';
+                    items["remove"].label = '@Model["Delete"]' ;
+                    @*var cpp = items["ccp"];
+                    cpp.label = '@Model["Edit..."]';
+                    var subMenu = cpp["submenu"];
+                    subMenu["copy"].label = '@Model["Copy"]';
+                    subMenu["paste"].label = '@Model["Paste"]';
+                    subMenu["cut"].label = '@Model["Cut"]';*@
+                    return items;
+                }
+            }
+        }).on('delete_node.jstree', function (e, data) {
+
+            if (selectedData.node.parent == "#" || selectedData.node.children.length > 0) {
+                data.instance.refresh();
+                return;
+            }
+            $("#dialogConfirm").dialog({
+                resizable: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                dialogClass: "no-close",
+                buttons: {
+                    'YesButton' : {
+                        click:function() {
+                            e.stopPropagation();
+
+                            postJsTreeOperation('DeleteNode', data,
+                                function (result) {
+                                    data.instance.set_id(data.node, result.id);
+                                },
+                                function (result) {
+                                    data.instance.refresh();
+                                });
+
+                            $(this).dialog("close");
+
+                        },
+                        text: '@Model["Yes"]',
+                        class: "btn btn-primary"
+                    },
+                    'NoButton': {
+                        click: function () {
+                            e.stopPropagation();
+                            data.instance.refresh();
+                            $(this).dialog("close");
+                        },
+                        text: '@Model["No"]',
+                        class: "btn btn-primary"
+                    }
+                },
+                open: function () {
+                    $('.ui-widget-overlay').addClass('custom-overlay');
+                }
+            });
+
+            })
+            .on('create_node.jstree', function (e, data) {
+
+                postJsTreeOperation('CreateNode', data,
+                    function (result) {
+                        data.instance.set_id(data.node, result.id);
+                    },
+                    function (result) {
+                        data.instance.refresh();
+                    });
+
+            })
+            .on('rename_node.jstree', function (e, data) {
+
+                postJsTreeOperation('RenameNode', data,
+                    function (result) {
+                        data.instance.set_id(data.node, result.id);
+                    },
+                    function (result) {
+                        data.instance.refresh();
+                    });
+
+                @Model.OnItemSelected@Html.Raw("(data.node)");
+                @*@Model.OnItemSelected@Html.Raw("(data.node.id)");*@
+
+            })
+            .on('move_node.jstree', function (e, data) {
+            })
+            .on('copy_node.jstree', function (e, data) {
+            })
+            .on('changed.jstree', function (e, data) {
+            })
+            .on('dblclick.jstree', function (e) {
+                //var href = selectedData.node.a_attr.href;
+                //alert('selected node: ' + selectedData.node.text + ', href:' + href);
+
+                //// auto redirect
+                //if (href) {
+                //    window.location = href;
+                //}
+                // activate edit mode
+                //var inst = $.jstree.reference(selectedData.node);
+                //inst.edit(selectedData.node);
+            })
+            .on('select_node.jstree', function (e, data) {
+
+                $("#@Model.ExternalHtmlControlId").val(data.node.id);
+
+                selectedData = data;
+                $("#@Model.SelectedItemHtmlControlId").val(selectedData.node.id);
+
+                //Call Callbak function
+                if (firstLoad == false) {
+                    firstLoad = true;
+                    return;
+                }
+
+                @Model.OnItemSelected@Html.Raw("(data.node)");
+                @*@Model.OnItemSelected@Html.Raw("(selectedData.node.id)");*@
+
+            })
+            .on('ready.jstree',
+            function (e, data)
+            {
+                if (selectedData != null) {
+                @Model.OnItemSelected@Html.Raw("(data.node)");
+                @*@Model.OnItemSelected@Html.Raw("(selectedData.node.id)");*@
+                }
+                $("#@jsTreeHtmlElementId").show();
+                //$(this).jstree('close_all');
+            });
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        function postJsTreeOperation(operation, data, onDone, onFail) {
+
+            if (data.node.additionalData == undefined) {
+                data.node.additionalData = '@Model.AdditionalData';
+            }
+
+            $.post('@doJsTreeOperationUrl',
+                {
+                    'operation': operation,
+                    'id': data.node.id,
+                    'parentId': data.node.parent,
+                    'position': data.position,
+                    'text': data.node.text,
+                    'originalId': data.original ? data.original.id : data.node.original.id,
+                    'href': data.node.a_attr.href,
+                    'additionalData': data.node.additionalData
+                })
+                .done(function (result) {
+                    onDone(result);
+                })
+                .fail(function (result) {
+                    alert('failed.....');
+                    onFail(result);
+                });
+        }
+
+        var to = false;
+        $('#@jsTreeSearchHtmlElementId').keyup(function () {
+            if (to) { clearTimeout(to); }
+            to = setTimeout(function () {
+                var v = $('#@jsTreeSearchHtmlElementId').val();
+                $('#@jsTreeHtmlElementId').jstree(true).search(v);
+            }, 250);
+        });
+
+    });
+</script>
+

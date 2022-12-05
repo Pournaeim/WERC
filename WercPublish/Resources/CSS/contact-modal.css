@@ -1,0 +1,93 @@
+﻿
+.contact-us-form, .contact-us-form p {
+    font-family: sans-serif !important;
+    background-color: #ebe8de;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 1.3em;
+    color: #616060;
+}
+
+.contact-header-image {
+    background-image: url('../Images/contact4.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 220px;
+    position: relative;
+    top: -2px;
+}
+
+#contact-title-font {
+    font-family: sans-serif;
+    text-align: left;
+    font-size: 6em;
+    font-weight: bolder !important;
+    color: #fff !important;
+    text-shadow: 3px 3px 0px rgb(0, 0, 0) !important;
+    letter-spacing: normal !important;
+    padding-left: 10px;
+}
+
+@media (max-width: 768px) {
+    #contact-title-font {
+        font-size: 3em !important;
+        padding-left: 5px;
+    }
+}
+
+.contact-info {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.close-contact {
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 1.5em;
+    color:#fff;
+}
+    
+.contact-close {
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    opacity: 1;
+}
+
+.email-title-font {
+    font-size: 2em;
+    text-shadow: 1px 1px 1px #aaa !important;
+    font-weight: bold;
+    color: #2a2a2a;
+    text-align: center;
+}
+
+.contact-submit-btn {
+    background-color: #fff;
+    font-size: 0.9em;
+    width: 200px;
+    height: 30px;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px lightgray;
+    color: rgb(255, 69, 19);
+}
+
+    .contact-submit-btn:hover {
+        box-shadow: 0px 0px 1px #616060;
+        color: #fc681f;
+        background-color: #edecec;
+    }
+
+.contact-us-meet-us {
+    margin-top: -15px;
+    padding-bottom: 5px;
+    box-shadow: 0px 0px 150px 0px gray;
+    text-align: justify;
+}
+
+.contact-titles h2 b {
+    color: #616060;
+}

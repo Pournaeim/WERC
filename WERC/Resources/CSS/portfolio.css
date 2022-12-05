@@ -1,0 +1,187 @@
+/*
+    Theme Name: Tempo
+    Theme URL: https://bootstrapmade.com/tempo-free-onepage-bootstrap-theme/
+    Student: BootstrapMade.com
+    Student URL: https://bootstrapmade.com
+*/
+
+/**************************************
+link & button
+**************************************/
+.white {
+    color: #fff !important;
+}
+
+h1.cta-title {
+    font-size: 43px;
+}
+
+h1 {
+    font-size: 36px;
+}
+/**************************************
+Header
+**************************************/
+
+/* Portfolio */
+#portfolio {
+    /*background: #fff;
+    padding-top: 40px;
+    position: relative;*/
+}
+
+    #portfolio #portfolio-wrapper {
+        /*padding-right: 15px;*/
+    }
+
+    #portfolio #portfolio-flters {
+        padding: 0;
+        margin: 0 0 45px 0;
+        list-style: none;
+        text-align: center;
+    }
+
+        #portfolio #portfolio-flters li {
+            cursor: pointer;
+            margin: 0 10px;
+            display: inline-block;
+            padding: 10px 22px;
+            font-size: 12px;
+            line-height: 20px;
+            color: #666666;
+            /*border-radius: 4px;*/
+            text-transform: uppercase;
+            background: #f7f7f7;
+            margin-bottom: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+
+            #portfolio #portfolio-flters li:hover, #portfolio #portfolio-flters li.filter-active {
+                background: #ffc627;
+                color: #cfc7bd;
+            }
+
+    #portfolio .portfolio-item {
+        position: relative;
+        padding-right: 0;
+        height: 310px;
+        overflow: hidden !important;
+        margin-bottom: 10px;
+        transition: all 350ms ease;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+
+
+
+        #portfolio .portfolio-item img {
+            position: relative;
+            top: 0;
+            height: auto;
+            min-height: 370px !important;
+            width: 100%;
+            transition: all 600ms cubic-bezier(0.645, 0.045, 0.355, 1);
+            overflow-y: scroll;
+        }
+
+/*#portfolio .portfolio-item a {
+            display: block;
+            width: 100%;
+            margin: 0 !important;
+            padding: 0 !important;
+        }*/
+
+.journal-submit-btn {
+    position: relative;
+    top: 15px;
+}
+
+.about-this-journal {
+    color: #fff;
+    text-align: left !important;
+}
+
+#portfolio .portfolio-item .details {
+    background: #cfc7bd;
+    position: absolute;
+    width: 100%;
+    height: 118px;
+    bottom: -69px;
+    border-radius: 0px;
+    transition: all 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+    #portfolio .portfolio-item .details h4 {
+        font-size: 14px;
+        color: #fff;
+        padding: 8px;
+        margin: 0;
+    }
+
+    #portfolio .portfolio-item .details span {
+        display: block;
+        color: #fff;
+        font-size: 13px;
+        padding: 8px;
+        margin-right: 8px;
+    }
+
+#portfolio .portfolio-item:hover .details {
+    bottom: 0;
+}
+
+#portfolio .portfolio-item:hover img {
+    top: -177px;
+}
+
+@media (max-width:767px) {
+    #portfolio .portfolio-item {
+        position: relative;
+        padding: 0;
+        height: 100% !important;
+        overflow: hidden !important;
+        margin-bottom: 10px;
+        transition: all 350ms ease;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+
+        #portfolio .portfolio-item img {
+            position: relative;
+            top: 0;
+            height: 100% !important;
+            min-height: 370px !important;
+            width: 100%;
+            transition: all 600ms cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        #portfolio .portfolio-item .details {
+            background: #cfc7bd;
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            bottom: 0px;
+            border-radius: 0px;
+            transition: all 300ms cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        #portfolio .portfolio-item:hover img {
+            top: unset;
+        }
+
+        #portfolio .portfolio-item .details span {
+            display: block;
+            color: #fff;
+            font-size: 13px;
+            padding: 8px;
+            /*margin-right: 60px;*/
+        }
+
+    .journal-submit-btn {
+        position: relative;
+        top: 15px;
+        /*margin-right: 60px;*/
+    }
+}

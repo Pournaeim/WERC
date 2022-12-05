@@ -1,0 +1,164 @@
+﻿
+@using Model.Base
+@using WERC.Models
+
+@model BaseViewModel
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section mainMenu{
+    <!--menu-->
+    <nav class="nav navbar navbar-inverse">
+        <div class="container-fluid menu-height">
+            @*<div class="col-xs-2"></div>*@
+            <div class="row">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-um" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="partialLogin text-left visible-xs col-xs-6">
+                        @Html.Partial("_LoginPartial",
+                            new LoginPartialViewModel
+                            {
+                                LanguageDictionary = Model.LanguageDictionary,
+                                Layout = Model.Layout,
+                                WelcomeMessage = Model.WelcomeMessage,
+                                CurrentUserName = Model.CurrentUserName
+                            })
+                    </div>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-um">
+
+                    <ul class="nav navbar-nav col-sm-8 col-md-5">
+                        <li class=""><a href="~/Home">@Model["HOME"] </a></li>
+                        @*<li>
+                                <a href="#" data-toggle="modal" data-target="#contactUsModal">@Model["CONTACT"]</a>
+                            </li>
+                            <li>
+                                <a href="#" data-toggle="modal" data-target="#aboutUsModal">@Model["ABOUT US"]</a>
+                            </li>*@
+                        @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Admin"))
+                        {
+                            <li>
+                                <a href="~/Admin/index" class="animate-user-menu-item">
+                                    <span class="menuItemText">@Model["ADMIN"]</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="~/SafetyAdmin/index" class="animate-user-menu-item">
+                                    <span class="menuItemText">@Model["SAFETY ADMIN PANEL"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("SafetyAdmin"))
+                        {
+                            <li>
+                                <a href="~/SafetyAdmin/index" class="animate-user-menu-item">
+                                    <span class="menuItemText">@Model["SAFETY ADMIN PANEL"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Advisor"))
+                        {
+                            if (Model.UserEmailConfirmed == false)
+                            {
+                                @Html.Raw("<script>alert('Your Account is not confirmed.\\n'+" +
+                                                             "'Please check your email and confirm that you initiated this request.\\n'+" +
+                                                             "'If you have questions about the WERC Environmental Design Contest online platform, please call 575 - 646 - 8171 or email wercteams.nmsu.edu.');window.location = '/home/lo/1'</script>")
+                            }
+
+                            <li>
+                                <a href="~/advisor/tl" class="animate-user-menu-item">
+                                    <span class="menuItemText">@Model["FACULTY ADVISOR PANEL"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Judge"))
+                        {
+                            if (Model.UserEmailConfirmed == false)
+                            {
+                                @Html.Raw("<script>alert('Your account is not confirmed.\\n'+" +
+                                                             "'Please check your email and confirm that you initiated this request.\\n'+" +
+                                                             "'If you have questions about the WERC Environmental Design Contest online platform, please call 575 - 646 - 8171 or email wercteams.nmsu.edu.');window.location = '/home/lo/1'</script>")
+                            }
+
+                            <li>
+                                <a href="~/judge/index" class="animate-user-menu-item">
+                                    <span class="menuItemText">@Model["JUDGE PANEL"]</span>
+                                </a>
+                            </li>
+                        }
+                         @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Lab"))
+                        {
+                            if (Model.UserEmailConfirmed == false)
+                            {
+                                @Html.Raw("<script>alert('Your Account is not confirmed.\\n'+" +
+                                                             "'Please check your email and confirm that you initiated this request.\\n'+" +
+                                                             "'If you have questions about the WERC Environmental Design Contest online platform, please call 575 - 646 - 8171 or email wercteams.nmsu.edu.');window.location = '/home/lo/1'</script>")
+                            }
+
+                            <li>
+                                <a href="~/Lab/index" class="animate-user-menu-item">
+                                    <span class="menuItemText">@Model["LAB PANEL"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Leader"))
+                        {
+                            <li>
+                                <a href="~/leader/index" class="animate-user-menu-item">
+                                    <span class="menuItemText">@Model["LEADER PANEL"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("CoAdvisor"))
+                        {
+                            <li>
+                                <a href="~/coadvisor/index" class="animate-user-menu-item">
+                                    <span class="menuItemText">@Model["CO-ADVISOR PANEL"]</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Student"))
+                        {
+                            <li>
+                                <a href="~/Student" class="animate-user-menu-item">
+                                    <span class="menuItemText">@Model["STUDENT PANEL"]</span>
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </div>
+    </nav>
+}
+
+@RenderBody()
+
+<script>
+        $(document).ready(
+                    function () {
+                        $('.animate-user-menu-item').delay(1000)
+                            .animate({ backgroundColor: '#abeac9' }, 700, 'linear');
+
+                        setTimeout(
+                            function () {
+                                $('.animate-user-menu-item').css({ color: "#000 !important" });
+                            }, 1000);
+
+
+                        //$('.blink_me').fadeOut(500);
+                        //$('.blink_me').fadeIn(500);
+                    });
+</script>

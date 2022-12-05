@@ -1,0 +1,32 @@
+﻿.testimonial-text {
+    font-family: 'Poppins', sans-serif;
+    text-align: justify;
+}
+
+.testimonial_subtitle {
+    color: #0aaa7a;
+    font-size: 12px;
+}
+
+.testimonial_btn {
+    background-color: #373d4b !important;
+    color: #000 !important;
+}
+
+.seprator {
+    height: 2px;
+    width: 56px;
+    background-color: #0aaa7a;
+    margin: 7px 0 10px 0;
+}
+
+.testemonial-img {
+    width: 80px;
+}
+
+.blured-testimonial {
+    margin-top: 10px;
+    pointer-events: none;
+    opacity: 0.4;
+    text-shadow: 1px 2px 13px;
+}

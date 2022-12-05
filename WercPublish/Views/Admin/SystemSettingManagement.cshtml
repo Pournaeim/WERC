@@ -1,0 +1,47 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Admin;
+@using Model.ViewModels.SystemSetting;
+
+@model VmSystemSettingsManagement
+@{
+    ViewBag.Title = "Open/Close Registration Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Open/Close Registration Management</h2>
+<hr />
+
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+<h5>Double-click on the grid row to update 'Open/Close Registration Status'. </h5>
+
+<div class="col-xs-8">
+
+    @Html.Partial("PartialViewSystemSettingGrid", new VmJsGrid()
+{
+    DataAction = "gpbf",
+    DataController = "SystemSetting",
+
+    CreateAction = "cpr",
+    CreateController = "SystemSetting",
+
+    EditAction = "upr",
+    EditController = "SystemSetting",
+
+    DeleteAction = "dpr",
+    DeleteController = "SystemSetting",
+
+    ReadOnly = false,
+
+    HtmlElementId = "SystemSetting_SystemSettingJsGrid",
+    CurrentUserRoles = Model.CurrentUserRoles,
+    LanguageDictionary = Model.LanguageDictionary
+
+})
+</div>

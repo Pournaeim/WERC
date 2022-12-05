@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Oregano-Italic';
+    src: url('/Resources/Fonts/Oregano-Italic.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Oregano-Regular';
+    src: url('/Resources/Fonts/Oregano-Regular.ttf') format('truetype');
+}

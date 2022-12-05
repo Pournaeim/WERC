@@ -1,0 +1,14 @@
+﻿@model Model.ViewModels.Person.VmPerson
+
+@{
+    ViewBag.Title = "Update Profile";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+
+@Html.Partial("_UpdateProfile", Model)
+
+<script>
+    function loadStudentPanel() {
+        //location.href = '/Student/index';
+    }
+</script>

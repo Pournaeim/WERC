@@ -1,0 +1,292 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+    /**/
+
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+}
+
+<style>
+    .jsgrid-cell {
+        border: 1px solid #f3f3f3;
+        cursor: default !important;
+    }
+
+    .body-div {
+        display: none;
+        height: 50px !important;
+        cursor: pointer !important;
+    }
+
+    .subject-div {
+        word-wrap: break-word;
+        height: 50px !important;
+        cursor: pointer !important;
+    }
+</style>
+
+<script>
+    var lastFilter = "";
+
+</script>
+
+<div class="row">
+
+    <div id="externalPager"></div><div id="@jsGridHtmlElementId"></div>
+    <link href="~/Resources/CSS/modal-fixed-full-screen.css" rel="stylesheet" />
+    <div class="modal-fixed-full-screen">
+        <div class="modal fade" id="profileInfoModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn btn-default profile-info-modal-close-button text-left"> Close</button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="modal-title"><span id="profileNameSpan"></span> Profile Info</h4>
+
+                        <div id="profileDiv" class=""></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default profile-info-modal-close-button text-left">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="hidden">
+    <div class="config-panel">
+        <label><input id="heading" type="checkbox" checked /> Heading</label>
+        <label><input id="filtering" type="checkbox" /> Filtering</label>
+        <label><input id="inserting" type="checkbox" /> Inserting</label>
+        <label><input id="editing" type="checkbox" checked /> Editing</label>
+        <label><input id="paging" type="checkbox" checked /> Paging</label>
+        <label><input id="sorting" type="checkbox" /> Sorting</label>
+        <label><input id="selecting" type="checkbox" checked /> Selecting</label>
+    </div>
+
+</div>
+<div id="showBodyModal" class="modal modal-fullscreen fade" tabindex="-1"
+     role="dialog" aria-labelledby="About-title-font" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--review for image quality-->
+            <div class="modal-header">
+                <button type="button" class="close about-close" data-dismiss="modal" aria-label="Close">
+                    <span class="close-about" aria-hidden="true">&times;</span>
+                </button>
+                <div class="text-center">
+                    <h5>Body</h5>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <!---------Main Content Starts Here----------->
+
+                <div class="row text-justify">
+                    <div class="col-xs-12" id="bodyTextDiv">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    var userMemberFirstTimeLoad = [];
+    var judgeRowIndex = 0;
+    var labResultUrlRowIndex = 0;
+    var ActiveRowIndex = 0;
+    var firstTime = true;
+
+    function LoadExelData(lastFilter) {
+
+        return $.ajax({
+            type: "POST",
+            url: "@jsGridLoadDataUrl",
+            data: { lastFilter }
+        });
+    }
+      var gridRowIndex = 0;
+      var rowNo = 0;
+
+    function showBody(bodyDivId)
+    {
+
+        var bodyText = $("#" + bodyDivId).html();
+
+        $("#bodyTextDiv").html(bodyText);
+
+        $("#showBodyModal").modal("show");
+
+     }
+
+    $(document).ready(function () {
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            height: "auto",
+            editing: true,
+            inserting: false,
+            autoload: true,
+            paging: true,
+            pageSize: 100,
+            pageIndex: 0,
+            pageLoading: true,
+            datatype: "json",
+            updateOnResize: false,
+            rowClick: function (args) {
+
+            },
+            onDataLoading: function (args) {
+
+
+            },
+            onDataLoaded: function (args) {
+
+            },
+            controller: {
+                loadData: function (filter) { gridRowIndex = 0;
+                    debugger
+                    if (firstTime == false) {
+                        lastFilter = filter;
+                        return $.ajax({
+                            type: "POST",
+                            url: "@jsGridLoadDataUrl",
+                            data: { filter, index: filter.pageIndex, count: filter.pageSize }
+                        });
+                    }
+                    firstTime = false;
+
+                }
+            },
+
+            onRefreshing: function (args) {gridRowIndex = 0;}, fields:
+                [
+                    {
+                        type: "control",
+                        modeSwitchButton: false,
+                        editButton: false,
+                        deleteButton: false,
+                        clearFilterButton: false,
+                        visible: false,
+                        width:65,
+                        headerTemplate: function () {
+
+                            return $("<a id='excelFileUrl' href=''><img src ='/Resources/Images/excel.png' width='50px' title='Export To Excel'/></a>");
+                        },
+                        itemTemplate: function (value, item) {
+
+                            //var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+                            excelFileUrl = item.ExcelFileUrl;
+                            $("#excelFileUrl").attr("href", excelFileUrl);
+
+                            //var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+                            //rowNo++;
+                            //var customDiv = $("<div>" + rowNo + "</div>");
+                            //return result.add(customDiv);
+                        }
+                    },
+                    {
+                        name: "Id", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div class='text-center'>" + (gridRowIndex + 1) + "</div>");
+
+                            return result.add(customDiv);
+                        }
+                    },
+                    { name: "Date", title: "@Model["Send Date"]", type: "text", width: 120 },
+                    {
+                        name: "Subject", title: "@Model["Subject"]", type: "text", width: 220,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div " + "id='#subjectTextDiv_" +
+                                gridRowIndex + "' class='subject-div'>" + value + "</div>");
+
+
+                            return result.add(customDiv);
+                        }
+                    },
+
+                    {
+                        name: "Body", title: "@Model["Email's Body"]", type: "text", width: 120,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div " + "id='bodyTextDiv_" +
+                                gridRowIndex + "' class='body-div' title='Click on body to view the body in full'>" + value + "</div>");
+
+                            var divId = "bodyTextDiv_" + gridRowIndex;
+
+                            var customButton = $("<button onclick='showBody(\"" + divId + "\")'>Email's Body</button>")
+                                .attr({
+                                    "data-toggle": "collapse",
+                                    "class": "btn btn-primary",
+                                });
+                            gridRowIndex++;
+                            $("#externalPager").html('Total rows: ' + gridRowIndex);
+
+
+                            return result.add(customDiv).add(customButton);
+                        }
+                    },
+                    { name: "SenderName", title: "@Model["Sender"]", type: "text", width: 120 },
+                    { name: "SenderEmail", title: "@Model["Sender Email/User"]", type: "text", width: 200 },
+                    { name: "SenderRoleName", title: "@Model["Sender Role"]", type: "text", width: 120 },
+
+                    { name: "RecepientName", title: "@Model["Recepient"]", type: "text", width: 120 },
+                    { name: "RecepientEmail", title: "@Model["Recepient Email/User"]", type: "text", width: 200 },
+                    { name: "RecepientRoleName", title: "@Model["Recepient Role"]", type: "text", width: 120 },
+
+
+                ]
+        });
+
+        $(".config-panel input[type=checkbox]").on("click", function () {
+            var $cb = $(this);
+            $("#@jsGridHtmlElementId").jsGrid("option", $cb.attr("id"), $cb.is(":checked"));
+        });
+
+        $("#filtering").click();
+        $("#sorting").click();
+
+        @*$("#@jsGridHtmlElementId").jsGrid(
+            /* Other parameters here */
+            pagerFormat: " Total rows: {itemCount}"
+        });*@
+    });
+
+</script>
+
+<script>
+
+    window.onload = function () {
+
+        var d = $(".jsgrid-button.jsgrid-search-button");
+        d.first().hide();
+    }
+
+
+</script>
+
+
+

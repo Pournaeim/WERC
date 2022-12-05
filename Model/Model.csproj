@@ -1,0 +1,638 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{33D8C618-A0D0-4FC2-877D-44BC4B12D602}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Model</RootNamespace>
+    <AssemblyName>Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.2.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\APMS\bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ABET.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Answer.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApiModels\AMSMSAuthentication.cs" />
+    <Compile Include="ApplicationDomainModels\ConstantObjects.cs" />
+    <Compile Include="ApplicationDomainModels\SmUser.cs" />
+    <Compile Include="AspNetRole.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUser.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserClaim.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserLogin.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUsers2.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUsersArchive.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Base\BaseViewModel.cs" />
+    <Compile Include="ApplicationDomainModels\MessageHandler.cs" />
+    <Compile Include="Base\LayoutViewModel.cs" />
+    <Compile Include="City.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Country.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="C__MigrationHistory.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dictionary.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DietType.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmailLog.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ethnicity.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Exceldata.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExcelDictionary.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GoalsAfterGraduation.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Grade.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GradeDetail.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HouseholdEducation.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Image.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Invoice.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InvoiceDetail.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Language.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LevelOfConfidence.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MealType.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Order.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PageContent.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ParticipantRule.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentRule.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentType.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Person.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PersonArchive.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PersonMealType.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Product.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Province.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Question.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QuestionAnswer.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="R1.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Reference.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RefrenceWord.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SafetyItem.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SafetyItemDetail.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShopCart\Checkout\VmCheckout.cs" />
+    <Compile Include="ShopCart\Message\VmMessage.cs" />
+    <Compile Include="ShopCart\Order\AllOrdersVerbose\VmOrderVerbose.cs" />
+    <Compile Include="ShopCart\Order\AllOrders\VmAllOrderSubmitted.cs" />
+    <Compile Include="ShopCart\Order\NewOrder\VmOrder.cs" />
+    <Compile Include="ShopCart\Order\OrderInfoVerbose\VmOrderInfoVerbose.cs" />
+    <Compile Include="ShopCart\Order\OrderInfo\VmOrderInfo.cs" />
+    <Compile Include="ShopCart\Product\VmAllProduct.cs" />
+    <Compile Include="ShopCart\Product\ProductDetail\VmProductDetail.cs" />
+    <Compile Include="ShopCart\ShopInfo\VmShopInfo.cs" />
+    <Compile Include="SiteInfo.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Size.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubmissionRule.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubSafetyItem.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SundryRule.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SurveyResult.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SurveyResultDetail.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SystemSetting.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Task.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TaskGrade.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TaskSubmissionRule.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TaskTest.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Team.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TeamGradeDetail.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TeamMember.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TeamSafetyItem.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TeamSafetyItemDetail.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TeamSafetyItemDetailLog.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TeamSafetyItemLog.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TeamSubmissionRule.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TeamTestResult.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TempUserTask.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Test.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ToolsModels\DropDownList\VmDropDownList.cs" />
+    <Compile Include="ToolsModels\DropDownList\VmSelectListItem.cs" />
+    <Compile Include="University.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserTask.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewDownloadTeamSubmissionRule.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewEmailLog.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewGradeDetail.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewInvoice.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewInvoiceExtraMember.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewJudgeFullInfo.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Admin\VmAssignTaskToLabManagement.cs" />
+    <Compile Include="ViewModels\Admin\VmMealTypesManagement.cs" />
+    <Compile Include="ViewModels\Admin\VmSystemSettingsManagement.cs" />
+    <Compile Include="ViewModels\Admin\VmPaymentTypesManagement.cs" />
+    <Compile Include="ViewModels\Admin\VmSubmissionRulesManagement.cs" />
+    <Compile Include="ViewModels\Admin\VmUniversity.cs" />
+    <Compile Include="ViewModels\Admin\VmUniversityManagement.cs" />
+    <Compile Include="ViewModels\Admin\VmPaymentRulesManagement.cs" />
+    <Compile Include="ViewModels\Admin\VmJudgeTaskFullInfoManagement.cs" />
+    <Compile Include="ViewModels\Admin\VmApprovalRejectManagement.cs" />
+    <Compile Include="ViewModels\Admin\VmApprovalReject.cs" />
+    <Compile Include="ViewModels\Admin\VmAssignTaskToJudgeManagement.cs" />
+    <Compile Include="ViewModels\CaptchaResponse.cs" />
+    <Compile Include="ViewModels\DietType\VmDietType.cs" />
+    <Compile Include="ViewModels\EmailLog\VmEmailLog.cs" />
+    <Compile Include="ViewModels\Ethnicity\VmEthnicity.cs" />
+    <Compile Include="ViewModels\Exceldata\VmExceldata.cs" />
+    <Compile Include="ViewModels\GoalsAfterGraduation\VmGoalsAfterGraduation.cs" />
+    <Compile Include="ViewModels\Grade\Grading\VmSingleGradingType.cs" />
+    <Compile Include="ViewModels\Grade\Grading\VmSingleTeamGradingManagement.cs" />
+    <Compile Include="ViewModels\Grade\Grading\VmGradingManagement.cs" />
+    <Compile Include="ViewModels\Grade\Grading\VmGradingDetail.cs" />
+    <Compile Include="ViewModels\Grade\Grading\VmSingleTeamGrading.cs" />
+    <Compile Include="ViewModels\Grade\Report\VmGradeReport.cs" />
+    <Compile Include="ViewModels\Grade\Report\VmGradeDetail.cs" />
+    <Compile Include="ViewModels\Grade\Report\VmJudgeBaseGrade.cs" />
+    <Compile Include="ViewModels\Grade\Report\VmJudgeGrade.cs" />
+    <Compile Include="ViewModels\Grade\Report\VmTeamGrade.cs" />
+    <Compile Include="ViewModels\Grade\Report\VmTaskBaseGrade.cs" />
+    <Compile Include="ViewModels\Grade\VmTotalScoreData.cs" />
+    <Compile Include="ViewModels\Grade\VmGrade.cs" />
+    <Compile Include="ViewModels\Grade\Grading\VmGradingType.cs" />
+    <Compile Include="ViewModels\Grade\VmGradeCollection.cs" />
+    <Compile Include="ViewModels\Grade\Grading\VmTeamGrading.cs" />
+    <Compile Include="ViewModels\Grade\VmClientGrading.cs" />
+    <Compile Include="ViewModels\Grade\VmTeamGradeDetail.cs" />
+    <Compile Include="ViewModels\InlineWebPageHandler\VmMousePositionCollection.cs" />
+    <Compile Include="ViewModels\InlineWebPageHandler\VmMousePosition.cs" />
+    <Compile Include="ViewModels\Invoice\VmInvoiceReport.cs" />
+    <Compile Include="ViewModels\Invoice\VmInvoiceCollection.cs" />
+    <Compile Include="ViewModels\Invoice\VmInvoiceIds.cs" />
+    <Compile Include="ViewModels\Invoice\VmTeamSelection.cs" />
+    <Compile Include="ViewModels\Judge\VmNoneAnsweredGradeManagement.cs" />
+    <Compile Include="ViewModels\Judge\VmGradeDetailManagement.cs" />
+    <Compile Include="ViewModels\Judge\VmFinalGradeReportManagement.cs" />
+    <Compile Include="ViewModels\Lab\VmJudge.cs" />
+    <Compile Include="ViewModels\Lab\VmJudgeFullInfo.cs" />
+    <Compile Include="ViewModels\Judge\VmJudgeFullInfo.cs" />
+    <Compile Include="ViewModels\Invoice\VmInvoice.cs" />
+    <Compile Include="ViewModels\Invoice\VmInvoiceDetail.cs" />
+    <Compile Include="ViewModels\CoAdvisor\VmCoAdvisor.cs" />
+    <Compile Include="ViewModels\Lab\VmLabUserCollection.cs" />
+    <Compile Include="ViewModels\AspNetUsers2\VmAspNetUsers2.cs" />
+    <Compile Include="ViewModels\HouseholdEducation\HouseholdEducation.cs" />
+    <Compile Include="ViewModels\LevelOfConfidence\LevelOfConfidence.cs" />
+    <Compile Include="ViewModels\MealType\VmMealType.cs" />
+    <Compile Include="ViewModels\SafetyItem\VmSafetyItemDetail.cs" />
+    <Compile Include="ViewModels\SafetyItem\VmSubSafetyItem.cs" />
+    <Compile Include="ViewModels\PaymentType\VmPaymentType.cs" />
+    <Compile Include="ViewModels\SubmissionRule\VmTeamSubmissionRule.cs" />
+    <Compile Include="ViewModels\SubmissionRule\VmTaskSubmissionRule.cs" />
+    <Compile Include="ViewModels\SundryRule\VmSundryRule.cs" />
+    <Compile Include="ViewModels\SubmissionRule\VmSubmissionRule.cs" />
+    <Compile Include="ViewModels\Person\VmRoleBaseUserEmailManagement.cs" />
+    <Compile Include="ViewModels\Product\VmProduct.cs" />
+    <Compile Include="ViewModels\Order\VmOrder.cs" />
+    <Compile Include="ViewModels\PageContent\VmPageContent.cs" />
+    <Compile Include="ViewModels\PaymentRule\VmPaymentRule.cs" />
+    <Compile Include="ViewModels\ParticipantRule\VmParticipantRule.cs" />
+    <Compile Include="ViewModels\Reference\VmReferenceCollection.cs" />
+    <Compile Include="ViewModels\Reference\VmReference.cs" />
+    <Compile Include="ViewModels\SafetyItem\VmSaveSafetyItemAdmin.cs" />
+    <Compile Include="ViewModels\SafetyItem\VmTeamSaveSafetyItem.cs" />
+    <Compile Include="ViewModels\Survey\VmSurveyManagement.cs" />
+    <Compile Include="ViewModels\Survey\VmSurveyDetail.cs" />
+    <Compile Include="ViewModels\Survey\VmSurvey.cs" />
+    <Compile Include="ViewModels\Survey\VmClientSurveyResult.cs" />
+    <Compile Include="ViewModels\Survey\VmSurveyResultDetail.cs" />
+    <Compile Include="ViewModels\Survey\VmSurveyResult.cs" />
+    <Compile Include="ViewModels\SystemSetting\VmSystemSetting.cs" />
+    <Compile Include="ViewModels\Task\VmUserTask.cs" />
+    <Compile Include="ViewModels\TeamSafetyItem\VmESPReportTeamSafetyItem.cs" />
+    <Compile Include="ViewModels\TeamSafetyItem\VmWERCESPObject.cs" />
+    <Compile Include="ViewModels\TeamSafetyItem\VmTeamSafetyItemDetail.cs" />
+    <Compile Include="ViewModels\Team\VmESPReportTeamMemberCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ViewModels\Team\VmESPReportTeamMember.cs" />
+    <Compile Include="ViewModels\Test\VmTestManagement.cs" />
+    <Compile Include="ViewModels\Test\VmTestCollection.cs" />
+    <Compile Include="ViewModels\Test\VmTeamTestResult.cs" />
+    <Compile Include="ViewModels\Test\VmTeamTestManagement.cs" />
+    <Compile Include="ViewModels\Test\VmTeamTest.cs" />
+    <Compile Include="ViewModels\Test\VmTest.cs" />
+    <Compile Include="ViewModels\Test\VmTeamTestCollection.cs" />
+    <Compile Include="ViewModels\Task\VmTaskFullInfo.cs" />
+    <Compile Include="ViewModels\Task\VmTask.cs" />
+    <Compile Include="ViewModels\Task\VmTaskCollection.cs" />
+    <Compile Include="ViewModels\Task\VmTaskDetail.cs" />
+    <Compile Include="ViewModels\Student\VmStudent.cs" />
+    <Compile Include="ViewModels\Leader\VmLeader.cs" />
+    <Compile Include="ViewModels\Judge\VmJudge.cs" />
+    <Compile Include="ViewModels\Advisor\VmAdvisor.cs" />
+    <Compile Include="ViewModels\Image\VmImage.cs" />
+    <Compile Include="ViewModels\SafetyItem\VmSafetyItem.cs" />
+    <Compile Include="ViewModels\TeamSafetyItemLog\VmSafetyItemLog.cs" />
+    <Compile Include="ViewModels\TeamSafetyItemLog\VmTeamSafetyItemLogCollection.cs" />
+    <Compile Include="ViewModels\TeamSafetyItemLog\VmTeamSafetyItemLog.cs" />
+    <Compile Include="ViewModels\TeamSafetyItem\VmTeamSafetyItemCollection.cs" />
+    <Compile Include="ViewModels\TeamSafetyItem\VmTeamSafetyItemManagement.cs" />
+    <Compile Include="ViewModels\TeamSafetyItem\VmTeamSafetyItem.cs" />
+    <Compile Include="ViewModels\Team\VmTeamFullInfo.cs" />
+    <Compile Include="ViewModels\Team\VmTeamFullInfoManagement.cs" />
+    <Compile Include="ViewModels\Team\VmTeamMemberUserId.cs" />
+    <Compile Include="ViewModels\Team\VmTeamMemberManagement.cs" />
+    <Compile Include="ViewModels\Team\VmTeamMember.cs" />
+    <Compile Include="ViewModels\Team\VmTeam.cs" />
+    <Compile Include="ViewModels\Team\VmTeamCollection.cs" />
+    <Compile Include="ViewModels\Person\VmPerson.cs" />
+    <Compile Include="ViewModels\User\VmEmail.cs" />
+    <Compile Include="ViewModels\User\VmUser.cs" />
+    <Compile Include="ViewModels\VmActiveLanguage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ApplicationDomainModels\SmUserRoles.cs" />
+    <Compile Include="ApplicationDomainModels\SmUserRolesList.cs" />
+    <Compile Include="ToolsModels\Tree\ITmNode.cs" />
+    <Compile Include="ToolsModels\Tree\VmJsTree.cs" />
+    <Compile Include="ViewModels\Admin\VmAdmin.cs" />
+    <Compile Include="ToolsModels\Grid\VmJsGrid.cs" />
+    <Compile Include="ViewModels\Role\VmRole.cs" />
+    <Compile Include="ViewModels\User\VmUserList.cs" />
+    <Compile Include="ViewModels\User\VmUserFullInfo.cs" />
+    <Compile Include="ViewModels\VmCountry.cs" />
+    <Compile Include="ViewModels\VmHome.cs" />
+    <Compile Include="ViewOrder.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewPersonInRole.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewPersonMealType.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSurvey.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewSurveyResult.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTask.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTaskFullInfo.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTaskSubmissionRule.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTaskTeam.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeam.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeamFullInfo.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeamGradeDetail.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeamGradeMetaData.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeamMember.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeamSafetyItem.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeamSafetyItemLog.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeamSubmissionRule.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeamTaskTest.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTeamTestResult.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTempUserTask.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewTest.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewUserRole.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewUserTask.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="View_Test.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WERC.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="YearClassification.cs">
+      <DependentUpon>WERC.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\EntityFramework.dll" />
+    <Content Include="bin\Debug\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\Debug\EntityFramework.SqlServer.xml" />
+    <Content Include="bin\Debug\EntityFramework.xml" />
+    <Content Include="bin\Debug\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Debug\Microsoft.AspNet.Identity.Core.xml" />
+    <Content Include="bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll" />
+    <Content Include="bin\Debug\Microsoft.AspNet.Identity.EntityFramework.xml" />
+    <Content Include="bin\Debug\Microsoft.AspNet.Identity.Owin.dll" />
+    <Content Include="bin\Debug\Microsoft.AspNet.Identity.Owin.xml" />
+    <Content Include="bin\Debug\Microsoft.Owin.dll" />
+    <Content Include="bin\Debug\Microsoft.Owin.Security.Cookies.dll" />
+    <Content Include="bin\Debug\Microsoft.Owin.Security.Cookies.xml" />
+    <Content Include="bin\Debug\Microsoft.Owin.Security.dll" />
+    <Content Include="bin\Debug\Microsoft.Owin.Security.OAuth.dll" />
+    <Content Include="bin\Debug\Microsoft.Owin.Security.OAuth.xml" />
+    <Content Include="bin\Debug\Microsoft.Owin.Security.xml" />
+    <Content Include="bin\Debug\Microsoft.Owin.xml" />
+    <Content Include="bin\Debug\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Debug\Model.dll" />
+    <Content Include="bin\Debug\Model.pdb" />
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Content Include="bin\Debug\Newtonsoft.Json.xml" />
+    <Content Include="bin\Debug\Owin.dll" />
+    <Content Include="bin\Debug\System.Web.Mvc.dll" />
+    <Content Include="bin\Debug\System.Web.Razor.dll" />
+    <Content Include="bin\Debug\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\Debug\System.Web.WebPages.dll" />
+    <Content Include="bin\Debug\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\Release\EntityFramework.dll" />
+    <Content Include="bin\Release\EntityFramework.SqlServer.dll" />
+    <Content Include="bin\Release\EntityFramework.SqlServer.xml" />
+    <Content Include="bin\Release\EntityFramework.xml" />
+    <Content Include="bin\Release\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Release\Microsoft.AspNet.Identity.Core.xml" />
+    <Content Include="bin\Release\Microsoft.AspNet.Identity.EntityFramework.dll" />
+    <Content Include="bin\Release\Microsoft.AspNet.Identity.EntityFramework.xml" />
+    <Content Include="bin\Release\Microsoft.AspNet.Identity.Owin.dll" />
+    <Content Include="bin\Release\Microsoft.AspNet.Identity.Owin.xml" />
+    <Content Include="bin\Release\Microsoft.Owin.dll" />
+    <Content Include="bin\Release\Microsoft.Owin.Security.Cookies.dll" />
+    <Content Include="bin\Release\Microsoft.Owin.Security.Cookies.xml" />
+    <Content Include="bin\Release\Microsoft.Owin.Security.dll" />
+    <Content Include="bin\Release\Microsoft.Owin.Security.OAuth.dll" />
+    <Content Include="bin\Release\Microsoft.Owin.Security.OAuth.xml" />
+    <Content Include="bin\Release\Microsoft.Owin.Security.xml" />
+    <Content Include="bin\Release\Microsoft.Owin.xml" />
+    <Content Include="bin\Release\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Release\Model.dll" />
+    <Content Include="bin\Release\Model.pdb" />
+    <Content Include="bin\Release\Newtonsoft.Json.dll" />
+    <Content Include="bin\Release\Newtonsoft.Json.xml" />
+    <Content Include="bin\Release\Owin.dll" />
+    <Content Include="bin\Release\System.Web.Mvc.dll" />
+    <Content Include="bin\Release\System.Web.Razor.dll" />
+    <Content Include="bin\Release\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\Release\System.Web.WebPages.dll" />
+    <Content Include="bin\Release\System.Web.WebPages.Razor.dll" />
+    <Content Include="WERC.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WERC.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="bin\Debug\Model.dll.config" />
+    <None Include="bin\Release\Model.dll.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

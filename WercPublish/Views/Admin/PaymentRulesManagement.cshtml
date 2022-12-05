@@ -1,0 +1,77 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Admin;
+@using Model.ViewModels.ParticipantRule;
+
+@model VmPaymentRulesManagement
+@{
+    ViewBag.Title = "Payment Rules Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Payment Rules Management</h2>
+<hr />
+
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+
+<div class="col-xs-6">
+    <div id="advisorPanel" class="panel panel-primary">
+        <div class="panel-heading" data-toggle="collapse" data-parent="#advisorPanel" data-target="#advisorPanelListGroup">
+            <div class="panel-title">
+                <span>Participant</span>
+                <b class="pull-right fa fa-id-card libreMenuIcon"> </b>
+            </div>
+        </div>
+        <ul class="list-group collapse out" id="advisorPanelListGroup">
+
+            <li class="list-group-item librePanelListGroupItem">
+                @Html.Partial("PartialViewParticipantRule_BenchScale", @Model.ParticipantRule_BenchScale)
+            </li>
+            
+            <li class="list-group-item librePanelListGroupItem">
+                @Html.Partial("PartialViewParticipantRule_Desktop", @Model.ParticipantRule_Desktop)
+            </li>
+
+        </ul>
+    </div>
+</div>
+<div class="col-xs-6">
+    <div id="judgePanel" class="panel panel-primary">
+
+        <div class="panel-heading" data-toggle="collapse" data-parent="#judgePanel" data-target="#judgePanelListGroup">
+            <div class="panel-title">
+                <span>Deadlines and Fee </span>
+                <b class="pull-right libreMenuIcon"> </b>
+            </div>
+        </div>
+        <ul class="list-group collapse out" id="judgePanelListGroup">
+            <li class="list-group-item librePanelListGroupItem">
+                @Html.Partial("PartialViewPaymentRuleGrid", new VmJsGrid()
+           {
+               DataAction = "gpbf",
+               DataController = "PaymentRule",
+
+               CreateAction = "cpr",
+               CreateController = "PaymentRule",
+
+               EditAction = "upr",
+               EditController = "PaymentRule",
+
+               DeleteAction = "dpr",
+               DeleteController = "PaymentRule",
+
+               ReadOnly = false,
+               HtmlElementId = "PaymentRule_PaymentRuleJsGrid",
+               CurrentUserRoles = Model.CurrentUserRoles,
+               LanguageDictionary = Model.LanguageDictionary
+           })
+            </li>
+        </ul>
+    </div>
+</div>

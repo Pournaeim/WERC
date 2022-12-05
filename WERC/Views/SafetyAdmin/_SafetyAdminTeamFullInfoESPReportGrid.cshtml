@@ -1,0 +1,175 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+}
+
+<div class="row">
+
+    <div id="externalPager"></div><div id="@jsGridHtmlElementId"></div>
+    <link href="~/Resources/CSS/modal-fixed-full-screen.css" rel="stylesheet" />
+    <div class="modal-fixed-full-screen">
+        <div class="modal fade" id="teamMemberModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><span id="teamNameSpan"></span> Team Members</h4>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <div id="teamMemberDiv" class="row text-left"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="hidden">
+    <div class="config-panel">
+        <label><input id="heading" type="checkbox" checked /> Heading</label>
+        <label><input id="filtering" type="checkbox" /> Filtering</label>
+        <label><input id="inserting" type="checkbox" /> Inserting</label>
+        <label><input id="editing" type="checkbox" checked /> Editing</label>
+        <label><input id="paging" type="checkbox" checked /> Paging</label>
+        <label><input id="sorting" type="checkbox" /> Sorting</label>
+        <label><input id="selecting" type="checkbox" checked /> Selecting</label>
+    </div>
+
+</div>
+<script>
+
+
+
+    var ActiveRowIndex = 0;
+    var gridRowIndex = 0;
+
+    $(document).ready(function () {
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            height: "auto",
+            editing: true,
+            inserting: false,
+            autoload: true,
+            paging: true,
+            pageSize: 1500,
+            pageIndex: 1,
+            pageButtonCount: 5,
+            datatype: "json",
+            updateOnResize: false,
+            rowClick: function (args) {
+                debugger
+                if (args.item.SubmitStatus == 1) {
+                    location.href = "/safetyadmin/gesprp/?teamId=" + args.item.Id;
+                }
+            },
+            onDataLoading: function (args) { 
+
+
+            },
+            onDataLoaded: function (args) {
+
+
+            },
+            controller: {
+                loadData: function (filter) { gridRowIndex = 0;
+
+                    return $.ajax({
+                        type: "POST",
+                        url: "@jsGridLoadDataUrl",
+                        data: { filter }
+                    });
+                }
+            },
+
+            onRefreshing: function (args) {gridRowIndex = 0;}, fields:
+                [
+                   {
+                        name: "Id", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div class='text-center'>" + (gridRowIndex + 1) + "</div>");
+                            gridRowIndex++
+                            $("#externalPager").html('Total rows: ' + gridRowIndex);
+
+                            return result.add(customDiv);
+                        }
+                    },
+                    { name: "PayStatus", type: "bool", visible: false },
+                    { name: "SafetyStatus", type: "bool", visible: false },
+                    { name: "Name", title: "@Model["Team Name"]", type: "text", width: 120 },
+                    { name: "TaskName", title: "@Model["Task"]", type: "text", width: 100 },
+                    { name: "Advisor", title: "@Model["Faculty Advisor"]", type: "text", width: 120 },
+                    { name: "Leader", title: "@Model["Student Leader"]", type: "text", width: 120 },
+                    {
+                        name: "SubmitStatus", title: "@Model["Submission Status"]", width: 80, type: "checkbox",
+                        itemTemplate: function (item) {
+                            debugger
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({ width: "32px" })
+                        }
+                    },
+                    {
+                        name: "Status", title: "@Model["Progress Status"]", width: 50, type: "checkbox",
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/yellow.png';
+                            }
+                            else {
+                                val = '/Resources/Images/blue.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({ width: "32px" })
+                        }
+                    },
+                    {
+                        name: "Approved", title: "@Model["Approval Status"]", width: 50, type: "checkbox",
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({ width: "32px" })
+                        }
+                    }
+                ]
+        });
+
+         $(".config-panel input[type=checkbox]").on("click", function () {
+            var $cb = $(this);
+            $("#@jsGridHtmlElementId").jsGrid("option", $cb.attr("id"), $cb.is(":checked"));
+        });
+
+        //$("#filtering").click();
+        $("#sorting").click();
+
+    });
+
+</script>

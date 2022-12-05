@@ -1,0 +1,24 @@
+﻿@using Model.ViewModels.Task
+@model  VmTaskCollection
+
+@foreach (var item in Model.TaskList)
+{
+    <div class="col-xs-12 col-sm-12 card ui-draggable ui-draggable-handle" id="@item.Id">
+        <div class="margin-div temp-select-item-hihghlight">
+            <div id="dragedImageDiv" class="col-xs-6">
+                <div class="row">
+                    <img src="@item.ImageUrl" class="img-responsive item-image" />
+                </div>
+            </div>
+
+            <div class="card-detail col-xs-6">
+                <div class="card-item-detail">
+                    <span for="Name" class="card-item-detail-label">@Model["Name"]:</span>
+                    <span id="Name" name="Name" class="card-item-detail-value"> @item.Name </span>
+                    <span for="Name" class="card-item-detail-label display-block">@Model["Priority"]:<span for="Name" class="card-item-detail-value"> @item.Priority</span></span>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+}

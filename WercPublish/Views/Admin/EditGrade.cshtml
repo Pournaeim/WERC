@@ -1,0 +1,15 @@
+﻿@model Model.ViewModels.Grade.VmGrade
+
+@{
+    ViewBag.Title = "Update Grade";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@Html.Partial("_EditGrade", Model)
+
+<script>
+    function loadGradeList(result) {
+        debugger
+        location.href = '/admin/gl';
+    }
+</script>

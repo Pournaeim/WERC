@@ -1,0 +1,247 @@
+﻿
+@for $i from 1 through 100 {
+    .top .char#{$i} {
+        transform: rotate(($i*6)+deg);
+    }
+
+    .bottom .char#{$i} {
+        transform: rotate(($i*-12+48)+deg);
+    }
+}
+
+.logo-image {
+    position: relative;
+    width: 60px;
+    top: 40px;
+    left: 55px;
+}
+
+.logo {
+    position: relative;
+    top: 20px;
+    margin: 0 auto;
+    width: 90%;
+    height: 100%;
+    border-radius: 0px;
+    z-index: 3;
+
+    span {
+        position: absolute;
+        width: 15%;
+        height: 51%;
+        text-align: center;
+        transform-origin: bottom center;
+        z-index: 100;
+        font-size: 15px;
+        color: #cfc7bd;
+        font-weight: 500;
+    }
+
+    div {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+
+    .title {
+        position: relative;
+        z-index: 1;
+        text-transform: uppercase;
+        font: bold 26px/230px 'Open Sans Condensed', sans-serif;
+    }
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+@media (max-width:450px) {
+
+    .logo-image {
+        position: relative;
+        width: 36px;
+        top: 22px;
+        left: 32px;
+    }
+
+    .logo {
+        position: relative;
+        top: 20px;
+        margin: 0 auto;
+        width: 87%;
+        height: 100%;
+        border-radius: 0px;
+        z-index: 3;
+
+        .title {
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            font: bold 26px/230px 'Open Sans Condensed', sans-serif;
+        }
+    }
+}
+
+@media (min-width:451px) and (max-width:600px) {
+
+    .logo-image {
+        position: relative;
+        width: 36px;
+        top: 22px;
+        left: 32px;
+    }
+
+    .logo {
+        position: relative;
+        top: 20px;
+        margin: 0 auto;
+        width: 70%;
+        height: 100%;
+        border-radius: 0px;
+        z-index: 3;
+
+        .title {
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            font: bold 26px/230px 'Open Sans Condensed', sans-serif;
+        }
+    }
+}
+
+@media (min-width:601px) and (max-width:700px) {
+
+    .logo-image {
+        position: relative;
+        width: 36px;
+        top: 22px;
+        left: 32px;
+    }
+
+    .logo {
+        position: relative;
+        top: 20px;
+        margin: 0 auto;
+        width: 60%;
+        height: 100%;
+        border-radius: 0px;
+        z-index: 3;
+
+        .title {
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            font: bold 26px/230px 'Open Sans Condensed', sans-serif;
+        }
+    }
+}
+
+@media (min-width:701px) and (max-width:767px) {
+
+    .logo-image {
+        position: relative;
+        width: 36px;
+        top: 22px;
+        left: 32px;
+    }
+
+    .logo {
+        position: relative;
+        top: 20px;
+        margin: 0 auto;
+        width: 50%;
+        height: 100%;
+        border-radius: 0px;
+        z-index: 3;
+
+        .title {
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            font: bold 26px/230px 'Open Sans Condensed', sans-serif;
+        }
+    }
+}
+
+@media (min-width:768px) and (max-width:992px) {
+    .logo-image {
+        position: relative;
+        width: 60px;
+        top: 40px;
+        left: 55px;
+    }
+
+    .logo {
+        position: relative;
+        top: 20px;
+        margin: 0 auto;
+        width: 100%;
+        height: 100%;
+        border-radius: 0px;
+        z-index: 3;
+
+        .title {
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            font: bold 26px/230px 'Open Sans Condensed', sans-serif;
+        }
+    }
+}
+
+@media (min-width:993px) and (max-width:1600px) {
+    .logo-image {
+        position: relative;
+        width: 60px;
+        top: 40px;
+        left: 55px;
+    }
+
+    .logo {
+        position: relative;
+        top: 20px;
+        margin: 0 auto;
+        width: 95%;
+        height: 100%;
+        border-radius: 0px;
+        z-index: 3;
+
+        .title {
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            font: bold 26px/230px 'Open Sans Condensed', sans-serif;
+        }
+    }
+}
+
+@media (min-width:1601px) and (max-width:3200px) {
+    .logo-image {
+        position: relative;
+        width: 60px;
+        top: 40px;
+        left: 55px;
+    }
+
+    .logo {
+        position: relative;
+        top: 20px;
+        margin: 0 auto;
+        width: 90%;
+        height: 100%;
+        border-radius: 0px;
+        z-index: 3;
+
+        .title {
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            font: bold 26px/230px 'Open Sans Condensed', sans-serif;
+        }
+    }
+}
+

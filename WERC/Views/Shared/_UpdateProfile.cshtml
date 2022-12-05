@@ -1,0 +1,1856 @@
+﻿
+<style>
+    .list-group-item {
+        border-color: #333;
+    }
+
+    legend {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 20px;
+        font-size: 20px;
+        line-height: inherit;
+        color: #333;
+        border: 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .list-group {
+        padding-left: 0;
+        margin-bottom: 20px;
+        margin: 5px;
+    }
+
+    .glyphicon {
+        position: relative;
+        top: 6px;
+        left: 5px;
+        display: inline-block;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        font-size: 21px !important;
+        -moz-osx-font-smoothing: grayscale;
+        color: #369 !important;
+        cursor: pointer;
+    }
+    }
+</style>
+
+<link href="~/Resources/CSS/sortable.css" rel="stylesheet" />
+
+@using Model.ToolsModels.DropDownList
+@model Model.ViewModels.Person.VmPerson
+<script src="~/Resources/Scripts/jquery.maskedinput.min.js"></script>
+
+@if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Advisor") == true)
+{
+    <div class="col-xs-12 text-center">
+        <span class="profile-top-message">You must fill out your profile to be able to create team(s)</span>
+    </div>
+}
+@{
+    var formCaptionSuffix = "for Handbook";
+    var imageCaptionSuffix = " to be printed in the handbook";
+    var shortBioCaption = " to be printed in the handbook";
+    var bioCharachterCount = "900";
+    var AddressHeader = "";
+
+    var EmgrColClass = "col-sm-12";
+    var MealsColClass = "col-sm-6";
+    var TaskColClass = "";
+    var GoalsAfterGraduationColClass = "col-sm-6";
+    var LevelOfConfidenceColClass = "col-sm-6";
+    var HouseholdEducationColClass = "";
+    var EthnicityColClass = "col-sm-6";
+
+}
+
+@if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Judge"))
+{
+    MealsColClass = "col-sm-6";
+    TaskColClass = "col-sm-6";
+}
+@if (Request.IsAuthenticated && Model.CurrentUserRoles != null
+    && (Model.CurrentUserRoles.Contains("Leader") == true || Model.CurrentUserRoles.Contains("Student") == true))
+{
+    formCaptionSuffix = "";
+    imageCaptionSuffix = "";
+    shortBioCaption = "Bio";
+    bioCharachterCount = "450";
+    @Html.Raw("<script>var userRole='student';</script>");
+}
+else
+{
+    @Html.Raw("<script>var userRole='noneStudent';</script>");
+    shortBioCaption = "Bio to be printed in the handbook";
+}
+
+
+<div class="col-xs-12">
+
+    @using (Html.BeginForm("up", "person", FormMethod.Post, new { id = "_ProfileEdit_Form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Profile</h4>
+
+            <hr />
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.RoleId)
+            @Html.HiddenFor(model => model.UserId)
+
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+
+
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-6">
+                    <fieldset>
+                        <legend>Personal Info @formCaptionSuffix</legend>
+                        <div class="row person-info-section">
+
+                            <div class="col-xs-12 col-md-3">
+
+                                <div class="row">
+
+                                    <input id="profilePicturFileInput" name="file" type="file" class="form-control hidden" />
+
+
+                                    <img id="profilePictureUrlImg" class="profile-img" onclick="$('#profilePicturFileInput').click()" title="@Model["Click to upload your picture"]" />
+                                    <hr />
+                                    @Model["Click to upload/change your portrait"] @imageCaptionSuffix
+                                    <script>
+                                        $('#profilePicturFileInput').on('change', function (e) {
+
+                                            uploadProfilePicture();
+
+                                        });
+                                    </script>
+                                    @Html.HiddenFor(model => model.ProfilePictureUrl, htmlAttributes: new { @id = "ProfilePictureUrlHidden" })
+                                    @Html.ValidationMessage(@Model["ProfilePictureUrl"], "", new { @class = "text-danger" })
+                                    <hr />
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-12 col-md-9">
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-7">
+                                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <span class="text-danger fa-2x">*</span>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-7">
+                                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <span class="text-danger fa-2x">*</span>
+                                </div>
+
+                                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Judge"))
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Affiliation, htmlAttributes: new { @class = "control-label col-md-4" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.Affiliation, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Affiliation, "", new { @class = "text-danger" })
+                                        </div>
+                                        <span class="text-danger fa-2x">*</span>
+                                    </div>
+                                }
+                                <div class="form-group">
+                                    @Html.Label(@shortBioCaption, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <span id="shortBioTextAreaLengthCounter" class="text-primary fa-1x">Up to @bioCharachterCount characters</span>
+                                    <div class="col-md-7">
+                                        @Html.TextAreaFor(model => model.ShortBio, new { @class = "form-control short-bio", @id = "shortBioTextArea", @onkeydown = "checkWordCount(this,'shortBioTextAreaLengthCounter'," + @bioCharachterCount + ")", @onchange = "checkWordCount(this,'shortBioTextAreaLengthCounter'," + @bioCharachterCount + ")" })
+                                        @if (shortBioCaption != "Bio")
+                                        {
+                                            @Html.ValidationMessageFor(model => model.ShortBio, "", new { @class = "text-danger" })
+                                        }
+                                    </div>
+                                    @if (shortBioCaption != "Bio")
+                                    {
+                                        <span class="text-danger fa-2x">*</span>
+                                    }
+                                </div>
+                                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && (Model.CurrentUserRoles.Contains("Leader") == true || Model.CurrentUserRoles.Contains("Student") == true))
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Major, htmlAttributes: new { @class = "control-label col-md-4" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.Major, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Major, "", new { @class = "text-danger" })
+                                        </div>
+                                        <span class="text-danger fa-2x">*</span>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Minor, htmlAttributes: new { @class = "control-label col-md-4" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.Minor, new { htmlAttributes = new { @class = "form-control" } })
+                                        </div>
+                                    </div>
+
+                                }
+
+                            </div>
+                        </div>
+                        <div class="row other-info-section">
+                            <div class="col-xs-12 col-md-3">
+
+                                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Advisor") == false)
+                                {
+
+                                    <input id="resumeFileInput" name="file" type="file" class="form-control hidden" />
+
+
+                                    <img src="~/Resources/Images/Mimetypes128x128/application_pdf.png" class="profile-img" onclick="$('#resumeFileInput').click()" title="@Model["Click to upload your resume"]" />
+                                    <hr />
+                                    @Model["Click to upload your resume"]
+                                    <script>
+
+
+                                        $('#resumeFileInput').on('change', function (e) {
+
+                                            uploadResume();
+
+                                        });
+                                    </script>
+                                    @Html.HiddenFor(model => model.ResumeUrl, htmlAttributes: new { @id = "ResumeUrlHidden" })
+                                    @Html.ValidationMessage(@Model["ResumeUrl"], "", new { @class = "text-danger" })
+
+
+                                }
+                                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Advisor") == true)
+                                {
+
+
+                                    <input id="universityPicturFileInput" name="file" type="file" class="form-control hidden" />
+
+                                    <img id="universityPictureUrlImg" class="profile-img" onclick="$('#universityPicturFileInput').click()" title="@Model["Click to upload university logo"]" />
+                                    <hr />
+                                    @Model["Click to upload university logo"]
+                                    <script>
+                                        $('#universityPicturFileInput').on('change', function (e) {
+
+                                            uploadUniversityPicture();
+
+                                        });
+                                    </script>
+                                    @Html.HiddenFor(model => model.UniversityPictureUrl, htmlAttributes: new { @id = "UniversityPictureUrlHidden" })
+                                    @Html.ValidationMessage(@Model["UniversityPictureUrl"], "", new { @class = "text-danger" })
+                                    <hr />
+
+                                }
+                            </div>
+
+                            <div class="col-xs-12 col-md-9">
+                                <div class="form-group">
+                                    @Html.Label(@Model["Diet Type"], new { @class = "col-md-4 control-label" })
+                                    <div class="col-md-7">
+
+                                        @Html.Partial("_DropDownList",
+                                        new VmDropDownList
+                                        {
+                                            HtmlElementId = "DietTypeDropDownList",
+                                            DataController = "DietType",
+                                            DataAction = "gdtddl",
+                                            OptionLabel = Model["Select DietType..."],
+                                            ActiveItemValue = Model.DietTypeId.ToString(),
+                                            OnItemSelected = "DietTypeDropDownList_OnClientSelectedItem",
+
+                                        })
+
+                                        <script>
+                                            function DietTypeDropDownList_OnClientSelectedItem(id) {
+
+                                                if (id == "5") {
+                                                    $("#otherDietDiv").removeClass("hidden");
+
+                                                }
+                                                else {
+                                                    $("#otherDietDiv").addClass("hidden");
+                                                    $("#dietType").val('');
+                                                }
+
+                                                if (id == "9") {
+                                                    $("#allergiesDiv").removeClass("hidden");
+
+                                                }
+                                                else {
+                                                    $("#allergiesDiv").addClass("hidden");
+                                                }
+
+                                                $("#dietTypeId").val(id);
+                                            }
+                                        </script>
+                                        <div id="otherDietDiv" class="form-group text-left hidden">
+                                            @Html.Label(Model["Enter your diet type"], htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-7">
+                                                @Html.EditorFor(model => model.DietType, new { @class = "form-control", @id = "dietType" })
+                                                @Html.Hidden(@Model["DietTypeId"], Model.DietTypeId, new { @class = "form-control", @id = "dietTypeId" })
+                                            </div>
+                                        </div>
+                                        <div id="allergiesDiv" class="form-group text-left hidden">
+                                            @Html.Label(Model["Enter your allergies"], htmlAttributes: new { @class = "col-md-12" })
+                                            <div class="col-md-11">
+                                                @Html.TextAreaFor(model => model.Allergies, new { @class = "form-control allergies", @id = "allergies" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <span class="text-danger fa-2x">*</span>
+
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.Label(@Model["T-Shirt Size"], new { @class = "col-md-4 control-label" })
+                                    <div class="col-md-7">
+
+                                        @Html.Partial("_DropDownList",
+                                        new VmDropDownList
+                                        {
+                                            HtmlElementId = "SizeId",
+                                            DataController = "Size",
+                                            DataAction = "gsddl",
+                                            OptionLabel = Model["Select T-Shirt Size..."],
+                                            ActiveItemValue = Model.SizeId.ToString(),
+                                            OnItemSelected = "SizeDropDownList_OnClientSelectedItem",
+
+                                        })
+
+                                        @Html.ValidationMessage(@Model["SizeId"], "", new { @class = "text-danger" })
+
+                                        <script>
+                                            function SizeDropDownList_OnClientSelectedItem(id) {
+                                            }
+                                        </script>
+                                    </div>
+                                    <span class="text-danger fa-2x">*</span>
+                                </div>
+
+                                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && (Model.CurrentUserRoles.Contains("Admin") || Model.CurrentUserRoles.Contains("Advisor") || Model.CurrentUserRoles.Contains("Judge") || Model.CurrentUserRoles.Contains("CoAdvisor")))
+                                {
+                                    <div class="form-group">
+                                        @Html.Label(@Model["Jacket Size"], new { @class = "col-md-4 control-label" })
+                                        <div class="col-md-7">
+
+                                            @Html.Partial("_DropDownList",
+          new VmDropDownList
+          {
+              HtmlElementId = "JacketSizeId",
+              DataController = "Size",
+              DataAction = "gjsddl",
+              OptionLabel = Model["Select Jacket Size..."],
+              ActiveItemValue = Model.JacketSizeId.ToString(),
+              OnItemSelected = "JacketSizeDropDownList_OnClientSelectedItem",
+
+          })
+
+                                            @Html.ValidationMessage(@Model["JacketSizeId"], "", new { @class = "text-danger" })
+
+                                            <script>
+                                                function JacketSizeDropDownList_OnClientSelectedItem(id) {
+
+                                                }
+                                            </script>
+                                        </div>
+                                        <span class="text-danger fa-2x">*</span>
+                                    </div>
+
+                                }
+
+                                <div class="form-group">
+                                    @Html.Label(@Model["Gender for Clothing Style"], new { @class = "col-md-4 control-label" })
+                                    <div class="col-md-7">
+                                        @Html.DropDownList("Sex", new List<SelectListItem>
+                                                                    {
+                                                                        new SelectListItem{ Text="Male", Value="false"},
+                                                                        new SelectListItem{ Text="Female", Value="true"}
+                                                                    }, new { @class = "form-control" })
+                                    </div>
+                                    <span class="text-danger fa-2x">*</span>
+                                </div>
+                                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && !Model.CurrentUserRoles.Contains("Admin"))
+                                {
+                                    <div class="form-group">
+                                        @Html.Label(@Model["Gender"], new { @class = "col-md-4 control-label" })
+                                        <div class="col-md-7">
+
+                                            @Html.HiddenFor(model => model.HouseholdEducationId, htmlAttributes: new { @id = "householdEducationIdHidden" })
+
+                                            <ul id="sortableHouseholdEducationOrder" class="list-group list-unstyled">
+
+                                                @foreach (var item in Model.HouseholdEducationList)
+                                                {
+                                                    <li class="list-group-item">
+                                                        @if (Model.HouseholdEducationId != null && item.Id == Model.HouseholdEducationId)
+                                                        {
+                                                            <input type="radio"
+                                                                   name="HouseholdEducationRadio"
+                                                                   checked
+                                                                   data-id="@item.Id"
+                                                                   class="checkbox-list-item"
+                                                                   onclick="sethouseholdEducationIdHidden(this)" />
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="radio"
+                                                                   name="HouseholdEducationRadio"
+                                                                   data-id="@item.Id"
+                                                                   class="checkbox-list-item"
+                                                                   onclick="sethouseholdEducationIdHidden(this)" />
+                                                        }
+                                                        @item.Name
+
+                                                    </li>
+                                                }
+
+                                            </ul>
+                                            <script>
+                                                function sethouseholdEducationIdHidden(radio) {
+
+                                                    $('#householdEducationIdHidden').val($(radio).data('id'));
+                                                }
+                                            </script>
+                                            @if (Model.HouseholdEducationId == null)
+                                            {
+                                                <script>
+                                                    $('input[name = "HouseholdEducationRadio"]').each(function (index, element) {
+                                                        $(this).prop('checked', false);
+                                                    });
+                                                </script>
+                                            }
+                                        </div>
+                                        <span class="text-danger fa-2x">*</span>
+
+                                    </div>
+                                }
+                                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && (Model.CurrentUserRoles.Contains("Leader") == true || Model.CurrentUserRoles.Contains("Student") == true))
+                                {
+                                    <div class="form-group">
+                                        @Html.Label(@Model["Year Classification"], new { @class = "col-md-4 control-label" })
+                                        <div class="col-md-7">
+
+                                            @Html.Partial("_DropDownList",
+                                             new VmDropDownList
+                                             {
+                                                 HtmlElementId = "YearClassificationId",
+                                                 DataController = "YearClassification",
+                                                 DataAction = "gycddl",
+                                                 OptionLabel = Model["Select Year Classification..."],
+                                                 ActiveItemValue = Model.YearClassificationId.ToString(),
+                                                 OnItemSelected = "YearClassificationDropDownList_OnClientSelectedItem",
+
+                                             })
+
+                                            @Html.ValidationMessage(@Model["YearClassificationId"], "", new { @class = "text-danger" })
+
+                                            <script>
+                                                function YearClassificationDropDownList_OnClientSelectedItem(id) {
+                                                }
+                                            </script>
+                                        </div>
+                                        <span class="text-danger fa-2x">*</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <fieldset>
+                        <legend>Contact info</legend>
+                        <div>
+
+                            @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Advisor"))
+                            {
+                                <div class="form-group text-left">
+                                    @Html.Label(@Model["University"], new { @class = " col-md-3 control-label" })
+                                    <div class="col-md-7">
+
+                                        @Html.Partial("_DropDownList",
+            new VmDropDownList
+            {
+                HtmlElementId = "UniversityId",
+                DataController = "University",
+                DataAction = "guddl",
+                OptionLabel = Model["Select University..."],
+                ActiveItemValue = Model.UniversityId.ToString(),
+                OnItemSelected = "UniversityDropDownList_OnClientSelectedItem",
+
+            })
+
+                                        @Html.ValidationMessage(@Model["UniversityId"], "", new { @class = "text-danger" })
+
+                                        <script>
+                                            function UniversityDropDownList_OnClientSelectedItem(id) {
+                                                loadUniversityPictureUrl(id);
+
+                                            }
+                                        </script>
+                                    </div>
+                                    <span class="text-danger fa-2x">*</span>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Abbreviation, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-5">
+                                        @Html.EditorFor(model => model.Abbreviation, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Abbreviation, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-md-1 text-left">
+                                        <span class="text-danger fa-2x remove-margin-left">*</span>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Admin"))
+                            {
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-5">
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-5">
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            }
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SecondaryEmail, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-5">
+                                    @Html.EditorFor(model => model.SecondaryEmail, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                            @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && (Model.CurrentUserRoles.Contains("Advisor") || Model.CurrentUserRoles.Contains("Judge")))
+                            {
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.WorkPhoneNumber, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-3">
+                                        @Html.EditorFor(model => model.WorkPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.WorkPhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                    <span class="text-danger fa-2x">*</span>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-3">
+                                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                    <span class="text-danger fa-2x">*</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-3" })
+                                    <div class="col-md-3">
+                                        @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                    <span class="text-danger fa-2x">*</span>
+                                </div>
+                            }
+
+
+                            @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Advisor"))
+                            {
+                                AddressHeader = "Address for shipping packages to the teams";
+                            }
+                            else
+                            {
+                                AddressHeader = "Permanent Home Address";
+
+                            }
+
+                            <div class="col-xs-12">
+                                <fieldset>
+                                    <legend>@AddressHeader</legend>
+                                    <div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.StreetLine1, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.StreetLine1, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.StreetLine1, "", new { @class = "text-danger" })
+                                            </div>
+                                            <span class="text-danger fa-2x">*</span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.StreetLine2, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.StreetLine2, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+
+                                            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-3">
+                                                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+
+                                            </div>
+                                            <div class="col-md-1 text-left">
+                                                <span class="text-danger fa-2x remove-margin-left">*</span>
+                                            </div>
+                                            @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-1" })
+                                            <div class="col-md-3">
+                                                @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="col-md-1 text-left remove-margin-left">
+                                                <span class="text-danger fa-2x">*</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+
+                                            @Html.LabelFor(model => model.ZipCode, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-3">
+                                                @Html.EditorFor(model => model.ZipCode, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.ZipCode, "", new { @class = "text-danger" })
+                                            </div>
+                                            <span class="text-danger fa-2x">*</span>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-xs-12 @EmgrColClass">
+                                <fieldset>
+                                    <legend>
+                                        <span class="text-danger fa-2x"></span>
+                                        Person to contact in case of emergency
+                                    </legend>
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.EmgyPersonFirstName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                <div class="col-md-7">
+                                                    @Html.EditorFor(model => model.EmgyPersonFirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.EmgyPersonFirstName, "", new { @class = "text-danger" })
+                                                </div>
+                                                <span class="text-danger fa-2x">*</span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.EmgyPersonLastName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                <div class="col-md-7">
+                                                    @Html.EditorFor(model => model.EmgyPersonLastName, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.EmgyPersonLastName, "", new { @class = "text-danger" })
+                                                </div>
+                                                <span class="text-danger fa-2x">*</span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-6 col-sm-6 col-md-6">
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.EmgyPersonPhoneNumber, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                <div class="col-md-7">
+                                                    @Html.EditorFor(model => model.EmgyPersonPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.EmgyPersonPhoneNumber, "", new { @class = "text-danger" })
+                                                </div>
+                                                <span class="text-danger fa-2x">*</span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.EmgyPersonRelationship, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                <div class="col-md-7">
+                                                    @Html.EditorFor(model => model.EmgyPersonRelationship, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.EmgyPersonRelationship, "", new { @class = "text-danger" })
+                                                </div>
+                                                <span class="text-danger fa-2x">*</span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div class="form-group">
+
+
+                                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null
+                                    &&
+                                    Model.CurrentUserRoles.Contains("Admin") == false
+                                    &&
+                                    (Model.Agreement.Value == false || Model.Agreement == null))
+                                {
+                                    <div class="col-xs-12 col-sm-9 col-md-10">
+
+
+                                    </div>
+
+                                    <div class="col-xs-12">
+                                        <div class="" onclick="Preview_Click('agreementsTextDiv')" title="Click here...">
+
+                                            <a href="#"><b> (Photograph & Video Release Consent)</b></a>
+
+                                        </div>
+
+                                        <div class="inline-block">
+                                            @*<input type="checkbox" name="Agreement" />*@
+                                            @Html.CheckBox("Agreement")
+                                            @Html.ValidationMessageFor(model => model.Agreement, "", new { @class = "text-danger" })
+                                            <span class="text-danger fa-2x">*</span>
+                                            By checking the box, I acknowledge that I have completely read and fully understand the Photograph & Video Release Consent and agree to be bound thereby. I hereby release any and all claims against any person or organization utilizing this material for educational purposes.
+                                        </div>
+
+                                        <div id="agreementsTextDiv" style="display:none">
+
+                                            <div class="col-xs-12 agreements">
+
+                                                <b>Photograph &amp; Video Release Consent<br>&nbsp;</b>
+                                                <br>I hereby grant permission to the rights of my image, likeness and sound of my voice as recorded on audio or video recording without payment or any other consideration.&nbsp; I understand that my image may be edited, copied, exhibited, published or distributed and waive the right to inspect or approve the finished product wherein my likeness appears. Additionally, I waive any right to royalties or other compensation arising or related to the use of my image or recording.&nbsp; I also understand that this material may be used in diverse educational settings within an unrestricted geographic area.
+                                                <br>&nbsp;<br>Photographic, audio or video recordings may be used for the following purposes:
+                                                <br>conference presentations
+                                                <br>educational presentations or courses
+                                                <br>promotional presentations
+                                                <br>informational presentations
+                                                <br>on-line educational courses
+                                                <br>educational videos
+                                                <br>&nbsp;
+                                                <br>By signing this release I understand this permission signifies that photographic or video recordings of me may be electronically displayed via the Internet or in the public educational setting.
+                                                <br>&nbsp;
+                                                <br>I will be consulted about the use of the photographs or video recording for any purpose other than those listed above.
+                                                <br>&nbsp;
+                                                <br>There is no time limit on the validity of this release nor is there any geographic limitation on where these materials may be distributed.
+                                                <br>&nbsp;
+                                                <br>This release applies to photographic, audio or video recordings collected as part of the sessions listed on this document only.
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <input id="Agreement" name="Agreement" type="hidden" value="@Model.Agreement.ToString().ToLower()" />
+                                }
+
+                            </div>
+                            <div class="form-group">
+
+
+                                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null &&
+                                    Model.CurrentUserRoles.Contains("Admin") == false)
+                                {
+                                    var checkedYes = (Model.IEEEMembership == true) ? "checked='checked'" : "";
+                                    var checkedNo = (Model.IEEEMembership == false) ? "checked='checked'" : "";
+
+                                    <div class="col-md-7">
+                                        <label class="control-label">Are you a member of IEEE?</label>
+                                        <span class="text-danger fa-2x">*</span>
+                                        <div class="">
+                                            <label class="control-label">Yes</label>
+                                            <input id="IEEEMembershipYes" name="IEEEMembership" type="radio"
+                                                   @checkedYes>
+                                            <label class="control-label">No</label>
+                                            <input id="IEEEMembershipNo" name="IEEEMembership" type="radio"
+                                                   @checkedNo>
+                                        </div>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <input id="IEEEMembership" name="IEEEMembership" type="hidden" value="@Model.IEEEMembership.ToString().ToLower()" />
+                                }
+
+                            </div>
+                            <hr />
+
+                            <div class="form-group">
+
+
+                                @if (
+                                    Request.IsAuthenticated && Model.CurrentUserRoles != null &&
+                                    Model.CurrentUserRoles.Contains("Admin") == false &&
+                                    (Model.CurrentUserRoles.Contains("Leader") == true || Model.CurrentUserRoles.Contains("Student") == true)
+                                    )
+                                {
+                                    var checkedYes = (Model.FirstGeneration == true) ? "checked='checked'" : "";
+                                    var checkedNo = (Model.FirstGeneration == false) ? "checked='checked'" : "";
+
+                                    <div class="col-md-12">
+                                        <span class="control-label">
+                                            <strong>Are you a first-generation college student?</strong> (None of your immediate parents or grandparents attended a two- or four-year college or university)
+                                        </span>
+                                        <span class="text-danger fa-2x">*</span>
+                                        <div class="">
+                                            <label class="control-label">Yes</label>
+                                            <input id="FirstGenerationYes" name="FirstGeneration" type="radio"
+                                                   @checkedYes>
+                                            <label class="control-label">No</label>
+                                            <input id="FirstGenerationNo" name="FirstGeneration" type="radio"
+                                                   @checkedNo>
+                                        </div>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <input id="FirstGeneration" name="FirstGeneration" type="hidden" value="@Model.FirstGeneration.ToString().ToLower()" />
+                                }
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+                </div>
+
+            </div>
+
+            <hr />
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="form-group">
+
+
+                        @if (Request.IsAuthenticated && Model.CurrentUserRoles != null &&
+                            Model.CurrentUserRoles.Contains("Admin") == false &&
+                            (Model.CurrentUserRoles.Contains("Leader") == true || Model.CurrentUserRoles.Contains("Student") == true)
+                            )
+                        {
+                            var checkedYes = (Model.IndividualDisadvantaged == true) ? "checked='checked'" : "";
+                            var checkedNo = (Model.IndividualDisadvantaged == false) ? "checked='checked'" : "";
+
+                            <div class="col-sm-12 text-justify">
+                                <span class="control-label">
+                                    <strong>Are you an individual from a disadvantaged background,</strong>  Are you an individual from a disadvantaged background, defined as: coming from a family with an annual income below established low-income thresholds, or coming from an educational environment such as that found in certain rural or inner-city environments that has demonstrably and directly inhibited the individual from obtaining the knowledge, skills, and abilities necessary to develop and participate in a research career?
+                                </span>
+                                <span class="text-danger fa-2x">*</span>
+                                <div class="">
+                                    <label class="control-label">Yes</label>
+                                    <input id="IndividualDisadvantagedYes" name="IndividualDisadvantaged" type="radio"
+                                           @checkedYes>
+                                    <label class="control-label">No</label>
+                                    <input id="IndividualDisadvantagedNo" name="IndividualDisadvantaged" type="radio"
+                                           @checkedNo>
+                                </div>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <input id="IndividualDisadvantaged" name="IndividualDisadvantaged" type="hidden" value="@Model.IndividualDisadvantaged.ToString().ToLower()" />
+                        }
+
+                    </div>
+
+                </div>
+                <div class="col-xs-6">
+
+
+
+                    <div class="form-group">
+
+                        @if (Request.IsAuthenticated && Model.CurrentUserRoles != null &&
+                            Model.CurrentUserRoles.Contains("Admin") == false &&
+                            (Model.CurrentUserRoles.Contains("Leader") == true || Model.CurrentUserRoles.Contains("Student") == true)
+                            )
+                        {
+                            var checkedYes = (Model.Disability == true) ? "checked='checked'" : "";
+                            var checkedNo = (Model.Disability == false) ? "checked='checked'" : "";
+
+                            <div class="col-sm-12 text-justify">
+                                <span class="control-label">
+                                    <strong>Do you have a disability?</strong>
+                                    Defined as a physical or mental impairment that substantially limits one or more major life activities?
+                                </span>
+
+                                <span class="text-danger fa-2x">*</span>
+
+                                <div class="">
+                                    <label class="control-label">Yes</label>
+                                    <input id="DisabilityYes" name="Disability" type="radio"
+                                           @checkedYes onclick="manageAccommodationDiv(this)">
+
+                                    <label class="control-label">No</label>
+                                    <input id="DisabilityNo" name="Disability" type="radio"
+                                           @checkedNo onclick="manageAccommodationDiv(this); cleanAccommodationTextBox()">
+                                </div>
+
+                                <script>
+                                    function manageAccommodationDiv(checkBox) {
+
+                                        if ($('#DisabilityYes').prop('checked')) {
+
+                                            $("#AccommodationDiv").removeClass("hidden");
+
+                                        }
+                                        else {
+
+                                            $("#AccommodationDiv").addClass("hidden");
+                                            $('#AccommodationNo').prop('checked', false)
+                                            $('#AccommodationYes').prop('checked', false)
+                                        }
+                                    }
+                                </script>
+                                <div id="AccommodationDiv" class="form-group hidden">
+
+                                    @{
+                                        var AccommodationCheckedYes = (!string.IsNullOrWhiteSpace(Model.Accommodation)) ? "checked='checked'" : "";
+                                        var AccommodationCheckedNo = (string.IsNullOrWhiteSpace(Model.Accommodation) && Model.Agreement == true) ? "checked='checked'" : "";
+                                    }
+                                    <div class="col-sm-12 text-justify border-round margin-div">
+                                        <span class="control-label">
+                                            <strong>If yes, will you need accommodations for your disability at the design contest?</strong>
+                                        </span>
+                                        <span class="text-danger fa-2x">*</span>
+                                        <div style="margin-top:15px">
+                                            <div>
+                                                <label class="control-label">No</label>
+                                                <input id="AccommodationNo" name="AccommodationCheckBox" type="radio"
+                                                       @AccommodationCheckedNo onclick="cleanAccommodationTextBox()">
+                                            </div>
+                                            <div>
+                                                <label class="control-label">Yes </label>
+                                                <input id="AccommodationYes" name="AccommodationCheckBox" type="radio"
+                                                       @AccommodationCheckedYes onclick="activeAccommodationTextBox()" />
+                                                <label class="control-label">(specify): </label>
+
+                                                <input id="AccommodationTextBox" name="Accommodation" type="text"
+                                                       style="margin-bottom:15px" value="@Model.Accommodation" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <script>
+
+                                        function cleanAccommodationTextBox() {
+                                            $('#AccommodationTextBox').val('');
+                                            $('#AccommodationTextBox').attr('disabled', 'disabled');
+                                        }
+
+                                        function activeAccommodationTextBox() {
+
+                                            $('#AccommodationTextBox').removeAttr('disabled');
+                                        }
+
+                                        if ($('#DisabilityYes').prop('checked')) {
+                                            $("#AccommodationDiv").removeClass("hidden");
+                                        }
+                                        if ($('#AccommodationYes').prop('checked')) {
+                                            activeAccommodationTextBox();
+                                        }
+                                    </script>
+                                </div>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <input id="Disability" name="Disability" type="hidden" value="@Model.Disability.ToString().ToLower()" />
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Judge"))
+                {
+                    <span class="text-danger fa-2x">*</span>
+                    <div class="col-xs-12 @TaskColClass">
+                        <fieldset>
+                            <legend>
+                                <strong class="center-block">@Model["1.Please select all the tasks that you are able to judge by checking the box"]</strong>
+                                <strong class="center-block task-select-hint">@Model["(Please select as many as possible)"]</strong>
+                                <strong class="center-block">@Model["2.Drag your selected tasks based on your preference"]</strong>
+                                <strong class="center-block task-select-hint">@Model["(Highest priority on top, lowest on bottom)"]</strong>
+
+                            </legend>
+                            <div class="form-group">
+
+                                @Html.ValidationMessage(@Model["TaskIds"], "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.ClientTaskIds, htmlAttributes: new { @id = "taskIdsHidden", @value = string.Join(",", Model.TaskIds) })
+
+                                <ul id="sortableTaskOrder" class="list-group list-unstyled">
+
+                                    @foreach (var item in Model.TaskList)
+                                    {
+                                        <li class="list-group-item list-item">
+                                            <input type="checkbox" data-id="@item.Id" @item.Checked class="checkbox-list-item" />
+
+
+                                            @item.Name
+                                            <span class="glyphicon glyphicon-plus-sign"
+                                                  onclick="manageTaskDecription(this)"
+                                                  data-toggle="tooltip" title="Description">
+
+                                            </span>
+
+
+                                            <div id="taskDecriptionDiv" class="hidden">
+                                                @item.Description
+                                            </div>
+
+                                        </li>
+                                    }
+                                    <script>
+                                        function manageTaskDecription(element) {
+
+                                            if ($(element).siblings('div').hasClass('hidden')) {
+                                                $(element).siblings('div').removeClass("hidden");
+                                                $(element).removeClass("glyphicon-plus-sign");
+                                                $(element).addClass("glyphicon-minus-sign");
+
+                                            }
+                                            else {
+                                                $(element).siblings('div').addClass("hidden");
+                                                $(element).addClass("glyphicon-plus-sign");
+                                                $(element).removeClass("glyphicon-minus-sign");
+
+                                            }
+                                        }
+
+                                    </script>
+                                </ul>
+
+                                @Html.Label(@Model["(The final tasks will be assigned later)"], htmlAttributes: new { @class = "control-label" })
+
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#sortableTaskOrder').sortable(
+                                            {
+                                                stop: function (e, ui) {
+
+                                                    var sortableTaskListId = $('#taskIdsHidden');
+
+                                                    $(sortableTaskListId).val(
+                                                        $.map($(this).find('li > input'),
+                                                            function (el) {
+                                                                if ($(el).prop('checked') == true) {
+                                                                    return $(el).data('id')
+                                                                }
+                                                            }));
+                                                }
+                                            });
+
+                                        $('#sortableTaskOrder').sortable({
+                                            placeholder: 'drop-placeholder'
+                                        });
+                                    });
+
+                                </script>
+                            </div>
+                        </fieldset>
+                    </div>
+                }
+
+                <div class="col-xs-12 @MealsColClass">
+                    <fieldset>
+                        <legend>
+                            @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Judge"))
+                            {
+                                <br />
+
+                            }
+                            Select the meals you are planning to attend
+                            <span class="text-danger fa-2x">*</span>
+                        </legend>
+
+                        <div class="form-group">
+
+                            @Html.ValidationMessage(@Model["MealTypeIds"], "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.ClientMealTypeIds, htmlAttributes: new { @id = "mealTypeIdsHidden", @value = string.Join(",", Model.MealTypeIds) })
+
+                            <ul id="sortableMealTypeOrder" class="list-group list-unstyled">
+
+                                @foreach (var item in Model.MealTypeList)
+                                {
+                                    <li class="list-group-item list-item">
+                                        <input type="checkbox" data-id="@item.Id" @item.Checked class="checkbox-list-item" />
+
+                                        @item.Name
+                                    </li>
+                                }
+
+                            </ul>
+                            <style>
+                                #sortableMealTypeOrder li {
+                                    cursor: default;
+                                }
+                            </style>
+                            <script>
+                                $(document).ready(function () {
+                                    $('#sortableMealTypeOrder').sortable(
+                                        {
+                                            disabled: true,
+                                            stop: function (e, ui) {
+
+                                                var sortableMealTypeListId = $('#mealTypeIdsHidden');
+
+                                                $(sortableMealTypeListId).val(
+                                                    $.map($(this).find('li > input'),
+                                                        function (el) {
+                                                            if ($(el).prop('checked') == true) {
+                                                                return $(el).data('id')
+                                                            }
+                                                        }));
+                                            }
+                                        });
+
+                                    $('#sortableMealTypeOrder').sortable({
+                                        placeholder: 'drop-placeholder'
+                                    });
+                                    $('#sortableMealTypeOrder').disableSelection();
+                                });
+
+                            </script>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && (Model.CurrentUserRoles.Contains("Leader") == true || Model.CurrentUserRoles.Contains("Student") == true))
+                {
+
+
+                    <div class="col-xs-12 @LevelOfConfidenceColClass">
+                        <fieldset>
+                            <legend>
+                                <span class="text-danger fa-2x">*</span>
+                                <span class="">@Model["Level of confidence as an engineer"]</span>
+                            </legend>
+                            <div class="form-group">
+
+                                @Html.HiddenFor(model => model.LevelOfConfidenceId, htmlAttributes: new { @id = "levelOfConfidenceIdHidden" })
+
+                                <ul id="sortableLevelOfConfidenceOrder" class="list-group list-unstyled">
+
+                                    @foreach (var item in Model.LevelOfConfidenceList)
+                                    {
+                                        <li class="list-group-item">
+                                            @if (Model.LevelOfConfidenceId != null && item.Id == Model.LevelOfConfidenceId)
+                                            {
+                                                <input type="radio"
+                                                       name="LevelOfConfidenceRadio"
+                                                       checked
+                                                       data-id="@item.Id"
+                                                       class="checkbox-list-item"
+                                                       onclick="setlevelOfConfidenceIdHidden(this)" />
+
+                                            }
+                                            else
+                                            {
+                                                <input type="radio"
+                                                       name="LevelOfConfidenceRadio"
+                                                       data-id="@item.Id"
+                                                       class="checkbox-list-item"
+                                                       onclick="setlevelOfConfidenceIdHidden(this)" />
+                                            }
+                                            @item.Name
+
+                                        </li>
+                                    }
+
+                                </ul>
+                                <script>
+                                    function setlevelOfConfidenceIdHidden(radio) {
+
+                                        $('#levelOfConfidenceIdHidden').val($(radio).data('id'));
+                                    }
+                                </script>
+                                @if (Model.LevelOfConfidenceId == null)
+                                {
+                                    <script>
+                                        $('input[name = "LevelOfConfidenceRadio"]').each(function (index, element) {
+                                            $(this).prop('checked', false);
+                                        });
+                                    </script>
+                                }
+                            </div>
+                        </fieldset>
+                    </div>
+
+
+                }
+
+
+            </div>
+            <div class="row">
+                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Admin") == false)
+                {
+                    <div class="col-xs-12 @EthnicityColClass">
+                        <fieldset>
+                            <legend>
+                                <span class="text-danger fa-2x">*</span>
+                                <span class="">@Model["Race/Ethnicity (check all that apply):"]</span>
+                            </legend>
+                            <div class="form-group">
+
+                                @Html.ValidationMessage(@Model["EthnicityIds"], "", new { @class = "text-danger" })
+                                @if (Model.EthnicityIds == null || Model.EthnicityIds.Count() == 0)
+                                {
+                                    @Html.HiddenFor(model => model.ClientEthnicityIds, htmlAttributes: new { @id = "ethnicityIdsHidden" })
+
+                                }
+                                else
+                                {
+                                    @Html.HiddenFor(model => model.ClientEthnicityIds, htmlAttributes: new { @id = "ethnicityIdsHidden", @value = string.Join(",", Model.EthnicityIds) })
+                                }
+
+
+                                <ul id="sortableEthnicityOrder" class="list-group list-unstyled">
+
+                                    @foreach (var item in Model.EthnicityList)
+                                    {
+                                        <li class="list-group-item">
+                                            <input type="checkbox" data-id="@item.Id" @item.Checked class="checkbox-list-item" />
+
+                                            @item.Name
+                                        </li>
+                                    }
+
+                                </ul>
+
+                            </div>
+                        </fieldset>
+                    </div>
+                }
+
+                @*Do not delete its for next year*@
+                @if (Request.IsAuthenticated && Model.CurrentUserRoles != null &&
+                                   Model.CurrentUserRoles.Contains("Admin") == false)
+                {
+                    <div class="col-xs-12 @GoalsAfterGraduationColClass">
+                        <fieldset>
+                            <legend>
+                                <span class="text-danger fa-2x">*</span>
+                                <span class="">@Model["How did you hear about the Design Contest? (Select all that apply)"]</span>
+                            </legend>
+                            <div class="form-group">
+
+                                @Html.ValidationMessage(@Model["GoalsAfterGraduationIds"], "", new { @class = "text-danger" })
+                                @if (Model.GoalsAfterGraduationIds == null || Model.GoalsAfterGraduationIds.Count() == 0)
+                                {
+                                    @Html.HiddenFor(model => model.ClientGoalsAfterGraduationIds, htmlAttributes: new { @id = "goalsAfterGraduationIdsHidden" })
+                                }
+                                else
+                                {
+                                    @Html.HiddenFor(model => model.ClientGoalsAfterGraduationIds, htmlAttributes: new { @id = "goalsAfterGraduationIdsHidden", @value = string.Join(",", Model.GoalsAfterGraduationIds) })
+                                }
+
+                                <ul id="sortableGoalsAfterGraduationOrder" class="list-group list-unstyled">
+
+                                    @foreach (var item in Model.GoalsAfterGraduationList)
+                                    {
+                                        var checkBoxId = "goalsAfterGraduationCheckbox_" + item.Id;
+                                        <li class="list-group-item">
+                                            <input type="checkbox" data-id="@item.Id" @item.Checked id="@checkBoxId"
+                                                   class="checkbox-list-item" onclick="manageOtherGoalsDiv(this)" />
+
+                                            @item.Name
+
+                                            @if (item.Id == 4)
+                                            {
+                                                <div id="otherGoalsDiv" class="form-group text-left hidden">
+                                                    @Html.Label(Model["Enter your item"], htmlAttributes: new { @class = "col-md-12" })
+                                                    <div class="col-md-11">
+                                                        @Html.TextAreaFor(model => model.OtherGoals, new { @class = "form-control otherGoals", @id = "otherGoals" })
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            @if (item.Id == 1)
+                                            {
+                                                <div id="goalsAfterGraduationSiteDiv" class="form-group text-left hidden">
+                                                    @Html.Label(Model["Site"], htmlAttributes: new { @class = "col-md-12" })
+                                                    <div class="col-md-11">
+                                                        @Html.TextAreaFor(model => model.GoalsAfterGraduationSite, new { @class = "form-control otherGoals", @id = "goalsAfterGraduationSite" })
+                                                    </div>
+                                                </div>
+                                            }
+                                        </li>
+                                        <script>
+                                                //Check on Load
+                                            if ($('#@checkBoxId').data('id') == '1')
+                                            {
+                                                if ($('#@checkBoxId').prop('checked')) {
+                                                    $("#goalsAfterGraduationSiteDiv").removeClass("hidden");
+                                                }
+                                                else {
+                                                    $("#goalsAfterGraduationSiteDiv").addClass("hidden");
+
+                                                }
+                                            }
+                                            else
+                                            if ($('#@checkBoxId').data('id') == '4')
+                                            {
+                                                if ($('#@checkBoxId').prop('checked')) {
+                                                    $("#otherGoalsDiv").removeClass("hidden");
+                                                }
+                                                else {
+                                                    $("#otherGoalsDiv").addClass("hidden");
+
+                                                }
+                                            }
+                                                //Check on Load
+                                        </script>
+                                    }
+
+                                    <script>
+                                        function manageOtherGoalsDiv(checkBox) {
+                                            if ($(checkBox).data('id') == '4') {
+                                                if ($(checkBox).prop('checked')) {
+                                                    $("#otherGoalsDiv").removeClass("hidden");
+                                                }
+                                                else {
+                                                    $("#otherGoalsDiv").addClass("hidden");
+
+                                                }
+                                            }
+                                            else
+                                                if ($(checkBox).data('id') == '1') {
+                                                    if ($(checkBox).prop('checked')) {
+                                                        $("#goalsAfterGraduationSiteDiv").removeClass("hidden");
+                                                    }
+                                                    else {
+                                                        $("#goalsAfterGraduationSiteDiv").addClass("hidden");
+
+                                                    }
+                                                }
+                                        }
+
+                                    </script>
+
+                                </ul>
+
+                            </div>
+                        </fieldset>
+                    </div>
+
+                }
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-sm-10 col-xs-12 col-md-6 col-lg-4">
+                        <input type="submit" value="@Model["Save and Submit"]" class="col-lg-offset-1 btn btn-primary" />
+                        <input type="button"
+                               onclick="saveAndFinishLater = true; updateProfile();"
+                               value="@Model["Save and Finish Later"]" class="btn btn-warning" />
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger", })
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    }
+</div>
+<script>
+
+////$("#" + element).hide(400);
+
+var openClose = true;
+function Preview_Click(element)
+{
+
+    if (openClose == true)
+    {
+
+            $("#" + element).show(400);
+
+    }
+    else
+    {
+
+            $("#" + element).hide(400);
+
+    }
+    openClose = !openClose;
+    }
+
+    var saveAndFinishLater = false;
+$('#_ProfileEdit_Form').submit(function (e) {
+
+    e.preventDefault();
+   return updateProfile();
+});
+
+    function updateProfile() {
+
+        debugger
+
+        var sortableEthnicityListId = $('#ethnicityIdsHidden');
+
+        $(sortableEthnicityListId).val(
+            $.map($("#sortableEthnicityOrder").find('li > input'),
+                function (el) {
+                    if ($(el).prop('checked') == true) {
+                        return $(el).data('id')
+
+                    }
+                }));
+
+
+        var sortableTaskListId = $('#taskIdsHidden');
+
+        $(sortableTaskListId).val(
+            $.map($("#sortableTaskOrder").find('li > input'),
+                function (el) {
+                    if ($(el).prop('checked') == true) {
+                        return $(el).data('id')
+
+                    }
+                }));
+
+        var sortableGoalsAfterGraduationListId = $('#goalsAfterGraduationIdsHidden');
+
+        $(sortableGoalsAfterGraduationListId).val(
+            $.map($("#sortableGoalsAfterGraduationOrder").find('li > input'),
+                function (el) {
+                    if ($(el).prop('checked') == true) {
+                        return $(el).data('id')
+
+                    }
+                }));
+
+        var sortableMealTypeListId = $('#mealTypeIdsHidden');
+
+        $(sortableMealTypeListId).val(
+            $.map($("#sortableMealTypeOrder").find('li > input'),
+                function (el) {
+                    if ($(el).prop('checked') == true) {
+                        return $(el).data('id')
+
+                    }
+                }));
+
+
+
+    var form = $('#_ProfileEdit_Form');
+
+    if (saveAndFinishLater == false) {
+        if (form.valid() == false) return;
+
+        if (validateCustomElements() == false) { return false; }
+    }
+
+    var formData = new FormData($('#_ProfileEdit_Form').get(0));
+
+    formData.set('SaveAndFinishLater', saveAndFinishLater);
+    formData.set('IEEEMembership', $("#IEEEMembershipYes").prop('checked'));
+    formData.set('IndividualDisadvantaged', $("#IndividualDisadvantagedYes").prop('checked'));
+    formData.set('FirstGeneration', $("#FirstGenerationYes").prop('checked'));
+    formData.set('Disability', $("#DisabilityYes").prop('checked'));
+    HoldOn.open({
+        theme: 'sk-cube-grid',
+                    message: "<h4>@Model["Please wait..."]</h4>"
+                            });
+
+            $.ajax({
+    url: "/person/up", //you can get also action attribute from form using form.attr('action')
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function(result) {
+
+        if (result.success == false)
+        {
+
+                    $("#actionMessageHandlerMessage").text(result.message);
+        }
+        else
+        {
+            alert("Your information has been saved successfully.");
+            location.href = result.returnUrl;
+        }
+
+        @if(!string.IsNullOrEmpty(@Model.OnActionSuccess))
+                {
+            @Html.Raw("if(result.success == true){" + @Model.OnActionSuccess + "(result);}")
+                }
+
+        @if(!string.IsNullOrEmpty(@Model.OnActionFailed))
+                {
+            @Html.Raw("if(result.success == false){" + @Model.OnActionFailed + "();}")
+                }
+
+        HoldOn.close();
+
+    }).fail(function() { HoldOn.close(); });
+
+    return false;
+
+    }
+</script>
+
+@*validate*@
+
+<script>
+
+    function validateCustomElements() {
+
+        if ($("#DisabilityYes").length > 0 && $("#DisabilityYes").prop('checked') == $("#DisabilityNo").prop('checked')) {
+            alert("Please answer the \"Do you have a disability?\" Question");
+
+            return false;
+        }
+
+        if ($("#DisabilityYes").length > 0 && $("#DisabilityYes").prop('checked') == true &&
+            $("#AccommodationYes").prop('checked') == $("#AccommodationNo").prop('checked'))
+        {
+            alert("Please answer the \"If yes, will you need accommodations for your disability at the design contest?\" Question");
+
+            return false;
+        }
+
+        if ($("#DisabilityYes").length > 0 && $("#AccommodationYes").prop('checked') == true && $("#AccommodationTextBox").val() == '')
+        {
+            alert("Please specify the accommodations for your disability at the design contest");
+
+            return false;
+        }
+        if ($("#IndividualDisadvantagedYes").length > 0 && $("#IndividualDisadvantagedYes").prop('checked') == $("#IndividualDisadvantagedNo").prop('checked')) {
+            alert("Please answer the \"Are you an individual from a disadvantaged background\" Question");
+
+            return false;
+        }
+
+
+        if ($("#FirstGenerationYes").length > 0 && $("#FirstGenerationYes").prop('checked') == $("#FirstGenerationNo").prop('checked')) {
+            alert("Please answer the \"Are you a first-generation college student?\" Question");
+
+            return false;
+        }
+
+        if ($("#IEEEMembershipYes").prop('checked') == $("#IEEEMembershipNo").prop('checked')) {
+            alert("The IEEE Membership field is required.");
+
+            return false;
+        }
+
+        if ($("#levelOfConfidenceIdHidden").length > 0 && $('#levelOfConfidenceIdHidden').val() == '') {
+            alert("The Level of confidence as an engineer field is required.");
+            return false;
+        }
+
+        if ($("#householdEducationIdHidden").length > 0 && $('#householdEducationIdHidden').val() == '') {
+            alert("Gender field is required.");
+            return false;
+        }
+
+        if (userRole != 'student' && $("#shortBioTextArea").val() == '') {
+            alert("The Bio field is required.");
+            return false;
+        }
+
+        if (userRole == 'student') {
+            var yearClassificationDdl = $('#YearClassificationId');
+            var yearClassification = yearClassificationDdl[0].options[yearClassificationDdl[0].options.selectedIndex].text;
+
+            if (yearClassification == '') {
+                alert("Please select your Year classification");
+                return false;
+            }
+
+        }
+
+
+        if ($("#taskIdsHidden").val() == '') {
+            alert("Please select all the tasks that you are able to judge by checking the box");
+            return false;
+        }
+
+
+
+        if ($("#mealTypeIdsHidden").val() == '') {
+            alert("Please select the meals you are planning to attend");
+            return false;
+        }
+
+
+
+        if ($("#goalsAfterGraduationIdsHidden").length > 0 && $("#goalsAfterGraduationIdsHidden").val() == '') {
+            alert("Please answer the \"How did you hear about the Design Contest?\" Question");
+            return false;
+        }
+        debugger
+        if ($("#goalsAfterGraduationSiteDiv").hasClass('hidden') == false &&
+            $('#goalsAfterGraduationCheckbox_1').prop('checked') &&
+            $('#goalsAfterGraduationSite').val() == ''
+        )
+        {
+            alert('Please specify the Site in \"How did you hear about the Design Contest?\" question');
+            return false;
+        }
+        if ($("#otherGoalsDiv").hasClass('hidden') == false &&
+            $('#goalsAfterGraduationCheckbox_4').prop('checked') &&
+             $('#otherGoals').val() == ''
+        )
+        {
+            alert('Please specify the other item in \"How did you hear about the Design Contest?\" question');
+            return false;
+        }
+
+        if ($("#ethnicityIdsHidden").length > 0 && $("#ethnicityIdsHidden").val() == '') {
+            alert("Please select the Ethnicity");
+            return false;
+        }
+
+        var JacketSizeDdl = $('#JacketSizeId');
+
+        if (JacketSizeDdl[0] != undefined) {
+
+            var JacketSize = JacketSizeDdl[0].options[JacketSizeDdl[0].options.selectedIndex].text;
+            if (JacketSize == '') {
+                alert("Please select your jacket size");
+                return false;
+            }
+        }
+
+        var sizeDdl = $('#SizeId');
+        var tShirtSize = sizeDdl[0].options[sizeDdl[0].options.selectedIndex].text;
+
+        if (tShirtSize == '') {
+            alert("Please select your T-Shirt size");
+            return false;
+        }
+
+
+        var dietTypeDdl = $('#DietTypeDropDownList');
+        var dietType = dietTypeDdl[0].options[dietTypeDdl[0].options.selectedIndex].text;
+
+        //if (dietType == '') {
+        //    alert("Please select your diet type");
+        //    return false;
+        //}
+
+         @if (Request.IsAuthenticated && Model.CurrentUserRoles != null
+             && Model.CurrentUserRoles.Contains("Admin") == false
+             && Model.Agreement == false)
+         {
+             @Html.Raw("return validateAgreement();")
+         }
+        return true;
+    }
+
+    function validateAgreement() {
+
+        if ($("#Agreement").prop("checked") == false) {
+            alert('Please check the "Photograph & Video Release Consent" check box');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $("#PhoneNumber").mask("(999) 999-9999");
+        $("#PhoneNumber").click(function () {
+            $(this).focus();
+        });
+
+        $("#WorkPhoneNumber").mask("(999) 999-9999");
+        $("#WorkPhoneNumber").click(function () {
+            $(this).focus();
+        });
+
+        $("#EmgyPersonPhoneNumber").mask("(999) 999-9999");
+        $("#EmgyPersonPhoneNumber").click(function () {
+            $(this).focus();
+        });
+
+        if ("@Model.ProfilePictureUrl" == '')
+        {
+            $("#profilePictureUrlImg").attr("src", '/Resources/Images/anonymous.png');
+        }
+        else
+        {
+            $("#profilePictureUrlImg").attr("src", "@Model.ProfilePictureUrl");
+        }
+
+        if ("@Model.UniversityPictureUrl" == '')
+        {
+            $("#universityPictureUrlImg").attr("src", '/Resources/Images/university-empty-pic.png');
+        }
+        else
+        {
+            $("#universityPictureUrlImg").attr("src", "@Model.UniversityPictureUrl");
+        }
+         });
+
+</script>
+
+<script type="text/javascript">
+    function uploadProfilePicture() {
+
+        var formData = new FormData();
+
+        var profile_file = document.getElementById("profilePicturFileInput").files[0];
+
+        formData.append("oldProfilePictureUrl", "@Model.ProfilePictureUrl");
+        formData.append("UploadedProfilePicture", profile_file);
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/person/upp", //you can get also action attribute from form using form.attr('action')
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+        }).done(
+            function (result) {
+                if (result.success == true) {
+
+                    var profile_file = document.getElementById("profilePicturFileInput").files[0];
+                    if (result.profilePictureUrl == '') {
+                        result.profilePictureUrl = '/Resources/Images/anonymous.png';
+                    }
+                    $("#profilePictureUrlImg").attr("src", result.profilePictureUrl);
+                    $("#ProfilePictureUrlHidden").val(result.profilePictureUrl);
+                    alert(result.message);
+
+                }
+                HoldOn.close();
+            }).fail(function (result) {
+
+                alert(result.message);
+
+                HoldOn.close();
+            });
+    }
+</script>
+
+<script type="text/javascript">
+    function uploadUniversityPicture() {
+
+        var formData = new FormData();
+
+        var university_file = document.getElementById("universityPicturFileInput").files[0];
+
+        formData.append("oldUniversityPictureUrl", "@Model.UniversityPictureUrl");
+        formData.append("UploadedUniversityPicture", university_file);
+        formData.append("universityId", $("#UniversityId").val());
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/person/uup", //you can get also action attribute from form using form.attr('action')
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+        }).done(
+            function (result)
+            {
+                if (result.success == true) {
+                    var university_file = document.getElementById("universityPicturFileInput").files[0];
+                    if (result.universityPictureUrl == '') {
+                        result.universityPictureUrl = '/Resources/Images/university-empty-pic.png';
+                    }
+                    $("#universityPictureUrlImg").attr("src", result.universityPictureUrl);
+                    $("#UniversityPictureUrlHidden").val(result.universityPictureUrl);
+                    alert(result.message);
+
+                }
+                HoldOn.close();
+            }).fail(function () { HoldOn.close(); });
+    }
+
+    function loadUniversityPictureUrl(id)
+    {
+
+        $.ajax({
+            url: "/person/luup", //you can get also action attribute from form using form.attr('action')
+            type: 'POST',
+            data: { universityId: $("#UniversityId").val() },
+        }).done(
+            function (result)
+            {
+                if (result.success == true) {
+
+                    var university_file = document.getElementById("universityPicturFileInput").files[0];
+                    if (result.universityPictureUrl == '') {
+                        result.universityPictureUrl = '/Resources/Images/university-empty-pic.png';
+                    }
+                    $("#universityPictureUrlImg").attr("src", result.universityPictureUrl);
+                    $("#UniversityPictureUrlHidden").val(result.universityPictureUrl);
+
+                }
+            });
+    }
+</script>
+
+<script type="text/javascript">
+    function uploadResume() {
+
+        var formData = new FormData();
+
+        var resume_file = document.getElementById("resumeFileInput").files[0];
+
+        formData.append("oldResumeUrl", "@Model.ResumeUrl");
+        formData.append("uploadedResume", resume_file);
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        $.ajax({
+            url: "/person/ur", //you can get also action attribute from form using form.attr('action')
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+        }).done(
+            function (result) {
+                if (result.success == true) {
+                    alert(result.message);
+                    HoldOn.close();
+                    $("#ResumeUrlHidden").val(result.resumeUrl);
+                }
+                else {
+                HoldOn.close();
+            }
+            }).fail(function () { HoldOn.close(); });
+    }
+</script>

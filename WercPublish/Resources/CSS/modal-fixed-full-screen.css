@@ -1,0 +1,58 @@
+﻿.modal-fixed-full-screen {
+}
+
+    .modal-fixed-full-screen .modal {
+        position: fixed !important;
+        top: 10% !important;
+        bottom: 0 !important;
+        left: 5% !important;
+        right: 5% !important;
+        overflow: auto !important;
+    }
+
+    .modal-fixed-full-screen .modal-dialog {
+        position: relative !important;
+        margin: auto !important;
+        padding: 0 !important;
+        height: 64% !important;
+        width: 100% !important;
+    }
+
+    .modal-fixed-full-screen .modal-header {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        border: none !important;
+    }
+
+    .modal-fixed-full-screen .modal-content {
+        position: absolute !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .modal-fixed-full-screen .modal-body {
+        position: absolute !important;
+        top: 50px !important;
+        bottom: 0 !important;
+        font-size: 15px !important;
+        overflow: auto !important;
+        margin-bottom: 60px !important;
+        padding: 0 15px 0 !important;
+        width: 100% !important;
+    }
+
+    .modal-fixed-full-screen .modal-footer {
+        position: absolute !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        height: 60px !important;
+        padding: 10px !important;
+        background: #f1f3f5 !important;
+    }

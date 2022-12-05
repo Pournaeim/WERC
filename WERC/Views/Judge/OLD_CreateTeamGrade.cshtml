@@ -1,0 +1,170 @@
+﻿
+@model Model.ViewModels.Grade.VmTeamGradeDetail
+
+@{
+    ViewBag.Title = "Grading Team";
+    Layout = "~/Views/Shared/_LayoutJudge.cshtml";
+}
+
+@if (!string.IsNullOrEmpty(Model.ActionMessageHandler.Message))
+{
+    <h2>@Model.ActionMessageHandler.Message</h2>
+}
+
+<h4>Grading Team @Model.TeamName</h4>
+
+@using (Html.BeginForm("ctg", "grade", FormMethod.Post, new { enctype = "multipart/form-data", @class = "col-xs-12", id = "gradeForm" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal text-left">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.Label(@Model["Grading Type"]) :
+        @Html.Label(@Model.Grade)
+    </div>
+
+    <div class="form-group">
+        <div class="row">
+            <div id="EvaluationItemElementsContainer" class="col-xs-12">
+                <!--Textboxes will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-sm-10 col-xs-12 col-md-6 col-lg-4">
+            <input type="submit" value="@Model["Save & Create"]" class="btn btn-primary" onclick="collectData();return validateCustomElements();" />
+        </div>
+    </div>
+
+    @Html.HiddenFor(model => model.GradeDetailIds, htmlAttributes: new { @id = "gradeDetailIdsHidden" })
+    @Html.HiddenFor(model => model.TeamId, htmlAttributes: new { @id = "TeamIdHidden" })
+    @Html.HiddenFor(model => model.EvaluationItems, htmlAttributes: new { @id = "evaluationItemsHidden" })
+    @Html.HiddenFor(model => model.Points, htmlAttributes: new { @id = "pointsHidden" })
+    @Html.HiddenFor(model => model.Coefficients, htmlAttributes: new { @id = "coefficientsHidden" })
+    @Html.HiddenFor(model => model.MaxPoints, htmlAttributes: new { @id = "maxPointsHidden" })
+</div>
+}
+
+@*Collect generated elements data*@
+<script type="text/javascript">
+    function getCommaSeparateElementsValue(elementName) {
+
+        var values = "";
+        $("input[name='" + elementName + "']")
+            .map(function () {
+
+                values += $(this).val() + ",";
+
+            }).get();
+
+        if (values.length > 0) {
+            values = values.substring(0, values.length - 1);
+        }
+
+        return values;
+    }
+
+    function getGeneratedElementsCount(elementName) {
+
+        return $("input[name='" + elementName + "']").length;
+    }
+
+    function collectData() {
+        $("#pointsHidden").val(getCommaSeparateElementsValue('DynamicEvaluationItemPointTextBox'));
+    }
+</script>
+
+@*EvaluationItem TextBoxs*@
+<script type="text/javascript">
+
+    function GetDynamicEvaluationItemElements(evaluationItemValue, pointValue, maxPointValue, index) {
+
+        var element =
+            "<div class='col-xs-12'>" +
+                "<label class='form-control text-box single-line'>" + evaluationItemValue + "</label>" +
+            "</div>" +
+            "<div class='col-xs-12'>" +
+                "<div class='input-group row'>" +
+                    "<div class='col-xs-12 text-center'><span id='pointSliderValue" + index + "' style='color:0f0;font-weight:bold;'>" + pointValue + "</span></div>" +
+                    "<div class='col-xs-1 text-left'><input type='button' value='-' onClick=\"subtractOne('pointInput" + index + "', 'pointSliderValue" + index + "')\"></div>" +
+                    "<div class='col-xs-1 text-left'>0</div>" +
+                    "<div class='col-xs-4 text-left'><input id='pointInput" + index + "' step='1' class='form-control text-box single-line' name = 'DynamicEvaluationItemPointTextBox' type='range' " +
+                            "min='0' max='" + maxPointValue + "' value = '" + pointValue + "' onchange=\"showValue('pointSliderValue" + index + "',this.value)\"/></div>" +
+                    "<div class='col-xs-1 text-right'>" + maxPointValue + "</div>" +
+                    "<div class='col-xs-1 text-right'><input type='button' value='+' onClick=\"addOne('pointInput" + index + "', 'pointSliderValue" + index + "')\"></div>"+
+                "</div>" +
+            "</div>";
+        
+         return element;
+    }
+
+    function showValue(id, value) {
+        
+        $("#" + id).html(value);
+    }
+
+    function addOne(id, valueId) {
+        
+
+        var value = $("#" + id).val();
+        $("#" + id).val(parseInt(value) + 1);
+        showValue(valueId, $("#" + id).val());
+    }
+
+    function subtractOne(id, valueId) {
+        var value = $("#" + id).val();
+        $("#" + id).val(parseInt(value) - 1);
+        showValue(valueId, $("#" + id).val());
+    }
+
+    function AddEvaluationItemTextBox() {
+        var div = document.createElement('DIV');
+        $(div).addClass("form-group element-group");
+        div.innerHTML = GetDynamicEvaluationItemElements("", "");
+        document.getElementById("EvaluationItemElementsContainer").appendChild(div);
+    }
+
+    function RecreateDynamicEvaluationItemElements() {
+        var evaluationItems = '@Model.EvaluationItems';
+        var points = '@Model.Points';
+        var maxPoints = '@Model.MaxPoints';
+
+        if (evaluationItems != '') {
+
+            var evaluationItemNameArray = evaluationItems.split(',');
+            var pointArray = points.split(',');
+            var maxPointArray = maxPoints.split(',');
+            var html = "";
+
+            for (var i = 0; i < evaluationItemNameArray.length; i++) {
+                html += "<div class='form-group element-group'>" + GetDynamicEvaluationItemElements(
+                    evaluationItemNameArray[i],
+                    pointArray[i],
+                    maxPointArray[i],
+                    i) + "</div>";
+            }
+            document.getElementById("EvaluationItemElementsContainer").innerHTML = html;
+        }
+    }
+
+</script>
+
+@*Initialize*@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        AddEvaluationItemTextBox();
+        RecreateDynamicEvaluationItemElements();
+    });
+
+    window.onload = callInitialFunctions;
+
+    function callInitialFunctions() {
+    }
+
+</script>
+

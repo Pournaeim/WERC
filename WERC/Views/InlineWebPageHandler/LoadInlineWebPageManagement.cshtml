@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "Load Inline Web Page Management";
+    Layout = "~/Views/Shared/_InlineWebPageHandlerLayout.cshtml";
+}
+<div class="login">
+    <form method="post" action="/InlineWebPageHandler/liwp" id="loginForm">
+        @*<input type="text" name="user" placeholder="Username" required="required"   autocomplete="new-password" />
+        <input type="password" name="pasword" placeholder="Password" required="required"  autocomplete="new-password" />*@
+        <input type="text" name="url" placeholder="Site Address" required="required" inputmode="url" />
+         <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
+    </form>
+</div>
+ 

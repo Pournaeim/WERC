@@ -1,0 +1,609 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="1">
+      <VmTeamMember Ref="2" type="Stimulsoft.Report.Dictionary.StiSqlDatabase" isKey="true">
+        <Alias>VmTeamMember</Alias>
+        <ConnectionStringEncrypted>9Gz7oe9KS91FYYSld1zoF41aaSjNSsLVRk25CHo9bGfFOvnPxlzD7cxG7dxjxKwv4hjdiUNRc91qXO2Uwxj2j8NwwevvVnv5bFrt3Gol</ConnectionStringEncrypted>
+        <Name>VmTeamMember</Name>
+      </VmTeamMember>
+    </Databases>
+    <DataSources isList="true" count="1">
+      <ViewTeamMember Ref="3" type="Stimulsoft.Report.Dictionary.StiSqlSource" isKey="true">
+        <Alias>ViewTeamMember</Alias>
+        <Columns isList="true" count="59">
+          <value>UserName,System.String</value>
+          <value>RoleName,System.String</value>
+          <value>RoleId,System.String</value>
+          <value>Date,System.DateTime</value>
+          <value>Id,System.Int32</value>
+          <value>PayStatus,System.Boolean</value>
+          <value>PaidByCheque,System.Boolean</value>
+          <value>PaidByChequePercent,System.Decimal</value>
+          <value>TeamId,System.Int32</value>
+          <value>TaskId,System.Int32</value>
+          <value>EmailConfirmed,System.Boolean</value>
+          <value>LockoutEnabled,System.Boolean</value>
+          <value>RegistrationStatus,System.Boolean</value>
+          <value>PhoneNumber,System.String</value>
+          <value>EmgyPersonFirstName,System.String</value>
+          <value>EmgyPersonLastName,System.String</value>
+          <value>EmgyPersonPhoneNumber,System.String</value>
+          <value>EmgyPersonRelationship,System.String</value>
+          <value>T_Shirt_Size,System.String</value>
+          <value>SizeId,System.Int32</value>
+          <value>LabResultUrl,System.String</value>
+          <value>WrittenReportUrl,System.String</value>
+          <value>PreliminaryReportUrl,System.String</value>
+          <value>TeamNumber,System.Int32</value>
+          <value>JacketSize,System.String</value>
+          <value>JacketSizeId,System.Int32</value>
+          <value>DietTypeId,System.Int32</value>
+          <value>DietType,System.String</value>
+          <value>UniversityPictureUrl,System.String</value>
+          <value>TeamName,System.String</value>
+          <value>Task,System.String</value>
+          <value>Survey,System.Boolean</value>
+          <value>MemberName,System.String</value>
+          <value>Identifier,System.String</value>
+          <value>Sex,System.Boolean</value>
+          <value>BirthDate,System.DateTime</value>
+          <value>WorkPhoneNumber,System.String</value>
+          <value>OpenTaskTestPlanUrl,System.String</value>
+          <value>PreliminaryStatus,System.Boolean</value>
+          <value>OpenTaskTestPlanStatus,System.Boolean</value>
+          <value>TeamState,System.Int32</value>
+          <value>TeamImageUrl,System.String</value>
+          <value>FirstName,System.String</value>
+          <value>LastName,System.String</value>
+          <value>UserDefiner,System.String</value>
+          <value>LastSignIn,System.DateTime</value>
+          <value>UniversityId,System.Int32</value>
+          <value>University,System.String</value>
+          <value>StreetLine1,System.String</value>
+          <value>StreetLine2,System.String</value>
+          <value>City,System.String</value>
+          <value>State,System.String</value>
+          <value>ZipCode,System.String</value>
+          <value>ShortBio,System.String</value>
+          <value>ProfilePictureUrl,System.String</value>
+          <value>ResumeUrl,System.String</value>
+          <value>MemberUserId,System.String</value>
+          <value>Email,System.String</value>
+          <value>RegisterDate,System.DateTime</value>
+        </Columns>
+        <CommandTimeout>30</CommandTimeout>
+        <Dictionary isRef="1" />
+        <Key>5e8541be3b294a8fb1ba5a6fce4995ad</Key>
+        <Name>ViewTeamMember</Name>
+        <NameInSource>VmTeamMember</NameInSource>
+        <Parameters isList="true" count="0" />
+        <SqlCommand>select * from ViewTeamMember</SqlCommand>
+      </ViewTeamMember>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Resources isList="true" count="0" />
+    <Variables isList="true" count="4">
+      <value>,ReportVariableTeamName,ReportVariableTeamName,,System.String,ReportVariableTeamName,False,False,False,False</value>
+      <value>,ReportVariableTaskName,ReportVariableTaskName,,System.String,ReportVariableTaskName,False,False,False,False</value>
+      <value>,ReportVariableUniversityName,ReportVariableUniversityName,,System.String,ReportVariableUniversityName,False,False,False,False</value>
+      <value>,ReportVariableAttachments,ReportVariableAttachments,,System.String,_x0031__x000D__x000A_2_x000D__x000A_3_x000D__x000A_4_x000D__x000A_5_x000D__x000A_6_x000D__x000A_7_x000D__x000A_8,False,False,False,False</value>
+    </Variables>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <Key>395749e4362f4eac92097a6539bf6dc6</Key>
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="4" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="6">
+        <HeaderBand1 Ref="5" type="HeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,0.4,20.5,19.18</ClientRectangle>
+          <Components isList="true" count="19">
+            <Text1 Ref="6" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0.2,8.8,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,24</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>Experimental Safety Plan.</Text>
+              <TextBrush>Black</TextBrush>
+            </Text1>
+            <Text2 Ref="7" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,1.2,4,1</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,20</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text2</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>Team Name:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text2>
+            <Text3 Ref="8" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4,1.2,4.2,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,20</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{ReportVariableTeamName}</Text>
+              <TextBrush>[149:55:52]</TextBrush>
+            </Text3>
+            <Text4 Ref="9" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>8.2,1.2,6.6,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,20</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text4</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{ReportVariableTaskName}</Text>
+              <TextBrush>[149:55:52]</TextBrush>
+            </Text4>
+            <Text5 Ref="10" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,2.1,17.4,0.84</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,20</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text5</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{ReportVariableUniversityName}</Text>
+              <TextBrush>[149:55:52]</TextBrush>
+            </Text5>
+            <Text6 Ref="11" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.42,3.57,19.74,6.93</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,12</Font>
+              <HorAlignment>Width</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text6</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>An Experiment Safety Plan (ESP) is required for every experiment conducted and performed by students in the WERC Design Contest.  The purpose of the ESP is to assure the safety of all by identifying the safest possible methods to conduct an experiment.  By signing below the individual(s) conducting the experiment, College of Engineering Safety Specialist (COE Safety), and the faculty advisor acknowledge responsibility for the following requirements.
+
+1)       Appropriate Personal Protective Equipment (PPE) must always be worn while in the lab (as described in the ESP). The minimum required PPE to enter a research/teaching lab is (1) long pants, (2) closed toe shoes, (3) lab coat or long sleeve shirt, and (4) safety glasses with side shields.
+
+2)       For safety reasons, no researcher is permitted to work alone in the lab at any time. Because the labs are open 24/7, there may be occasions (such as a late night or over weekends) when there are no other people working in the lab. If you plan to work during a time when the lab might be expected to be empty, please plan ahead and coordinate your work schedule with another lab member.</Text>
+              <TextBrush>Black</TextBrush>
+            </Text6>
+            <Text7 Ref="12" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>11.55,10.71,1.05,0.42</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,12</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text7</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>Date</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text7>
+            <Text8 Ref="13" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.21,16.17,19.74,2.31</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,12</Font>
+              <HorAlignment>Width</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text8</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>3)       By signing below, both faculty advisor and researchers(s) understand that the CHO can approve/disapprove any part of the ESP.  The CHO can further assemble a committee of individuals with appropriate technical or EH&amp;S background to assist in reviewing the ESP. It is the goal of the CHO to help the researcher(s) find the safest method(s) of conducting an experiment. The CHO, or any faculty member, may stop lab activity of individuals not following good lab practices.  </Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text8>
+            <Text9 Ref="14" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.63,11.76,3.99,0.63</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,12</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text9</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>ESP Phase I approval:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text9>
+            <Text10 Ref="15" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.63,12.6,2.73,0.63</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,12,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text10</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text> COE Safety</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text10>
+            <Text11 Ref="16" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.63,13.86,3.99,0.63</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,12</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text11</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>ESP Phase II approval:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text11>
+            <Text12 Ref="17" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.63,14.7,2.73,0.63</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,12,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text12</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text> COE Safety</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text12>
+            <StartPointPrimitive1 Ref="18" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+              <ClientRectangle>0.42,11.34,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>StartPointPrimitive1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <ReferenceToGuid>87b2285cfc6c41c78852bf7b5c51929a</ReferenceToGuid>
+            </StartPointPrimitive1>
+            <EndPointPrimitive1 Ref="19" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+              <ClientRectangle>13.86,15.54,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>EndPointPrimitive1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <ReferenceToGuid>87b2285cfc6c41c78852bf7b5c51929a</ReferenceToGuid>
+            </EndPointPrimitive1>
+            <HorizontalLinePrimitive1 Ref="20" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0.42,13.44,13.44,0.0254</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions isList="true" count="0" />
+              <EndCap Ref="21" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <StartCap Ref="22" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive1>
+            <StartPointPrimitive2 Ref="23" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+              <ClientRectangle>6.72,11.34,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>StartPointPrimitive2</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <ReferenceToGuid>020576eb6f48469b883ff3f1a37e3458</ReferenceToGuid>
+            </StartPointPrimitive2>
+            <EndPointPrimitive2 Ref="24" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+              <ClientRectangle>6.72,15.54,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>EndPointPrimitive2</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <ReferenceToGuid>020576eb6f48469b883ff3f1a37e3458</ReferenceToGuid>
+            </EndPointPrimitive2>
+            <StartPointPrimitive3 Ref="25" type="Stimulsoft.Report.Components.StiStartPointPrimitive" isKey="true">
+              <ClientRectangle>10.29,11.34,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>StartPointPrimitive3</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <ReferenceToGuid>1e90d2eba7b64227910f83f73697828f</ReferenceToGuid>
+            </StartPointPrimitive3>
+            <EndPointPrimitive3 Ref="26" type="Stimulsoft.Report.Components.StiEndPointPrimitive" isKey="true">
+              <ClientRectangle>10.29,15.54,0,0</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Name>EndPointPrimitive3</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <ReferenceToGuid>1e90d2eba7b64227910f83f73697828f</ReferenceToGuid>
+            </EndPointPrimitive3>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>HeaderBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </HeaderBand1>
+        <TableViewTeamMember Ref="27" type="Stimulsoft.Report.Components.Table.StiTable" isKey="true">
+          <Brush>Transparent</Brush>
+          <BusinessObjectGuid isNull="true" />
+          <ClientRectangle>0,20.38,20.5,1.6</ClientRectangle>
+          <ColumnCount>4</ColumnCount>
+          <Components isList="true" count="8">
+            <TableViewTeamMember_Cell1 Ref="28" type="TableCell" isKey="true">
+              <Brush>White</Brush>
+              <ClientRectangle>0,0,5.25,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,14,Bold</Font>
+              <ID>8</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>TableViewTeamMember_Cell1</Name>
+              <Page isRef="4" />
+              <Parent isRef="27" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>School and Team</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </TableViewTeamMember_Cell1>
+            <TableViewTeamMember_Cell2 Ref="29" type="TableCell" isKey="true">
+              <Brush>White</Brush>
+              <ClientRectangle>5.25,0,5.04,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,14,Bold</Font>
+              <ID>9</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>TableViewTeamMember_Cell2</Name>
+              <Page isRef="4" />
+              <Parent isRef="27" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>Name</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </TableViewTeamMember_Cell2>
+            <TableViewTeamMember_Cell3 Ref="30" type="TableCell" isKey="true">
+              <Brush>White</Brush>
+              <ClientRectangle>10.29,0,5.04,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,14,Bold</Font>
+              <ID>10</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>TableViewTeamMember_Cell3</Name>
+              <Page isRef="4" />
+              <Parent isRef="27" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>Signature</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </TableViewTeamMember_Cell3>
+            <TableViewTeamMember_Cell4 Ref="31" type="TableCell" isKey="true">
+              <Brush>White</Brush>
+              <ClientRectangle>15.33,0,5.17,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,14,Bold</Font>
+              <ID>11</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>TableViewTeamMember_Cell4</Name>
+              <Page isRef="4" />
+              <Parent isRef="27" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>Date</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </TableViewTeamMember_Cell4>
+            <TableViewTeamMember_Cell5 Ref="32" type="TableCell" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>0,0.8,5.25,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <ID>0</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>TableViewTeamMember_Cell5</Name>
+              <Page isRef="4" />
+              <Parent isRef="27" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>{ViewTeamMember.RoleName}</Text>
+              <TextBrush>Black</TextBrush>
+            </TableViewTeamMember_Cell5>
+            <TableViewTeamMember_Cell6 Ref="33" type="TableCell" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>5.25,0.8,5.04,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <ID>1</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>TableViewTeamMember_Cell6</Name>
+              <Page isRef="4" />
+              <Parent isRef="27" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <Text>{ViewTeamMember.MemberName}</Text>
+              <TextBrush>Black</TextBrush>
+            </TableViewTeamMember_Cell6>
+            <TableViewTeamMember_Cell7 Ref="34" type="TableCell" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>10.29,0.8,5.04,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <ID>2</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>TableViewTeamMember_Cell7</Name>
+              <Page isRef="4" />
+              <Parent isRef="27" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <TextBrush>Black</TextBrush>
+            </TableViewTeamMember_Cell7>
+            <TableViewTeamMember_Cell8 Ref="35" type="TableCell" isKey="true">
+              <Border>All;Black;1;Solid;False;4;Black</Border>
+              <Brush>White</Brush>
+              <ClientRectangle>15.33,0.8,5.17,0.8</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Arial,9</Font>
+              <ID>3</ID>
+              <JoinCells isList="true" count="0" />
+              <Margins>0,0,0,0</Margins>
+              <Name>TableViewTeamMember_Cell8</Name>
+              <Page isRef="4" />
+              <Parent isRef="27" />
+              <Restrictions>AllowMove, AllowSelect, AllowChange</Restrictions>
+              <TextBrush>Black</TextBrush>
+            </TableViewTeamMember_Cell8>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <DataRelationName isNull="true" />
+          <DataSourceName>ViewTeamMember</DataSourceName>
+          <Filters isList="true" count="0" />
+          <HeaderPrintOn>OnlyFirstPage</HeaderPrintOn>
+          <HeaderRowsCount>1</HeaderRowsCount>
+          <MinHeight>0.21</MinHeight>
+          <Name>TableViewTeamMember</Name>
+          <NumberID>12</NumberID>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <RowCount>2</RowCount>
+          <Sort isList="true" count="0" />
+        </TableViewTeamMember>
+        <FooterBand1 Ref="36" type="FooterBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,22.78,20.5,6.22</ClientRectangle>
+          <Components isList="true" count="2">
+            <Text13 Ref="37" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0.09,11.34,0.84</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,24</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text13</Name>
+              <Page isRef="4" />
+              <Parent isRef="36" />
+              <Text>Required attachments to the ESP:</Text>
+              <TextBrush>Black</TextBrush>
+            </Text13>
+            <Text14 Ref="38" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.21,0.95,20.13,5.04</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Times New Roman,16</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text14</Name>
+              <Page isRef="4" />
+              <Parent isRef="36" />
+              <Text>{ReportVariableAttachments}</Text>
+              <TextBrush>Black</TextBrush>
+            </Text14>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>FooterBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </FooterBand1>
+        <RectanglePrimitive1 Ref="39" type="RectanglePrimitive" isKey="true">
+          <ClientRectangle>0.42,11.74,13.44,4.2</ClientRectangle>
+          <Color>Black</Color>
+          <Conditions isList="true" count="0" />
+          <Guid>87b2285cfc6c41c78852bf7b5c51929a</Guid>
+          <Name>RectanglePrimitive1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </RectanglePrimitive1>
+        <VerticalLinePrimitive1 Ref="40" type="VerticalLinePrimitive" isKey="true">
+          <ClientRectangle>6.72,11.74,0.0254,4.2</ClientRectangle>
+          <Color>Black</Color>
+          <Conditions isList="true" count="0" />
+          <EndCap Ref="41" type="Cap" isKey="true">
+            <Color>Black</Color>
+          </EndCap>
+          <Guid>020576eb6f48469b883ff3f1a37e3458</Guid>
+          <Name>VerticalLinePrimitive1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <StartCap Ref="42" type="Cap" isKey="true">
+            <Color>Black</Color>
+          </StartCap>
+        </VerticalLinePrimitive1>
+        <VerticalLinePrimitive2 Ref="43" type="VerticalLinePrimitive" isKey="true">
+          <ClientRectangle>10.29,11.74,0.0254,4.2</ClientRectangle>
+          <Color>Black</Color>
+          <Conditions isList="true" count="0" />
+          <EndCap Ref="44" type="Cap" isKey="true">
+            <Color>Black</Color>
+          </EndCap>
+          <Guid>1e90d2eba7b64227910f83f73697828f</Guid>
+          <Name>VerticalLinePrimitive2</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <StartCap Ref="45" type="Cap" isKey="true">
+            <Color>Black</Color>
+          </StartCap>
+        </VerticalLinePrimitive2>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>1faa7b711eb744b48a82155924303d60</Guid>
+      <Margins>0.25,0.25,0.25,0.25</Margins>
+      <Name>Page1</Name>
+      <PageHeight>29.7</PageHeight>
+      <PageWidth>21</PageWidth>
+      <PaperSize>A4</PaperSize>
+      <Report isRef="0" />
+    </Page1>
+  </Pages>
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>2/19/2020 1:05:52 AM</ReportChanged>
+  <ReportCreated>2/18/2020 2:47:03 PM</ReportCreated>
+  <ReportFile>C:\MyProject\Web\WERC\WERC\Resources\Reports\ESPStimulReport.mrt</ReportFile>
+  <ReportGuid>6cc3c0bcfbb743a8a2aecb3b15b80745</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Centimeters</ReportUnit>
+  <ReportVersion>2019.2.3.0</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

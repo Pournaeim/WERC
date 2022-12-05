@@ -1,0 +1,19 @@
+﻿
+@model  Model.ViewModels.Invoice.VmInvoiceCollection
+
+@{
+                /**/
+
+                ViewBag.Title = "Invoice Form";
+                Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h3>
+    List of Extra Participants Should be Paid
+</h3>
+@foreach (var item in Model.Invoices)
+{
+    <div id="invoiceDetailContainer" class="row">
+        @Html.Partial("_ExtraMemberReport", item)
+    </div>
+
+}

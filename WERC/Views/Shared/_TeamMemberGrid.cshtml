@@ -1,0 +1,606 @@
+﻿
+@using Model.ToolsModels.Grid
+
+@model VmJsGrid
+
+@{
+
+    var jsGridHtmlElementId = "_" + Model.HtmlElementId;
+    var jsGridObjectId = Model.HtmlElementId;
+    var detailsDialogHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+    var detailsFormHtmlElementId = Guid.NewGuid().ToString().Replace("-", "_");
+
+    var jsGridLoadDataUrl = Url.Action(Model.DataAction, Model.DataController);
+    var jsGridInsertDataUrl = Url.Action(Model.CreateAction, Model.CreateController);
+    var jsGridUpdateDataUrl = Url.Action(Model.EditAction, Model.EditController);
+    var jsGridDeleteDataUrl = Url.Action(Model.DeleteAction, Model.DeleteController);
+    var Display = Model.ReadOnly ? "hidden" : "";
+    var AllowUpdate = (!Model.ReadOnly).ToString().ToLower();
+
+}
+<div class="row">
+
+    <div id="externalPager"></div><div id="@jsGridHtmlElementId"></div>
+
+    @*hidden elements sectio start*@
+
+    <div class="hidden">
+        <div class="config-panel">
+            <label><input id="heading" type="checkbox" checked /> Heading</label>
+            <label><input id="filtering" type="checkbox" /> Filtering</label>
+            <label><input id="inserting" type="checkbox" /> Inserting</label>
+            <label><input id="editing" type="checkbox" checked /> Editing</label>
+            <label><input id="paging" type="checkbox" checked /> Paging</label>
+            <label><input id="sorting" type="checkbox" /> Sorting</label>
+            <label><input id="selecting" type="checkbox" checked /> Selecting</label>
+        </div>
+        <div id="dialogConfirm" title="Delete...">
+            Are you sure?
+        </div>
+    </div>
+
+    <div id="@detailsDialogHtmlElementId" class="row @Display">
+
+        <form id="@detailsFormHtmlElementId" role="form">
+            <input type="hidden" id="Id" name="Id" />
+            <input type="hidden" id="TeamName" name="TeamName" />
+            <input type="hidden" id="TeamId" name="TeamId" />
+            <input type="hidden" id="MemberUserId" name="MemberUserId" />
+
+            <div class="col-xs-12 hidden" id="addMemeberMessage">
+                <span class="text-info">Each member will receive an email with sign-in information to complete personal information</span>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label for="FirstName" class="control-label">@Model["First Name"]:</label>
+                    <input id="FirstName" name="FirstName" type="text" class="form-control" autoComplete="new-password" />
+                </div>
+                <div class="form-group">
+                    <label for="LastName" class="control-label">@Model["Last Name"]:</label>
+                    <input id="LastName" name="LastName" type="text" class="form-control" autoComplete="new-password" />
+                </div>
+                <div class="form-group">
+                    <label for="Email" class="control-label">@Model["Email"]:</label>
+                    <input id="Email" name="Email" type="text" class="form-control" autoComplete="new-password" />
+                </div>
+                <div id="isTeamLeaderDiv" class="form-group">
+                    <label for="IsTeamLeader" class="control-label">@Model["Select as Team Leader"]:</label>
+                    <input id="IsTeamLeader" name="IsTeamLeader" type="checkbox" onclick="isTeamLeaderCheckboxClick()" class="" autoComplete="new-password" />
+                    <div class="col-xs-12">
+                        <span class="text-info"> (Team Leader has access to add another team members)</span>
+                    </div>
+                </div>
+                <div id="isCoAdvisorDiv" class="form-group">
+                    <label for="IsCoAdvisor" class="control-label">@Model["Select as Co-Advisor"]:</label>
+                    <input id="IsCoAdvisor" name="IsCoAdvisor" type="checkbox" onclick="isCoAdvisorCheckboxClick()" class="" autoComplete="new-password" />
+                    <div class="col-xs-12">
+                        <span id="coAdvisorSpan" class="text-info"> (Co-Advisor has access to add another team members)</span>
+                    </div>
+                </div>
+                <div class="form-group hidden">
+                    <label for="RegistrationStatus" class="control-label">@Model["Registration Status"]:</label>
+                    <input id="RegistrationStatus" name="RegistrationStatus" type="checkbox" class="" autoComplete="new-password" />
+                </div>
+                <div class="form-group hidden">
+                    <label for="Survey" class="control-label">@Model["SURVEY"]:</label>
+                    <input id="Survey" name="Survey" type="checkbox" class="" />
+                </div>
+                <script>
+                    function isCoAdvisorCheckboxClick() {
+                        if ($("#IsCoAdvisor").prop("checked") == true) {
+                            $("#IsTeamLeader").prop("checked", "");
+                        }
+                    }
+                    function isTeamLeaderCheckboxClick() {
+                        if ($("#IsTeamLeader").prop("checked") == true) {
+                            $("#IsCoAdvisor").prop("checked", "");
+                        }
+                    }
+                </script>
+            </div>
+
+            <div class="col-xs-12 text-center">
+                <button type="submit" id="save" class="btn btn-primary btn-group">@Model["Update"]</button>
+                <button type="button" id="cancel" class="btn btn-primary btn-group" onclick='$("#@detailsDialogHtmlElementId").dialog("close");'>@Model["Cancel"]</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<script>
+    function validateTeam() {
+        return true;
+    }
+
+    var @jsGridObjectId = {
+
+        FirstLoad: true,
+
+        LoadDataUrl: "@jsGridLoadDataUrl",
+
+        LoadData:function(){
+            $("#@jsGridHtmlElementId").jsGrid("render");
+        }
+    };
+    var gridRowIndex = 0;
+
+    $(function () {
+
+        $("#@jsGridHtmlElementId").jsGrid({
+            width: "100%",
+            editing: @AllowUpdate,
+            autoload: true,
+            paging: false,
+            pageButtonCount: 5,
+            datatype: "json",
+            updateOnResize: false,
+            rowDoubleClick: function (args) {
+
+                if ((args.item.RoleName == 'Advisor' || args.item.RoleName == 'CoAdvisor' )&& '@Model.CurrentUserRoles.Contains("Leader").ToString().ToLower()' == 'true') {
+                    return;
+                }
+                showDetailsDialog("Edit", args.item);
+            },
+            rowClick: function (args) {
+            },
+            controller: {
+                loadData: function (filter) { gridRowIndex = 0;
+
+                    if (@jsGridObjectId@Html.Raw(".FirstLoad") == true) {
+                        @jsGridObjectId@Html.Raw(".FirstLoad") = false;
+                        return;
+                    }
+
+                    return $.ajax({
+                        type: "GET",
+                        url: @jsGridObjectId@Html.Raw(".LoadDataUrl"),
+                        data: { teamId: $("#@Model.ExternalHtmlControlId").val(), filter }
+                    });
+                }
+            },
+            insertItem: function (item) {
+                item.TeamId = $("#@Model.ExternalHtmlControlId").val();
+
+                var d = $.Deferred();
+                $.ajax({
+                    type: "POST",
+                    url: "@jsGridInsertDataUrl",
+                    data: item
+                }).done(function (response) {
+                    if (response.success === false) {
+                        alert(response.message);
+                    }
+                    d.resolve(response.value);
+
+                }).fail(function (xhr, ajaxOptions, thrownError) {
+
+                    //here, restore old row value
+                    //previousItem doesn't exist in this point
+
+                    d.resolve();
+                });
+
+                return d.promise();
+
+            },
+            updateItem: function (item) {
+
+                var d = $.Deferred();
+                item.TeamId = $("#@Model.ExternalHtmlControlId").val();
+
+                $.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    url: "@jsGridUpdateDataUrl",
+                    cache: false,
+                    data: { model: item }
+                }).done(function (response) {
+                    if (response.success === false) {
+                        alert(response.message);
+                    }
+                    d.resolve(response.value);
+
+                }).fail(function (xhr, ajaxOptions, thrownError) {
+
+                    //here, restore old row value
+                    //previousItem doesn't exist in this point
+                    d.resolve();
+                });
+
+                return d.promise();
+
+            },
+            deleteItem: function (item) {
+
+                var d = $.Deferred();
+
+                $.ajax({
+                    type: "GET",
+                    url: "@jsGridDeleteDataUrl",
+                    data: item
+                }).done(function (response) {
+                    d.resolve(response.value);
+                    if (response.success == false) {
+
+                        alert(response.message);
+                        window.location.reload();
+                    }
+                    }).fail(function (result) {
+
+                    d.resolve();
+                });
+
+                return d.promise();
+            },
+            onRefreshing: function (args) {gridRowIndex = 0;}, fields: [
+                {
+                        name: "Id", type: "number", title: "@Model["Row No"]", sorting: false, filtering: false, visible: true, width: 50,
+                        itemTemplate: function (value, item) {
+
+                            var result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var customDiv = $("<div class='text-center'>" + (gridRowIndex + 1) + "</div>");
+                            gridRowIndex++;
+                            $("#externalPager").html('Total rows: ' + gridRowIndex);
+
+                            return result.add(customDiv);
+                        }
+                    },
+                    {
+                        type: "control",
+                        modeSwitchButton: false,
+                        editButton: false,
+                        deleteButton: false,
+                        headerTemplate: function () {
+                            return $("<button>").attr("type", "button").attr("title", "Add Member").text("Add Member")
+                                .on("click", function () {
+                                    showDetailsDialog("Add", {});
+                                });
+                        },
+
+                        itemTemplate: function (value, item) {
+                            if (item.RoleName == 'Advisor') {
+                                return;
+                            }
+
+                            if (item.RoleName == 'Leader' && '@Model.CurrentUserRoles.Contains("Leader").ToString().ToLower()' == 'true') {
+                                return;
+                            }
+                            if (item.RoleName == 'CoAdvisor' && '@Model.CurrentUserRoles.Contains("CoAdvisor").ToString().ToLower()' == 'true') {
+                                return;
+                            }
+
+                            @*if (item.MemberUserId == '@Model.CurrentUserId') {
+                                return;
+                            }*@
+
+                            var $result = jsGrid.fields.control.prototype.itemTemplate.apply(this, arguments);
+
+                            var $customDeleteButton = $("<button>").attr(
+                                {
+                                    class: "customGridDeletebutton jsgrid-button jsgrid-delete-button"
+                                }).click(function (e) {
+
+
+                                    $("#dialogConfirm").dialog({
+                                        resizable: false,
+                                        height: "auto",
+                                        width: 400,
+                                        modal: true,
+                                        dialogClass: "no-close", //removes X from dialog
+                                        buttons: {
+                                            'YesButton' : {
+                                                click:function() {
+                                                    e.stopPropagation();
+                                                    $("#@jsGridHtmlElementId").jsGrid("deleteItem", item);
+                                                    $("#@jsGridHtmlElementId").jsGrid("render");
+                                                    $(this).dialog("close");
+                                                },
+                                                text: '@Model["Yes"]',
+                                                class: "btn btn-primary"
+                                            },
+                                            'NoButton': {
+                                                click: function () {
+                                                    e.stopPropagation();
+                                                    $(this).dialog("close");
+                                                },
+                                                text: '@Model["No"]',
+                                                class: "btn btn-primary"
+                                            }
+                                        },
+                                        open: function () {
+                                            $('.ui-widget-overlay').addClass('custom-overlay');
+
+                                        }
+                                    });
+                                });
+
+                            return $result.add($customDeleteButton);
+                        }
+                    },
+
+                { name: "MemberUserId", type: "number", visible: false },
+                { name: "CanChangeLeader", title: "", type: "checkbox", visible: false },
+                { name: "ProfilePictureUrl", title: "@Model[""]",
+                    itemTemplate: function (val, item) {
+
+                        if (val == null)
+                        {
+                            val = '/Resources/Images/anonymous.png';
+                        }
+
+                        return $("<img>").attr("src", val).css({width:"64px"})
+                    }
+                },
+                { name: "RoleName", title: "@Model["Role"]", type: "text", visible: true, width: 100 },
+                { name: "MemberName", title: "@Model["First & Last Name"]", type: "text", width: 150, visible: false  },
+                { name: "FirstName", title: "@Model["First Name"]", type: "text", width: 80, visible: true },
+                { name: "LastName", title: "@Model["Last Name"]", type: "text", width: 80, visible: true },
+                { name: "TeamName", title: "@Model["Team Name"]", type: "text", width: 10, visible: false },
+                { name: "Email", title: "@Model["Email"]", type: "email", width: 120 },
+                { name: "Survey", title: "@Model["Survey"]", type: "checkbox", visible: false },
+                { name: "RegistrationStatus", title: "@Model["Registration Status"]", type: "checkbox", visible: false  },
+                { name: "IsTeamLeader", title: "@Model["Is Team Leader"]", type: "checkbox", visible: false  },
+                { name: "IsCoAdvisor", title: "@Model["Is Co-Advisor"]", type: "checkbox", visible: false  },
+                {
+                        name: "Survey", title: "@Model["Survey"]",
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+                    {
+                        name: "RegistrationStatus", title: "@Model["Registration Status"]",
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+                    {
+                        name: "IsTeamLeader", title: "@Model["Is Team Leader"]",
+                        itemTemplate: function (item) {
+
+                            if (item == true) {
+                                val = '/Resources/Images/Stylish_ok.png';
+                            }
+                            else
+                            {
+                                val = '/Resources/Images/Stylish_not_ok.png';
+                            }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    },
+                    {
+                        name: "IsCoAdvisor", title: "@Model["Is Co-Advisor"]",
+                        itemTemplate: function (item) {
+
+                        if (item == true) {
+                            val = '/Resources/Images/Stylish_ok.png';
+                        }
+                        else
+                        {
+                            val = '/Resources/Images/Stylish_not_ok.png';
+                        }
+
+                            return $("<img>").attr("src", val).css({width:"32px"})
+                        }
+                    }
+            ]
+        });
+
+        $("#@detailsDialogHtmlElementId").dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: true,
+            width: 'auto',
+            resize: "auto",
+            dialogClass: "no-close", //removes X from dialog
+            close: function () {
+                $("#@detailsFormHtmlElementId").validate().resetForm();
+                $("#@detailsFormHtmlElementId").find(".error").removeClass("error");
+            },
+            open: function () {
+                $('.ui-widget-overlay').addClass('custom-overlay');
+               // $('.ui-dialog-titlebar-close').text('');
+
+            }
+        });
+
+        $("#@detailsFormHtmlElementId").validate({
+            rules: {
+                FirstName: "required",
+                LastName: "required",
+                Email: "required",
+            },
+            messages: {
+                FirstName: "Please enter First Name",
+                LastName: "Please enter Last Name",
+                Email: "Please enter Email",
+            },
+            invalidHandler: function () {
+                validateTeam();
+                },
+            submitHandler: function () {
+
+                formSubmitHandler();
+            }
+        });
+
+        var formSubmitHandler = $.noop;
+
+        var showDetailsDialog = function (dialogType, client) {
+
+            if (client.RoleName == 'Advisor' ||
+                    '@Model.CurrentUserRoles.Contains("Leader").ToString().ToLower()' == 'true' ||
+                '@Model.CurrentUserRoles.Contains("CoAdvisor").ToString().ToLower()' == 'true')
+            {
+                $('#isTeamLeaderDiv').hide();
+                $('#isCoAdvisorDiv').hide();
+            }
+            else {
+
+                $('#isTeamLeaderDiv').show();
+                $('#isCoAdvisorDiv').show();
+                if (client.IsCoAdvisor == true) {
+                    $('#isTeamLeaderDiv').hide();
+                    $('#IsCoAdvisor').hide();
+                    $('#coAdvisorSpan').text("Due to this member is Co-advisor, If you want to change his/her role to a  Student or a Leader, you should delete this member then add with the new role");
+
+                }
+                else {
+                    $('#coAdvisorSpan').text("(Co-Advisor has access to add another team members)");
+                    $('#IsCoAdvisor').show();
+
+                }
+            }
+
+            formSubmitHandler = function () {
+                saveClient(client, dialogType === "Add");
+            };
+
+            if (dialogType === "Add") {
+
+                client.Id = "";
+                $("#MemberUserId").val('');
+                $("#save").text("Add");
+                $("#addMemeberMessage").removeClass("hidden");
+                $("#Email").prop('disabled', false);
+
+
+                $("#@detailsDialogHtmlElementId").dialog("option", "title", '@Model["Add New Member"]')
+                    .dialog("open");
+            }
+            else {
+                $("#addMemeberMessage").addClass("hidden");
+
+                $("#Id").val(client.Id);
+                $("#FirstName").val(client.FirstName);
+                $("#TeamName").val(client.TeamName);
+                $("#LastName").val(client.LastName);
+
+                $("#Email").val(client.Email);
+                $("#Email").prop('disabled', true);
+
+                $("#IsTeamLeader").prop("checked", client.IsTeamLeader);
+                $("#IsCoAdvisor").prop("checked", client.IsCoAdvisor);
+                $("#MemberUserId").val(client.MemberUserId),
+                $("#RegistrationStatus").prop("checked", client.RegistrationStatus);
+                $("#Survey").prop("checked", client.Survey);
+                $("#save").text("Update");
+
+                $("#@detailsDialogHtmlElementId").dialog("option", "title", '@Model["Update Member"]')
+                    .dialog("open");
+            }
+        };
+
+        var saveClient = function (client, isNew) {
+
+            if (validateTeam() == false) return;
+
+            $.extend(client, {
+                Id: $("#Id").val(),
+                FirstName: $("#FirstName").val(),
+                TeamName: $("#TeamName").val(),
+                LastName: $("#LastName").val(),
+                Email: $('#Email').val(),
+                IsTeamLeader: $("#IsTeamLeader").prop("checked"),
+                IsCoAdvisor: $("#IsCoAdvisor").prop("checked"),
+                MemberUserId: $("#MemberUserId").val(),
+                CanChangeLeader: true,
+                RegistrationStatus: $("#RegistrationStatus").prop("checked"),
+                Survey: $("#Survey").prop("checked"),
+            });
+
+            if (client.IsTeamLeader == true) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/TeamMember/cotlie",
+                    data:
+                        {
+                            isTeamLeader: client.IsTeamLeader,
+                            teamId: $("#@Model.ExternalHtmlControlId").val(),
+                            teamMemberUserId: client.MemberUserId
+                        }
+                }).done(function (response) {
+
+                    if (response.success == true) {
+                        // other leader is exist
+                        var confirmChangeDialogObjec =
+                            {
+                                title: "Change Team Leader",
+                                message: response.message,
+                                sender: "",
+                                width: "400px",
+                                height: "auto",
+                                dialogConfirmId: "confirmDialogContainer",
+                                yesButton: '@Model["Yes"]',
+                                noButton: '@Model["No"]',
+                                acceptCallbak: function (sender) {
+
+                                    client.CanChangeLeader = true;
+                                    DoOperation(isNew, client);
+
+                                },
+                                rejectCallbak: function () {
+
+                                    client.CanChangeLeader = false;
+                                    DoOperation(isNew, client);
+                                }
+                            }
+
+                        openConfirmDialog(confirmChangeDialogObjec);
+
+                    }
+                    else {
+                        DoOperation(isNew, client);
+
+                    }
+                });
+
+            }
+            else {
+
+                DoOperation(isNew, client);
+            }
+
+
+        };
+
+        $(".config-panel input[type=checkbox]").on("click", function () {
+            var $cb = $(this);
+            $("#@jsGridHtmlElementId").jsGrid("option", $cb.attr("id"), $cb.is(":checked"));
+        });
+
+
+        //$("#filtering").click();
+        $("#sorting").click();
+});
+
+    function DoOperation(isNew, client) {
+        $("#@jsGridHtmlElementId").jsGrid(isNew ? "insertItem" : "updateItem", client);
+        $("#@detailsDialogHtmlElementId").dialog("close");
+        $("#@jsGridHtmlElementId").jsGrid("render");
+    }
+</script>
+
+

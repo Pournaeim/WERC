@@ -1,0 +1,66 @@
+﻿
+<script>
+
+    var positionObject = {
+        X:0,
+        Y:0,
+        Click:true
+    };
+
+    var mousePositionList = [];
+</script>
+
+<iframe id="siteIframe" src="@ViewBag.InlineWebPageUrl" frameborder="0" width="100%" height="100%"></iframe>
+
+<button type="button" id="saveButton" class="btn btn-primary btn-block btn-large">Save</button>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#siteIframe').click(function (e) {
+            var offset = $(this).offset();
+            alert(e.pageX - offset.left + ", " + e.pageY - offset.top);
+            
+        });
+    });
+
+    $('#saveButton').Click(function (e) {
+
+        HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+        
+        jsonData = JSON.stringify(
+           {
+               "mousePositionList": mousePositionList,
+           });
+
+    $.ajax({
+        url: "/InlineWebPageHandler/siwpd",
+        type: 'POST',
+        data: jsonData,
+        contentType: false,
+    }).done(function (result) {
+
+        if (result.success == false) {
+
+            alert("Your information has been saved successfully.");
+            location.href = result.returnUrl;
+        }
+        else
+        {
+            alert("Operations Failed.");
+        }
+
+        HoldOn.close();
+
+    }).fail(function () {
+        alert("Operations Failed.");
+        HoldOn.close();
+    });
+
+    return false;
+    });
+</script>

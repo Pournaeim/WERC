@@ -1,0 +1,28 @@
+﻿@model  WERC.Models.VMConfirmEmail
+@{
+    ViewBag.Title = "Confirm Email";
+}
+<hr />
+
+<div class="col-xs-1"></div>
+<div class="col-xs-10">
+    <div>
+
+
+        <p> Thank you for confirming your email.</p>
+
+        <span style="color:#f00">
+            Thank you for confirming your email. To finish the registration process,
+        </span>
+        <p>
+            @Html.ActionLink("click here to sign in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) and complete your profile.
+        </p>
+        <p>
+            You will not be able to work on the system until your profile is complete.
+        </p>
+        <p>
+            If you have questions about the WERC Environmental Design Contest online platform, please call 575-646-8171 or email wercteams.nmsu.edu .
+        </p>
+    </div>
+    <div class="col-xs-1"></div>
+</div>

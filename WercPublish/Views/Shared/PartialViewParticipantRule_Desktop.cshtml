@@ -1,0 +1,121 @@
+﻿
+@model Model.ViewModels.ParticipantRule.VmParticipantRule
+
+<h3>Virtual-only Desktop</h3>
+<h2 id="actionMessageHandlerMessage"></h2>
+
+@using (Html.BeginForm("upar", "PaymentRule", FormMethod.Post, new { id = "_ParticipantRuleEdit_Form_Desktop" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal text-left">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label(@Model["First team max members"], htmlAttributes: new { @class = "control-label col-sm-4 col-xs-12  col-md-8" })
+            <div class="col-sm-2 col-xs-4 col-md-2 col-lg-2">
+                @Html.EditorFor(model => model.FirstTeamMaxMember, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage(@Model["FirstTeamMaxMember"], "", new { @class = "text-danger" })
+            </div>
+            <span class="text-danger fa-2x">*</span>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4 col-xs-12  col-md-8">
+                Each extra team max members(Include the advisor for the first team.)
+            </label>            <div class="col-sm-2 col-xs-4 col-md-2 col-lg-2">
+                @Html.EditorFor(model => model.EachExtraTeamMaxMember, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage(@Model["EachExtraTeamMaxMember"], "", new { @class = "text-danger" })
+            </div>
+            <span class="text-danger fa-2x">*</span>
+        </div>
+        <div class="form-group">
+            @Html.Label(@Model["Extra participant fee (USD)"], htmlAttributes: new { @class = "control-label col-sm-4 col-xs-12  col-md-8" })
+            <div class="col-sm-2 col-xs-4 col-md-2 col-lg-2">
+
+                @Html.EditorFor(model => model.UIExtraParticipantFee, new { htmlAttributes = new { @class = "form-control" } })
+
+                @Html.ValidationMessage(@Model["UIExtraParticipantFee"], "", new { @class = "text-danger" })
+            </div>
+            <span class="text-danger fa-2x">*</span>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-sm-10 col-xs-12 col-md-6 col-lg-4">
+                <input id="_ParticipantRuleEdit_Submit" type="submit" value="@Model["Update"]" class="btn btn-primary" />
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.Id, htmlAttributes: new { @id = "IdHidden" })
+        @Html.HiddenFor(model => model.PaymentTypeId, htmlAttributes: new { @id = "PaymentTypeIdHidden" })
+
+    </div>
+}
+
+<script>
+    $('#_ParticipantRuleEdit_Form_Desktop').submit(function (e) {
+        e.preventDefault();
+        debugger
+
+        var form = $('#_ParticipantRuleEdit_Form_Desktop');
+        if (form.valid() == false) return;
+
+        if (validateCustomElements() == false) { return false;}
+
+            var formData = new FormData($('#_ParticipantRuleEdit_Form_Desktop').get(0));
+
+            HoldOn.open({
+                    theme: 'sk-cube-grid',
+                    message: "<h4>@Model["Please wait..."]</h4>"
+            });
+
+            $.ajax({
+                url: "/PaymentRule/upar", //you can get also action attribute from form using form.attr('action')
+                type: 'POST',
+                data: formData,
+                datatype: 'json',
+                processData: false,
+                contentType: false,
+            }).done(function (result) {
+
+                alert(result.message);
+
+                @if(!string.IsNullOrEmpty(@Model.OnActionSuccess))
+                {
+                    @Html.Raw("if(result.success == true){"+@Model.OnActionSuccess+"(result);}")
+                }
+
+                @if(!string.IsNullOrEmpty(@Model.OnActionFailed))
+                {
+                    @Html.Raw("if(result.success == false){"+@Model.OnActionFailed + "();}")
+                }
+                 }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                });
+
+        HoldOn.close();
+        return false;
+    });
+</script>
+
+@*validate*@
+
+<script>
+
+    function validateCustomElements() {
+
+
+        return true;
+
+    }
+</script>
+
+@*Initialize*@
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+    })
+
+</script>
+

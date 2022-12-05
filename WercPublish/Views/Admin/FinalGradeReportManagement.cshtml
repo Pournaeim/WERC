@@ -1,0 +1,83 @@
+﻿
+@model Model.ViewModels.Judge.VmFinalGradeReportManagement
+
+@{
+    ViewBag.Title = "Final Scores Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Resources/CSS/_grading.css" rel="stylesheet" />
+ 
+<h2>@ViewBag.BS_Title</h2>
+ 
+<div class="row">
+    <div class="col-xs-3">
+        <button class="btn btn-primary" onclick="printDiv()">Print</button>
+    </div>
+    @*<div class="col-xs-5">
+
+        <button class="btn btn-primary" onclick="exportGradeToExcel()">Download Teams Scrore Detail</button>
+    </div>*@
+</div>
+<div id="DivIdToPrint">
+    <hr />
+    @Html.Partial("_FinalGradesReportTableADMIN", Model.GradeReportList)
+</div>
+<div class="row">
+    <div class="col-xs-3">
+        <button class="btn btn-primary" onclick="printDiv()">Print</button>
+    </div>
+    @*<div class="col-xs-5">
+
+        <button class="btn btn-primary" onclick="exportGradeToExcel()">Download Teams Scrore Detail</button>
+    </div>*@
+</div>
+<script>
+
+    function printDiv() {
+
+        Popup($('#DivIdToPrint').html());
+        return;
+        $("#gradingEvaluationDetailModalContainer").hide();
+        var divToPrint = document.getElementById('DivIdToPrint');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+        $("#gradingEvaluationDetailModalContainer").show();
+
+    }
+
+    function Popup(data) {
+        var mywindow = window.open('', 'my div', 'height=400,width=600');
+
+        mywindow.document.head.innerHTML = '<title>PressReleases</title><link rel="stylesheet" href="css/main.css" type="text/css" />';
+        mywindow.document.body.innerHTML = '<body>' + data + '</body>';
+
+        mywindow.document.close();
+        mywindow.focus(); // necessary for IE >= 10
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+    function exportGradeToExcel() {
+
+        var exportRequest = $.ajax(
+            {
+                type: 'json',
+                method: 'post',
+                url: '/grade/egtex',
+                dataType:'json',
+            });
+        exportRequest.done(function (data) {
+            window.location.href = data.excelFileUrl;
+        });
+    }
+
+</script>

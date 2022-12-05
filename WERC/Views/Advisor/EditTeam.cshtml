@@ -1,0 +1,14 @@
+﻿@model Model.ViewModels.Team.VmTeam
+
+@{
+    ViewBag.Title = "Update Team";
+    Layout = "~/Views/Shared/_LayoutAdvisor.cshtml";
+}
+
+@Html.Partial("_TeamEdit", Model)
+
+<script>
+    function loadTeamList() {
+        location.href = '/advisor/tmm/' + @Model.Id;
+    }
+</script>

@@ -1,0 +1,78 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Admin;
+
+@model VmJudgeTaskFullInfoManagement
+@{
+    ViewBag.Title = "Approval Reject Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Model.ReadOnly = false;
+}
+
+<h2>@Model["Judges' Task Overview"]</h2>
+<hr />
+
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+<div class="row">
+
+    <div class="col-xs-6">
+        <div id="judgePanel" class="panel panel-primary">
+            <div class="panel-heading" data-toggle="collapse" data-parent="#judgePanel" data-target="#judgePanelListGroup">
+                <div class="panel-title">
+                    <span>Judge List </span>
+                    <b class="pull-right fa fa-id-card libreMenuIcon"> </b>
+                </div>
+
+            </div>
+            <ul class="list-group collapse out" id="judgePanelListGroup">
+
+                <li class="list-group-item librePanelListGroupItem">
+                    @Html.Partial("PartialViewJudgeFullInfoManagement", new VmJsGrid()
+                    {
+                       DataAction = "gjfibf",
+                       DataController = "judge",
+
+                       EditAction = "etps",
+                       EditController = "team",
+
+                       ReadOnly = false,
+                       HtmlElementId = "JudgeFullInfoManagement_JudgeFullInfoManagementJsGrid",
+                       CurrentUserRoles = Model.CurrentUserRoles
+                    })
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-xs-6">
+
+        <div id="taskPanel" class="panel panel-primary">
+
+            <div class="panel-heading" data-toggle="collapse" data-parent="#taskPanel" data-target="#taskPanelListGroup">
+                <div class="panel-title">
+                    <span>Task List </span>
+                    <b class="pull-right fa fa-tasks libreMenuIcon"> </b>
+                </div>
+            </div>
+            <ul class="list-group collapse out" id="taskPanelListGroup">
+                <li class="list-group-item librePanelListGroupItem">
+                    @Html.Partial("PartialViewTaskFullInfoGrid", new VmJsGrid()
+               {
+                   DataAction = "gtfibf",
+                   DataController = "task",
+
+                   ReadOnly = true,
+                   HtmlElementId = "_TaskFullInfo_TaskFullInfoJsGrid",
+                   CurrentUserRoles = Model.CurrentUserRoles,
+                   LanguageDictionary = Model.LanguageDictionary
+               })
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

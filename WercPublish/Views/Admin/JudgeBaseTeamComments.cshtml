@@ -1,0 +1,100 @@
+﻿
+@model Model.ViewModels.Judge.VmNoneAnsweredGradeManagement
+
+@{
+    ViewBag.Title = "Team Comments";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Resources/CSS/treeview.css" rel="stylesheet" />
+<h2>Team Comments</h2>
+
+<style>
+    .glyphicon {
+        position: relative;
+        top: 1px;
+        display: inline-block;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        font-size: 21px !important;
+        -moz-osx-font-smoothing: grayscale;
+        color: #369 !important;
+    }
+</style>
+
+<div>
+    <p>   Click on the <i class="indicator glyphicon glyphicon-plus-sign"></i> icon and expand to see the details of the Team Comments </p>
+
+</div>
+<div>
+    <a href="@ViewBag.ExcelUrl" target="_blank">
+        <img src='/Resources/Images/excel.png' width='50px' title='Export To Excel' />
+    </a>
+</div>
+   
+<hr />
+
+<div class="col-xs-12 col-sm-12 col-md-8">
+    <ul id="tree1" class="tree cnct">
+
+        @foreach (var judge in Model.JudgeBaseGrades)
+        {
+            <li class="cnct first-li-element">
+                 
+                @judge.JudgeName
+
+                <ul class="cnct">
+
+                    @foreach (var teamGrade in judge.TeamGradeList)
+                    {
+                        <li class="cnct">
+
+                            @teamGrade.TeamName
+
+                            <ul class="cnct">
+                                @foreach (var gradeReport in teamGrade.GradeReportList)
+                                {
+                                    <li class="cnct">
+
+                                        @gradeReport.GradeType
+                                        <table class="table-bordered">
+                                            <caption>Description</caption>
+                                            <tr>
+                                                <td>
+                                                    <div class="cnct">
+                                                        @gradeReport.Comment
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+
+            </li>
+        }
+    </ul>
+
+</div>
+<script src="~/Resources/Scripts/treeview.js"></script>
+<script>
+
+    //Initialization of treeviews
+
+    $('#tree1').treed();
+
+//$('#tree2').treed({ openedClass: 'glyphicon-folder-open', closedClass: 'glyphicon-folder-close' });
+
+//$('#tree3').treed({ openedClass: 'glyphicon-chevron-right', closedClass: 'glyphicon-chevron-down' });
+
+//$('.first-li-element > i').each(function (i, obj) {
+//    $(this).click();
+//});
+
+</script>

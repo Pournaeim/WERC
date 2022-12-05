@@ -1,0 +1,247 @@
+﻿
+@using Model.ToolsModels.DropDownList
+@model Model.ViewModels.Person.VmPerson
+
+@{
+    var shortBioCaption = " to be printed in the handbook";
+}
+@if (Request.IsAuthenticated && Model.CurrentUserRoles != null
+    && (Model.CurrentUserRoles.Contains("Leader") == true || Model.CurrentUserRoles.Contains("Student") == true))
+{
+    shortBioCaption = "Bio";
+}
+else
+{
+    shortBioCaption = "Bio to be printed in the handbook";
+}
+<div class="col-xs-12">
+
+    @using (Html.BeginForm())
+    {
+        <div class="form-horizontal">
+
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-6">
+                    <fieldset>
+                        <legend>Person Info</legend>
+                        <div class="row">
+
+                            <div class="col-xs-3 col-md-4">
+
+                                <div class="row">
+
+                                    <img id="profilePictureUrlImg" class="profile-img" title="" />
+                                    <hr />
+
+                                </div>
+
+                                <div class="row">
+                                    <a href="@Model.ResumeUrl">
+                                        <img src="~/Resources/Images/Mimetypes128x128/application_pdf.png" class="profile-img" />
+                                    </a>
+                                    <hr />
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-9 col-md-8">
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FirstName) :
+                                    @Html.Label(@Model.FirstName)
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.LastName) :
+                                    @Html.Label(@Model.LastName)
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.Label(@Model["Gender"]) :
+                                    @Html.Label(@Model.Sex.Value ? "Female" : "Male")
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.Label(@Model["Diet Type"]) :
+                                    @Html.Label(@Model.DietType)
+                                </div>
+                                @if (Model.DietTypeId == 9)
+                                {
+                                    <div class="form-group">
+                                        @Html.Label(@Model["Allergies"]) :
+                                        @Html.Label(@Model.Allergies)
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    @Html.Label(@Model["T-Shirt Size"]) :
+                                    @Html.Label(@Model.T_Shirt_Size)
+                                </div>
+                                @if (Model.RoleName == "Advisor")
+                                {
+                                    <div class="form-group">
+                                        @Html.Label(@Model["Jacket Size"]) :
+                                        @Html.Label(@Model.JacketSize)
+                                    </div>
+
+                                }
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <fieldset>
+                        <legend>Address</legend>
+                        <div>
+                            @if (!string.IsNullOrEmpty(@Model.University) && !Model.CurrentUserRoles.Contains("Judge") && !Model.RoleName.ToLower().Contains("judge"))
+                            {
+                                <div class="form-group text-left">
+                                    @Html.Label(@Model["University"]) :
+                                    @Html.Label(@Model.University)
+                                </div>
+                            }
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email) : <b>@Model.Email</b>
+                            </div>
+
+                            @if (Request.IsAuthenticated && Model.CurrentUserRoles != null && Model.CurrentUserRoles.Contains("Admin"))
+                            {<div class="form-group">
+                                    @Html.LabelFor(model => model.SecondaryEmail) : <b>@Model.SecondaryEmail</b>
+                                </div>
+                            }
+
+
+                            @if (Model.RoleName.ToLower().Contains("judge") || Model.RoleName.ToLower().Contains("advisor"))
+                            {
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.WorkPhoneNumber) :
+                                    @Html.Label(@Model.WorkPhoneNumber)
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Affiliation") :
+                                    @Html.Label(@Model.Affiliation)
+                                </div>
+                            }
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PhoneNumber) :
+                                @Html.Label(@Model.PhoneNumber)
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StreetLine1) :
+                                @Html.Label(@Model.StreetLine1)
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StreetLine2) :
+                                @Html.Label(@Model.StreetLine2)
+                            </div>
+
+                            <div class="form-group">
+
+                                @Html.LabelFor(model => model.City) :
+                                @Html.Label(@Model.City)
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.State) :
+                                @Html.Label(@Model.State)
+                            </div>
+                            <div class="form-group">
+
+                                @Html.LabelFor(model => model.ZipCode) :
+                                @Html.Label(@Model.ZipCode)
+                            </div>
+                            <div class="form-group">
+                                @Html.Label(shortBioCaption) :
+                                <div>
+                                    @Model.ShortBio
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                @if (Model.HideEmergency == false)
+                {
+                    <div class="col-xs-12 col-sm-6">
+                        <fieldset>
+                            <legend>Person to contact in case of Emergency</legend>
+                            <div class="row">
+                                <div class="hidden-xs col-sm-3 col-md-2"></div>
+
+                                <div class="col-xs-12 col-sm-9 col-md-10">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.EmgyPersonFirstName) :
+                                        @Html.Label(@Model.EmgyPersonFirstName)
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.EmgyPersonLastName) :
+                                        @Html.Label(@Model.EmgyPersonLastName)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.EmgyPersonPhoneNumber) :
+                                        @Html.Label(@Model.EmgyPersonPhoneNumber)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.EmgyPersonRelationship) :
+                                        @Html.Label(@Model.EmgyPersonRelationship)
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                }
+                <div class="col-xs-12 col-sm-6">
+                    <fieldset>
+                        <legend>Selected meals for planning to attend</legend>
+                        <div class="form-group">
+
+                            @Html.Partial("_DropDownListMultipleSelect", new VmDropDownList
+                            {
+                                HtmlElementId = "MealTypeDropDownList",
+                                DataController = "MealType",
+                                DataAction = "gptddl",
+                                OptionLabel = Model["Select the meals you are planning to attend"],
+                                SelectedItems = Model.ClientMealTypeIds,
+                                OnItemSelected = "MealTypeDropDownList_OnClientSelectedItem",
+                                ReadOnly = true,
+
+                            })
+                            <input type="hidden" id="mealTypeIdsHidden" name="ClientMealTypeIds" />
+
+                            <script>
+                                function MealTypeDropDownList_OnClientSelectedItem(ids) {
+                                    debugger
+                                    $("#mealTypeIdsHidden").val(ids);
+                                }
+
+                            </script>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </div>
+
+
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        if ("@Model.ProfilePictureUrl" == '')
+        {
+            $("#profilePictureUrlImg").attr("src", '/Resources/Images/anonymous.png');
+        }
+        else
+        {
+            $("#profilePictureUrlImg").attr("src", "@Model.ProfilePictureUrl");
+        }
+         });
+
+</script>

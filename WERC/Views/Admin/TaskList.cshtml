@@ -1,0 +1,24 @@
+﻿
+@using Model.ViewModels.Task
+
+@model VmTaskCollection
+
+@{
+    ViewBag.Title = "Task Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h2>Task Management</h2>
+
+<div class="col-xs-12">
+    <a href="/task/lctf" class="btn btn-primary btn-lg">@Model["Create Task"]</a>
+</div>
+
+<div id="TaskList_ParentHtmlControlId" class="col-xs-12 scroll-article-list">
+    @Html.Partial("_TaskList", Model)
+</div>
+
+<script>
+    function TaskManagement_OnClientSelectedItem(selectedId) {
+
+    }
+</script>

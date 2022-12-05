@@ -1,0 +1,24 @@
+﻿
+@using Model.ViewModels.Team
+
+@model VmTeamCollection
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdvisor.cshtml";
+}
+<h2>Team Management</h2>
+
+<div class="col-xs-12">
+    <a href="/team/lctf" class="btn btn-primary btn-lg">@Model["Create Team"]</a>
+</div>
+
+<div id="TeamList_ParentHtmlControlId" class="col-xs-12 scroll-article-list">
+    @Html.Partial("_TeamList", Model)
+</div>
+
+<script>
+    function TeamManagement_OnClientSelectedItem(selectedId) {
+
+    }
+</script>

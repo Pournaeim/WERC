@@ -1,0 +1,34 @@
+﻿
+
+@using Model.ToolsModels.Grid;
+@using Model.ViewModels.Team;
+
+@model VmTeamFullInfoManagement
+
+@{
+    ViewBag.Title = "Email Log Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Model.ReadOnly = false;
+}
+
+<hr />
+
+<div class="col-xs-12 col-sm-12">
+    @Html.Partial("PartialViewEmailLogGrid", new VmJsGrid()
+{
+    DataAction = "gel",
+    DataController = "admin",
+
+    ReadOnly = true,
+    HtmlElementId = "EmailLogGrid",
+    CurrentUserRoles = Model.CurrentUserRoles,
+    LanguageDictionary = Model.LanguageDictionary
+})
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+

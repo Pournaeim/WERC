@@ -1,0 +1,103 @@
+﻿
+.responsive-width-cliped-height {
+    object-fit: none !important; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    width: 100% !important;
+    max-height: 350px;
+}
+
+.cliped-height {
+    object-fit: contain !important;
+    object-position: bottom left;
+    height: 100% !important;
+    min-width: 200px;
+}
+
+@media screen and (max-width:767px) {
+    .cliped-height, .responsive-width-cliped-height {
+        object-fit: none;
+        height: 150px !important;
+        object-position: bottom left;
+    }
+}
+
+
+.about-us-text-format {
+    font-size: 1.5em;
+}
+
+.margin-font-style {
+    margin: 50px;
+    font-size: 1.5em;
+}
+
+.bg-image-banner {
+    background-image: url('../Images/about-us2.jpeg');
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 360px;
+    object-position: bottom !important;
+}
+
+    .bg-image-banner ul {
+        position: relative;
+        list-style-type: circle;
+        top: 50px;
+    }
+
+        .bg-image-banner ul li {
+            font-family:  sans-serif;
+            font-size: 2.2em;
+            color: #eee;
+            text-shadow: 0px 1px #4f4d4e;
+            word-spacing: 0.15em;
+            font-style:italic;
+        }
+
+            .bg-image-banner ul li:hover {
+                color: #ff3d09;
+                cursor: pointer;
+                text-shadow: 1px 2px #4f4d4e;
+            }
+
+@media screen and (max-width:767px) {
+    .bg-image-banner ul li {
+            font-size: 1.6em;
+            line-height:2em;
+    }
+}
+.services p{
+    text-align:justify;
+        font-size:0.9em;
+}
+@media screen and (max-width:767px) {
+    .services p{
+        font-size:0.7em;
+ }
+}
+
+.services input {
+    background-color: rgba(222, 61, 9, 1);
+    box-shadow: 1px 1px 1px 1px rgb(110, 110, 110);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.9em;
+    width: 200px;
+    padding: 4px 15px;
+    margin-top: 15px;
+}
+
+    .services input:hover {
+        color:#2a2a2a;
+        background-color: rgba(222, 61, 9, 0.9);
+    }
+
+.services span {
+    font-family: sans-serif;
+    color: #4a4a4a;
+    font-size: 1.3em;
+    font-weight: bold;
+    font-style:italic;
+}

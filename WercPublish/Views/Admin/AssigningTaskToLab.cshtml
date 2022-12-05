@@ -1,0 +1,162 @@
+﻿
+
+@using Model.ViewModels.Admin;
+@using Model.ViewModels.Task;
+
+@model VmAssignTaskToLabManagement
+@{
+    ViewBag.Title = "Assigning Task To Lab";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+<script>
+
+    $(document).ready(function () {
+
+        var dragMessage = '@Model["Drag task below and drop to drop zone or double click it to assign"]';
+
+        if (deviceIsTouchable == true) {
+            dragMessage =  '@Model["Double Touch on task below to assign it to assign"]';
+        }
+
+        $("#dragMessageDiv").text(dragMessage);
+
+        $('#lab_DropDownList').selectpicker({
+            liveSearch: true,
+            maxOptions: 1
+        });
+
+        if ($("#lab_DropDownList").val() != "") {
+            getLabTasks($("#lab_DropDownList").val());
+        }
+
+        function getLabTasks(id) {
+            $.ajax({
+                url: '/Admin/gjt',
+                type: 'POST',
+                data: { "userId": id },
+                dataType: "html",
+
+            }).done(function (response) {
+                $("#labTasks").html(response);
+            }).fail(function (data, textStatus, XMLHttpRequest) {
+                    $("#labTasks").html(data.responseText);
+                });
+        }
+
+        $("#lab_DropDownList").change(
+            function (evt) {
+
+                if ($("#lab_DropDownList").val() != "") {
+
+                    getLabTasks($("#lab_DropDownList").val());
+                }
+            });
+
+    });
+
+
+</script>
+<a name="dropAnchor"></a>
+
+
+<table class="table table-condensed">
+    <tr class="darg-drop-title">
+        <td>
+            <div id="dragMessageDiv" class="stack-header"></div>
+        </td>
+        <td>
+            <div class="form-group-sm stack-header text-center">
+                <div class="col-xs-12">
+                    @Html.Label(@Model["Drop zone for selected lab"], new { @class = "control-label" })
+                </div>
+
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="darg-width">
+            <div id="_AssignTaskToLabManagement_TaskList" class="col-xs-12">
+                @Html.Partial("_TaskList", new VmTaskCollection()
+                   {
+                       ParentHtmlControlId = "_AssignTaskToLabManagement_TaskList",
+                       Draggable = true,
+                       ShowSearchBox = true,
+                       TaskList = Model.Tasks,
+                       OnItemDragged = "updateAssignment",
+                       HtmlControlId = "Admin_TaskList",
+                       DataAction = "ts",
+                       DataController = "Admin",
+                       AllowEdit = true,
+                       AllowDelete = true,
+                       ActiveItemId = -1,
+                       OnItemSelected = "",
+                   })
+            </div>
+        <td class="drop-width">
+            <div class="col-xs-12 text-center ">
+                @Html.DropDownList("lab_DropDownList",
+                   (IEnumerable<SelectListItem>)Model.Labs, new {@class = "" })
+            </div>
+            <div id="dropZone" class="stack col-xs-12 text-left">
+
+                <div class="stack-drop" id="labTasks">
+
+
+                </div>
+            </div>
+        </td>
+    </tr>
+
+</table>
+
+<script>
+    function updateAssignment(dragedItem) {
+
+          HoldOn.open({
+            theme: 'sk-cube-grid',
+            message: "<h4>@Model["Please wait..."]</h4>"
+        });
+
+        var id = $("#lab_DropDownList").val();
+
+        if (id == "" || id == null) {
+            alert('@Model["Please select Lab..."]');
+            dragedItem.find("#removeSection").parent().parent().parent().remove();
+            HoldOn.close();
+            return;
+        }
+
+        var ids = [];
+
+        $("#labTasks").children("div.card").each(function (id, item) {
+            ids[id] = $(item).attr("id");
+        });
+
+        $.ajax({
+            url: '/Admin/attl',
+            type: 'POST',
+            data: { userId: id, taskIds: ids},
+            dataType: "json",
+            cache: false,
+
+        }).done(function (data) {
+                if (data.success == true) {
+                    //  alert('@Model["Task(s) has been assigned to Lab"]');
+                   
+                }
+                else {
+                    alert('@Model["Operation has failed"]');
+
+            }
+            HoldOn.close();
+
+
+            }).fail(function () {
+                console.log("no display");
+                HoldOn.close();
+
+            });
+    }
+</script>

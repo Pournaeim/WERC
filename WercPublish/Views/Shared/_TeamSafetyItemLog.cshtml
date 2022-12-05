@@ -1,0 +1,65 @@
+﻿
+@model Model.ViewModels.TeamSafetyItemLog.VmTeamSafetyItemLogCollection
+
+@if (Model.SafetyItemLogList != null && Model.SafetyItemLogList.Count() > 0)
+{
+    <table class="table table-striped">
+        <tr>
+            <th>
+                @Html.DisplayName("Date")
+            </th>
+            <th>
+                @Html.DisplayName("Name")
+            </th>
+
+            @if (Model.SafetyItemLogList.First().Type == true)
+            {
+                <th>
+                    @Html.DisplayName("Comment")
+                </th>
+            }
+            else
+            {
+                <th>
+                    @Html.DisplayName("Content")
+                </th>
+            }
+
+            <th>
+                @Html.DisplayName("Attachment")
+            </th>
+
+        </tr>
+
+        @foreach (var item in Model.SafetyItemLogList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTime)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+
+                <td>
+                    @MvcHtmlString.Create(item.Content)
+                </td>
+                <td>
+
+                    @if (string.IsNullOrWhiteSpace(@item.AttachedFileUrl) == false)
+                    {
+                        <a href="@HttpUtility.HtmlDecode(@item.AttachedFileUrl)" target="_blank">Download</a>
+                    }
+                    else
+                    {
+                        <span>None</span>
+                    }
+
+                </td>
+
+            </tr>
+        }
+
+    </table>
+}

@@ -1,0 +1,8 @@
+﻿site:
+https://server314.dnslake.com:8443/smb/file-manager/list#
+
+user:
+cyberneticcode.com
+
+password:
+Robotic.1364

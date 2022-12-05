@@ -1,0 +1,14 @@
+﻿@model Model.ViewModels.Person.VmPerson
+
+@{
+    ViewBag.Title = "Update Profile";
+    Layout = "~/Views/Shared/_LayoutLeader.cshtml";
+}
+
+@Html.Partial("_UpdateProfile", Model)
+
+<script>
+    function loadLeaderPanel() {
+        //location.href = '/Leader/index';
+    }
+</script>
