@@ -892,7 +892,7 @@ namespace BLL
                                                           }).ToList()
                                      }).ToList();
 
-
+             
             foreach (var taskBaseGrade in taskBaseGradeList)
             {
                 foreach (var team in taskBaseGrade.TeamGradeList)
