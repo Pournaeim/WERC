@@ -14,7 +14,7 @@ namespace WERC.Controllers
     public class InvoiceController : BaseController
     {
 
-        [HttpGet]
+        [HttpPost]
         [ActionName("lif")]
         [Route("{controller=invoice}/{action=lif}/error")]
         public ActionResult LoadInvoiceError()

@@ -1,4 +1,6 @@
 ﻿using BLL;
+using System;
+using System.Linq;
 using System.Web.Mvc;
 using WERC.Models;
 
@@ -75,8 +77,28 @@ namespace WERC.Controllers
         [HttpPost]
         [ActionName("receiptList")]
         [Route("{controller=receipt}/{action=receiptList}/succeed")] //Invoice List
-        public ActionResult LoadReceiptSuccessList()
+        public ActionResult LoadReceiptSuccessList(ShopSucceed shopSucceed)
         {
+
+            BLPerson bLPerson = new BLPerson();
+
+            try
+            {
+                CurrentUserId = bLPerson.GetUsersByEmails(new string[] { shopSucceed.EMAIL_G }).First().UserId;
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    errorMessage += "\n                           " + ex.InnerException.Message;
+                }
+
+                return PartialView("_EmptyReviewOrder", new VMHandleErrorInfo
+                {
+                    ErrorMessage = errorMessage + "\n ================     " + CurrentUserId
+                });
+            }
 
             var blInvoice = new BLInvoice();
 
@@ -92,9 +114,15 @@ namespace WERC.Controllers
                 if (lastOrderInfo != null)
                 {
                     //Update all data in one transaction
+
+                    lastOrderInfo.Order.Received = shopSucceed.Effdate;
+                    lastOrderInfo.Order.Tx = shopSucceed.Tx;
+
+                    invoice.Received = shopSucceed.Effdate;
+                    invoice.TransactionNo = shopSucceed.Tx;
+                    
                     blInvoice.UpdateInvoiceOrderStatus(lastOrderInfo, invoice.Id, true, lastOrderId.Value, true, true);
-                    invoice.Received = lastOrderInfo.Order.Received;
-                    invoice.TransactionNo = lastOrderInfo.Order.Tx;
+
                 }
             }
 
