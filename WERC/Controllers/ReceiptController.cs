@@ -114,13 +114,17 @@ namespace WERC.Controllers
                 if (lastOrderInfo != null)
                 {
                     //Update all data in one transaction
+                    try
+                    {
+                        lastOrderInfo.Order.Received = shopSucceed.Effdate;
+                        lastOrderInfo.Order.Tx = shopSucceed.Tx;
 
-                    lastOrderInfo.Order.Received = shopSucceed.Effdate;
-                    lastOrderInfo.Order.Tx = shopSucceed.Tx;
+                        invoice.Received = shopSucceed.Effdate;
+                        invoice.TransactionNo = shopSucceed.Tx;
 
-                    invoice.Received = shopSucceed.Effdate;
-                    invoice.TransactionNo = shopSucceed.Tx;
-                    
+                    }
+                    catch { }
+
                     blInvoice.UpdateInvoiceOrderStatus(lastOrderInfo, invoice.Id, true, lastOrderId.Value, true, true);
 
                 }

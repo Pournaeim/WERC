@@ -8,6 +8,7 @@ using Model.ViewModels.Product;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Xml.Serialization;
@@ -82,10 +83,12 @@ namespace BLL
                 shopOrderId = blOrder.CreateOrder(newOrder);
                 createProduct = true;
             }
-
+            
+            string allTeamNames = "";
             foreach (var item in invoice.InvoiceDetails)
             {
                 var teamData = new BLTeam().GetTeamById(item.TeamId);
+                allTeamNames += teamData.Name + ", ";
                 if (item.IsChecked)
                 {
                     if (teamData.Payment > 0 && teamData.Payment < 100)
@@ -122,12 +125,6 @@ namespace BLL
                         ShopProductId = productCode
 
                     });
-
-                    //var orderInfo = AddProduct(shopOrderId.ToString(), productCode.ToString());
-                    //if (orderInfo.Error != "0")
-                    //{
-                    //    return null;
-                    //}
 
                     if (item.ExtraParticipantCount > 0)
                     {
@@ -180,7 +177,23 @@ namespace BLL
 
             var amountDue = invoice.Subtotal/* - invoice.TotalConventionalFee*/;
 
-            return "https://commerce.cashnet.com/nmsuwercpay?itemcode=WERC2-REG&amount=" + amountDue;
+            var person = new BLPerson();
+            var userData = person.GetPersonsByUserIds(new string[] { advisorUserId }).First();
+
+            if(!string.IsNullOrWhiteSpace(allTeamNames))
+            {
+                allTeamNames = allTeamNames.Substring(0, allTeamNames.Length - 2);
+            }
+
+            return $"https://commerce.cashnet.com/nmsuwercpay" +
+                $"?itemcode=WERC2-REG" +
+                $"&EMAIL_G={userData.Email}" +
+                $"&EMAIL_G_EDT=N" +
+                $"&TEAM_NAME={allTeamNames}" +
+                "&TEAM_NAME_EDT=N" +
+                $"&NAME_G={userData.FirstName + " " + userData.LastName}" +
+                "&NAME_G_EDT=N" +
+                "&amount=" + amountDue;
         }
 
         public decimal GetDicountProductCode_BenchScale(decimal discount, int paymentRuleId, string firstTeamOrExtraTeam)
@@ -466,8 +479,18 @@ namespace BLL
             }
 
             var amountDue = invoice.Subtotal/* - invoice.TotalConventionalFee*/;
+            var person = new BLPerson();
+            var userData = person.GetPersonsByUserIds(new string[] { advisorUserId }).First();
 
-            return "https://commerce.cashnet.com/nmsuwercpay?itemcode=WERC2-REG&amount=" + amountDue;
+            return $"https://commerce.cashnet.com/nmsuwercpay" +
+                $"?itemcode=WERC2-REG" +
+                $"&EMAIL_G={userData.Email}" +
+                $"&EMAIL_G_EDT=N" +
+                $"&TEAM_NAME=NA" +
+                "&TEAM_NAME_EDT=N" +
+                $"&NAME_G={userData.FirstName + " " + userData.LastName}" +
+                "&NAME_G_EDT=N" +
+                "&amount=" + amountDue;
         }
 
         /// <summary>
