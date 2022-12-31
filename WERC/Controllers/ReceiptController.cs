@@ -72,7 +72,7 @@ namespace WERC.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [ActionName("receiptList")]
         [Route("{controller=receipt}/{action=receiptList}/succeed")] //Invoice List
         public ActionResult LoadReceiptSuccessList()

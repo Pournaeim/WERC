@@ -600,12 +600,18 @@ namespace BLL
                 var blTeam = new BLTeam();
                 var teamRepository = UnitOfWork.GetRepository<TeamRepository>();
 
+
                 var updateableTeamMember = new TeamMember
                 {
-
                     MemberUserId = personData.UserId,
-                    RegistrationStatus = true,
                 };
+
+                updateableTeamMember.RegistrationStatus = teamMemberRepository.GetTeamMembers(new string[] { personData.UserId }).First().RegistrationStatus; ;
+
+                if (personData.SaveAndFinishLater == false)
+                {
+                    updateableTeamMember.RegistrationStatus = true;
+                }
 
                 teamMemberRepository.UpdateTeamMemberRegistrationStatusByUserId(updateableTeamMember);
 
@@ -1018,8 +1024,8 @@ namespace BLL
                                  HouseholdEducationId = personData.HouseholdEducationId,
                                  Tasks = "",
                                  TeamName = "",
-                                 ClientEthnicityIds= personData.EthnicityIds,
-                                 ClientGoalsAfterGraduationIds= personData.GoalsAfterGraduationIds
+                                 ClientEthnicityIds = personData.EthnicityIds,
+                                 ClientGoalsAfterGraduationIds = personData.GoalsAfterGraduationIds
                              }).ToList();
 
 
@@ -1049,12 +1055,12 @@ namespace BLL
             {
                 if (!string.IsNullOrWhiteSpace(person.ClientEthnicityIds))
                 {
-                    var  ethnicityIdArray = new List<int>();
+                    var ethnicityIdArray = new List<int>();
 
                     foreach (var item in person.ClientEthnicityIds.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToArray())
                     {
                         ethnicityIdArray.Add(int.Parse(item));
-                    }    
+                    }
 
                     var ethnicities = allEthnicity.Where(t => ethnicityIdArray.Contains(t.Id)).ToList();
                     if (ethnicities != null)
