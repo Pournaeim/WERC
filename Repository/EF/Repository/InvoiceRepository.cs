@@ -29,6 +29,14 @@ namespace Repository.EF.Repository
 
             Update(oldInvoice);
         }
+        public void UpdateInvoiceTitle(int id, string title)
+        {
+            var oldInvoice = (from s in Context.Invoices where s.Id == id select s).FirstOrDefault();
+
+            oldInvoice.Title = title;
+
+            Update(oldInvoice);
+        }
         public void UpdateInvoiceStatus(int invoiceId, bool finished)
         {
             var oldInvoice = Context.Invoices.Find(invoiceId);

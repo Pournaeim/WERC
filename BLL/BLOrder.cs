@@ -51,7 +51,7 @@ namespace BLL
             {
                 return null;
             }
-
+            order.ShopOrderId = order.Id;
             return order.ShopOrderId;
         }
         public VmOrder GetCompleteOrder(string userId, int invoiceId)

@@ -1037,6 +1037,10 @@ namespace BLL
                 var invoiceRepository = UnitOfWork.GetRepository<InvoiceRepository>();
 
                 invoiceRepository.UpdateInvoiceStatus(invoiceId, finished);
+                if (!string.IsNullOrWhiteSpace(lastOrderInfo.Order.Tx))
+                {
+                    invoiceRepository.UpdateInvoiceTitle(invoiceId, lastOrderInfo.Order.Tx);
+                }
 
                 var orderRepository = UnitOfWork.GetRepository<OrderRepository>();
 

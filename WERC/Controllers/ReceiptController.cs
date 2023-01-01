@@ -68,7 +68,7 @@ namespace WERC.Controllers
             var completeOrderInfo = blOrder.GetCompleteOrder(CurrentUserId, id);
 
             invoice.Received = completeOrderInfo.Received.Value.ToShortDateString();
-            invoice.TransactionNo = completeOrderInfo.TransactionNo;
+            invoice.Title = completeOrderInfo.TransactionNo;
 
             return PartialView("LastReceiptForm", invoice);
         }

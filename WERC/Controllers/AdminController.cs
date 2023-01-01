@@ -291,27 +291,27 @@ namespace WERC.Controllers
         [ActionName("ups_tfim")]
         public ActionResult UpdatePayStatusTeamFullInfoManagement()
         {
-            var blInvoice = new BLInvoice();
+            //var blInvoice = new BLInvoice();
 
-            var invoiceList = blInvoice.GetInvoiceIds(false);
+            //var invoiceList = blInvoice.GetInvoiceIds(false);
 
-            if (invoiceList != null)
-            {
-                foreach (var invoiceId in invoiceList.Ids)
-                {
+            //if (invoiceList != null)
+            //{
+            //    foreach (var invoiceId in invoiceList.Ids)
+            //    {
 
-                    int? lastOrderId = 0;
+            //        int? lastOrderId = 0;
 
-                    var blShopCart = new BLShopCart();
-                    var lastOrderInfo = blShopCart.GetCheckoutStatus(invoiceId, out lastOrderId);
+            //        var blShopCart = new BLShopCart();
+            //        var lastOrderInfo = blShopCart.GetCheckoutStatus(invoiceId, out lastOrderId);
 
-                    if (lastOrderInfo != null)
-                    {
-                        //Update all data in one transaction
-                        blInvoice.UpdateInvoiceOrderStatus(lastOrderInfo, invoiceId, true, lastOrderId.Value, true, true);
-                    }
-                }
-            }
+            //        if (lastOrderInfo != null)
+            //        {
+            //            //Update all data in one transaction
+            //            blInvoice.UpdateInvoiceOrderStatus(lastOrderInfo, invoiceId, true, lastOrderId.Value, true, true);
+            //        }
+            //    }
+            //}
 
             return View("TeamFullInfoManagement", new VmTeamFullInfoManagement());
         }
